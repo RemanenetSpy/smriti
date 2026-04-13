@@ -18,6 +18,24 @@ import streamlit as st
 
 API_BASE = os.getenv("CHRONOS_API_URL", "http://localhost:8000")
 
+import base64
+from pathlib import Path
+
+def get_base64_image(image_path: Path) -> str:
+    if image_path.exists():
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    return ""
+
+logo_path = Path(__file__).parent / "logo.png"
+b64_logo = get_base64_image(logo_path)
+
+if b64_logo:
+    sidebar_logo_html = f'<img src="data:image/png;base64,{b64_logo}" style="width: 140px; filter: contrast(1.1); display: inline-block; padding-bottom: 0px; margin-bottom: 0px;" />'
+    hero_logo_html = f'<img src="data:image/png;base64,{b64_logo}" style="width: 160px; filter: contrast(1.1); display: inline-block;" />'
+else:
+    sidebar_logo_html = '<div style="font-size:2.2rem; transform: translateY(10px);">🕰️</div>'
+    hero_logo_html = '<div class="seal">🕰️</div>'
 # ---------------------------------------------------------------------------
 # Page Config
 # ---------------------------------------------------------------------------
@@ -427,9 +445,9 @@ def api_call(method: str, path: str, api_key: str = "", **kwargs) -> dict:
 # ---------------------------------------------------------------------------
 
 with st.sidebar:
-    st.markdown("""
-    <div style="text-align:center;padding:1rem 0 0.5rem">
-        <div style="font-size:2.2rem">🕰️</div>
+    st.markdown(f"""
+    <div style="text-align:center;padding:0.5rem 0 0.5rem">
+        {sidebar_logo_html}
         <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;
                     color:var(--chronos-accent);font-weight:500;letter-spacing:2px;margin-top:0.3rem">
             CHRONOS
@@ -482,10 +500,10 @@ with st.sidebar:
 
 if page == "🏠 Overview":
     # Hero
-    st.markdown("""
+    st.markdown(f"""
     <div class="chronos-hero">
-        <div class="seal">🕰️</div>
-        <h1>CHRONOS OS</h1>
+        {hero_logo_html}
+        <h1 style="margin-top: -15px;">CHRONOS OS</h1>
         <div class="tagline">Capturing the fragments of today for the clarity of tomorrow.</div>
         <div class="subtitle">Temporal AI Agent Ecosystem · v0.1.0</div>
     </div>
