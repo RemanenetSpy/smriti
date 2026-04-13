@@ -1,3 +1,12 @@
+---
+title: Chronos API Backend
+emoji: 🕰️
+colorFrom: red
+colorTo: gray
+sdk: docker
+pinned: false
+---
+
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Live-4ADE80?style=for-the-badge" alt="Live" />
   <img src="https://img.shields.io/badge/AI-Llama%203.3%2070B-C7AB6B?style=for-the-badge" alt="AI" />
