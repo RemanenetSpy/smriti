@@ -34,15 +34,15 @@ if b64_logo:
     sidebar_logo_html = f'<img src="data:image/png;base64,{b64_logo}" style="width: 140px; filter: contrast(1.1); display: inline-block; padding-bottom: 0px; margin-bottom: 0px;" />'
     hero_logo_html = f'<img src="data:image/png;base64,{b64_logo}" style="width: 160px; filter: contrast(1.1); display: inline-block;" />'
 else:
-    sidebar_logo_html = '<div style="font-size:2.2rem; transform: translateY(10px);">🕰️</div>'
-    hero_logo_html = '<div class="seal">🕰️</div>'
+    sidebar_logo_html = '<div style="font-size:2.2rem; transform: translateY(10px);">⧗</div>'
+    hero_logo_html = '<div class="seal">⧗</div>'
 # ---------------------------------------------------------------------------
 # Page Config
 # ---------------------------------------------------------------------------
 
 st.set_page_config(
     page_title="Chronos OS — Temporal AI Agent Ecosystem",
-    page_icon="🕰️",
+    page_icon="⧗",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -459,7 +459,7 @@ with st.sidebar:
 
     # API Key input
     api_key = st.text_input(
-        "🔑 API Key",
+        "⚷ API Key",
         type="password",
         placeholder="chrn_...",
         help="Your Chronos API key for authenticated requests",
@@ -540,7 +540,7 @@ if page == "⟡ Overview":
             </div>
             """, unsafe_allow_html=True)
     else:
-        st.error(f"⚠️ {health['error']}")
+        st.error(f"⚠ {health['error']}")
         st.info("Start the API server: `python -m uvicorn api.main:app --port 8000`")
 
     # Architecture
@@ -588,9 +588,9 @@ elif page == "⭳ Ingest Events":
         label_visibility="collapsed",
     )
 
-    parse_svo = st.checkbox("✨ Enable AI SVO Parsing (DeepSeek R1)", value=True)
+    parse_svo = st.checkbox("✧ Enable AI SVO Parsing (DeepSeek R1)", value=True)
 
-    if st.button("📥 Ingest Into Memory") and stored_key and events_text.strip():
+    if st.button("⭳ Ingest Into Memory") and stored_key and events_text.strip():
         lines = [l.strip() for l in events_text.strip().split("\n") if l.strip()]
         payload = {
             "source_id": source_id,
@@ -602,7 +602,7 @@ elif page == "⭳ Ingest Events":
             result = api_call("POST", "/ingest", stored_key, json=payload)
 
         if "error" not in result:
-            st.success(f"✅ Ingested **{result.get('ingested_count', 0)} events** into temporal memory")
+            st.success(f"✓ Ingested **{result.get('ingested_count', 0)} events** into temporal memory")
 
             svo_tuples = result.get("svo_tuples", [])
             if svo_tuples:
@@ -643,7 +643,7 @@ elif page == "⚲ Query Memory":
     with col3:
         max_results = st.slider("Results", 1, 50, 20)
 
-    if st.button("🔍 Search Temporal Memory") and query and stored_key:
+    if st.button("⚲ Search Temporal Memory") and query and stored_key:
         payload = {"query": query, "max_results": max_results}
         if start_date:
             payload["time_range"] = payload.get("time_range", {})
@@ -721,7 +721,7 @@ elif page == "✦ Agent Chat":
                 ev_ret = result.get("events_retrieved", 0)
                 ev_cre = result.get("events_created", 0)
                 if ev_ret or ev_cre:
-                    st.caption(f"🕰️ {ev_ret} memories recalled · {ev_cre} new memories formed")
+                    st.caption(f"⧗ {ev_ret} memories recalled · {ev_cre} new memories formed")
             else:
                 st.error(result["error"])
     elif prompt:
@@ -747,7 +747,7 @@ elif page == "⚙ Connect Tool":
             label_visibility="collapsed",
         )
 
-        submitted = st.form_submit_button("🔗 Connect Tool")
+        submitted = st.form_submit_button("⚙ Connect Tool")
 
         if submitted and stored_key:
             try:
@@ -758,7 +758,7 @@ elif page == "⚙ Connect Tool":
                     "endpoints": endpoints,
                 })
                 if "error" not in result:
-                    st.success(f"✅ {result.get('message', 'Connected!')}")
+                    st.success(f"✓ {result.get('message', 'Connected!')}")
                 else:
                     st.error(result["error"])
             except json.JSONDecodeError:
@@ -832,7 +832,7 @@ elif page == "⚷ API Keys":
 
     tier = st.selectbox("Tier", ["explorer", "builder", "scale"])
 
-    if st.button("🔑 Generate Key"):
+    if st.button("⚷ Generate Key"):
         result = api_call("POST", f"/billing/keys?tier={tier}")
 
         if "error" not in result:
@@ -856,7 +856,7 @@ elif page == "⚷ API Keys":
 
 st.markdown("""
 <div class="chronos-footer">
-    <span class="seal-small">🕰️</span>
+    <span class="seal-small">⧗</span>
     Chronos OS v0.1.0 — Curated with continuity in mind.
     <br>© 2026 Chronos Labs
 </div>
