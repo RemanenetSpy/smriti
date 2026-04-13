@@ -448,10 +448,6 @@ with st.sidebar:
     st.markdown(f"""
     <div style="text-align:center;padding:0.5rem 0 0.5rem">
         {sidebar_logo_html}
-        <div style="font-family:'Cormorant Garamond',serif;font-size:1.5rem;
-                    color:var(--chronos-accent);font-weight:500;letter-spacing:2px;margin-top:0.3rem">
-            CHRONOS
-        </div>
         <div style="font-family:'Inter',sans-serif;font-size:0.5rem;
                     color:var(--chronos-text-dim);text-transform:uppercase;letter-spacing:4px;margin-top:0.2rem">
             Temporal AI Agent Ecosystem
@@ -479,9 +475,9 @@ with st.sidebar:
     # Navigation
     page = st.radio(
         "Navigate",
-        ["🏠 Overview", "📥 Ingest Events", "🔍 Query Memory",
-         "🤖 Agent Chat", "🔗 Connect Tool",
-         "📊 Usage & Billing", "🔑 API Keys"],
+        ["⟡ Overview", "⭳ Ingest Events", "⚲ Query Memory",
+         "✦ Agent Chat", "⚙ Connect Tool",
+         "▤ Usage & Billing", "⚷ API Keys"],
         label_visibility="collapsed",
     )
 
@@ -498,13 +494,12 @@ with st.sidebar:
 # PAGES
 # ═══════════════════════════════════════════════════════════════════════════
 
-if page == "🏠 Overview":
+if page == "⟡ Overview":
     # Hero
     st.markdown(f"""
     <div class="chronos-hero">
         {hero_logo_html}
-        <h1 style="margin-top: -15px;">CHRONOS OS</h1>
-        <div class="tagline">Capturing the fragments of today for the clarity of tomorrow.</div>
+        <div class="tagline" style="margin-top: 10px;">Capturing the fragments of today for the clarity of tomorrow.</div>
         <div class="subtitle">Temporal AI Agent Ecosystem · v0.1.0</div>
     </div>
     """, unsafe_allow_html=True)
@@ -576,7 +571,7 @@ POST /query
     """, language="python")
 
 
-elif page == "📥 Ingest Events":
+elif page == "⭳ Ingest Events":
     st.markdown("<div class='section-label'>Memory Ingestion</div>", unsafe_allow_html=True)
     st.markdown("## Feed the Temporal Memory")
     st.markdown("*Enter events as natural language. The AI extracts the who, what, and when.*")
@@ -633,7 +628,7 @@ elif page == "📥 Ingest Events":
         st.warning("Paste your API key in the sidebar first.")
 
 
-elif page == "🔍 Query Memory":
+elif page == "⚲ Query Memory":
     st.markdown("<div class='section-label'>Temporal Retrieval</div>", unsafe_allow_html=True)
     st.markdown("## Query the Memory")
     st.markdown("*Ask in natural language. Chronos searches across time and meaning.*")
@@ -690,7 +685,7 @@ elif page == "🔍 Query Memory":
             st.error(result["error"])
 
 
-elif page == "🤖 Agent Chat":
+elif page == "✦ Agent Chat":
     st.markdown("<div class='section-label'>Temporal Agent</div>", unsafe_allow_html=True)
     st.markdown("## Converse with Memory")
     st.markdown("*An agent that remembers. Ask anything — it searches your temporal memory first.*")
@@ -733,7 +728,7 @@ elif page == "🤖 Agent Chat":
         st.warning("Paste your API key in the sidebar first.")
 
 
-elif page == "🔗 Connect Tool":
+elif page == "⚙ Connect Tool":
     st.markdown("<div class='section-label'>SaaS Integration</div>", unsafe_allow_html=True)
     st.markdown("## Connect a Tool")
     st.markdown("*Register any SaaS API — agents will discover and use it automatically.*")
@@ -772,7 +767,7 @@ elif page == "🔗 Connect Tool":
             st.warning("Paste your API key in the sidebar first.")
 
 
-elif page == "📊 Usage & Billing":
+elif page == "▤ Usage & Billing":
     st.markdown("<div class='section-label'>Account</div>", unsafe_allow_html=True)
     st.markdown("## Usage & Billing")
 
@@ -830,7 +825,7 @@ elif page == "📊 Usage & Billing":
         st.info("Paste your API key in the sidebar to view usage.")
 
 
-elif page == "🔑 API Keys":
+elif page == "⚷ API Keys":
     st.markdown("<div class='section-label'>Authentication</div>", unsafe_allow_html=True)
     st.markdown("## Generate API Key")
     st.markdown("*Create a new key to authenticate with Chronos OS. Store it safely — it's shown only once.*")
