@@ -44,7 +44,7 @@ pinned: false
 **The solution:** Chronos OS is a **temporal memory API** that any AI agent or SaaS product can plug into. It:
 
 1. **Ingests** text from any source (CRM, chat, email, code commits...)
-2. **Decomposes** it into structured Subject-Verb-Object events using AI (Qwen 3 235B via Cerebras)
+2. **Decomposes** it into structured Subject-Verb-Object events using AI (Llama 3.1 8B via Cerebras)
 3. **Stores** events in dual calendars — SQLite for temporal queries, ChromaDB for semantic search
 4. **Retrieves** relevant memories via natural language — "What happened with Acme Corp last quarter?"
 5. **Powers** agents that actually remember — an AI that knows *your* history
@@ -105,7 +105,7 @@ LATER, ANY AGENT CAN ASK:
 chronos-hub/
 ├── chronos_core/           🧠 Memory Core
 │   ├── models.py           Pydantic models, tier config, pricing
-│   ├── svo_parser.py       AI event extraction (Cerebras / Qwen 3)
+│   ├── svo_parser.py       AI event extraction (Cerebras / Llama 3.1)
 │   ├── memory_store.py     SQLite dual calendars (events + turns)
 │   └── vector_store.py     ChromaDB semantic search (sentence-transformers)
 │
@@ -453,7 +453,7 @@ User: "What's our biggest contract?"
 
 | Property | Value |
 |---|---|
-| **Model** | Qwen 3 235B Instruct |
+| **Model** | Qwen 3 235B Instruct (Agent) + Llama 3.1 8B (Parsing) |
 | **Provider** | Cerebras (free tier) |
 | **Speed** | 2,100+ tokens/second |
 | **Daily Limit** | 1,000,000 requests/day |
@@ -503,7 +503,7 @@ Chronos OS uses a three-tier model with metered overage:
 | **Structured Storage** | SQLite (via aiosqlite) |
 | **Vector Search** | ChromaDB + sentence-transformers |
 | **Embedding Model** | all-MiniLM-L6-v2 (HuggingFace) |
-| **LLM** | Qwen 3 235B (Cerebras, free) |
+| **LLM** | Qwen 3 235B & Llama 3.1 8B (Cerebras, free) |
 | **Agent Framework** | LangGraph + LangChain |
 | **Dashboard** | Streamlit |
 | **Billing** | Razorpay |

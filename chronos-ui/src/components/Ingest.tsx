@@ -78,7 +78,7 @@ export function Ingest({ apiKey }: { apiKey: string }) {
             onChange={(e) => setParseSvo(e.target.checked)}
             className="w-4 h-4 accent-[var(--chronos-wax-red)]"
           />
-          <label htmlFor="parseSvo">✧ Enable Fast SVO Parsing (Cerebras AI)</label>
+          <label htmlFor="parseSvo">✧ Enable Fast SVO Parsing (Llama 3.1 via Cerebras)</label>
         </div>
 
         <button 
