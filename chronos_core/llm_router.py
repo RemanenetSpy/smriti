@@ -64,7 +64,7 @@ def get_heavy_pipeline() -> BaseChatModel:
     if _heavy_pipeline is not None:
         return _heavy_pipeline
 
-    from langchain_community.chat_models import ChatLiteLLM
+    from langchain_litellm import ChatLiteLLM
 
     has_cerebras = bool(os.getenv("CEREBRAS_API_KEY"))
     has_groq = bool(os.getenv("GROQ_API_KEY"))
