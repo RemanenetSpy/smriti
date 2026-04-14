@@ -22,27 +22,20 @@ from pathlib import Path
 import streamlit.components.v1 as components
 
 def inject_ga():
-    """Inject Google Analytics into the parent window via Streamlit components."""
+    """Inject Google Analytics. 
+    In Streamlit Cloud, parent.window throws CORS errors. We must trigger it natively inside the component."""
     GA_ID = "G-J0H4WX3FYJ"
     ga_script = f"""
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
     <script>
-        // Check if GA is already injected to avoid duplicates
-        if (!parent.window.document.getElementById('ga-script')) {{
-            var script1 = parent.window.document.createElement('script');
-            script1.id = 'ga-script';
-            script1.async = true;
-            script1.src = 'https://www.googletagmanager.com/gtag/js?id={GA_ID}';
-            parent.window.document.head.appendChild(script1);
-
-            var script2 = parent.window.document.createElement('script');
-            script2.innerHTML = `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){{dataLayer.push(arguments);}}
-              gtag('js', new Date());
-              gtag('config', '{GA_ID}');
-            `;
-            parent.window.document.head.appendChild(script2);
-        }}
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){{dataLayer.push(arguments);}}
+      gtag('js', new Date());
+      gtag('config', '{GA_ID}', {{
+        'page_title' : 'Chronos OS',
+        'page_path': '/'
+      }});
     </script>
     """
     components.html(ga_script, height=0, width=0)
