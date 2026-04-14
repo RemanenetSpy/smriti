@@ -48,19 +48,13 @@ async def lifespan(app: FastAPI):
     """Initialize and tear down core services."""
     logger.info("🕰️  Chronos OS starting up...")
 
-    import time
-    start_time = time.time()
-    
     # Initialize Memory Store
     memory_store = MemoryStore()
     await memory_store.initialize()
-    logger.info(f"⏱️ Memory Store took {time.time() - start_time:.2f}s")
     
     # Initialize Vector Store
-    v_start = time.time()
     vector_store = VectorStore()
     await vector_store.initialize(pool=memory_store.pool)
-    logger.info(f"⏱️ Vector Store (Schema) took {time.time() - v_start:.2f}s")
 
     # Initialize SVO Parser (LiteLLM Mixture of Agents Router)
     svo_parser = SVOParser()
@@ -68,7 +62,7 @@ async def lifespan(app: FastAPI):
     # Register singletons for dependency injection
     set_stores(memory_store, vector_store, svo_parser)
 
-    logger.info(f"🚀 Chronos OS Ready — Total startup: {time.time() - start_time:.2f}s")
+    logger.info("✅ Chronos OS ready — Neon PostgreSQL + pgvector online")
 
     yield  # App is running
 
