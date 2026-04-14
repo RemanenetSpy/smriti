@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: chronos-os-api
+    runtime: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: CEREBRAS_API_KEY
+        sync: false
+      - key: CHRONOS_DB_PATH
+        value: ./data/chronos.db
+      - key: CHROMA_PERSIST_DIR
+        value: ./data/chroma
+      - key: API_SECRET_KEY
+        generateValue: true

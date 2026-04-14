@@ -15,8 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy application code
 COPY . .
 
-# Expose API port for Hugging Face Spaces
-EXPOSE 7860
+# Use PORT env variable (Render injects this), fallback to 7860 for HF Spaces
+ENV PORT=7860
+EXPOSE ${PORT}
 
-# Default command to run the FastAPI backend (for Hugging Face Spaces)
-CMD ["python", "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "7860"]
+CMD ["sh", "-c", "python -m uvicorn api.main:app --host 0.0.0.0 --port ${PORT}"]
