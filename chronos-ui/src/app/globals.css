@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: #F7F5F0;
+  --color-foreground: #2C3048;
+
+  --font-inter: var(--font-inter), sans-serif;
+  --font-spectral: var(--font-spectral), serif;
+  --font-cormorant: var(--font-cormorant-garamond), serif;
+}
+
+:root {
+  --background: #F7F5F0;
+  --foreground: #2C3048;
+  
+  --chronos-bg: #F7F5F0;
+  --chronos-text: #2C3048;
+  --chronos-text-dim: #6B7194;
+  --chronos-wax-red: #A93322;
+  --chronos-wax-shadow: rgba(169, 51, 34, 0.4);
+  --chronos-ink: #1F2232;
+  --chronos-panel: #FFFFFF;
+  --chronos-border: #E8E5DA;
+  --chronos-hover: #F0ECD8;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), sans-serif;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* Add specialized UI components */
+@layer components {
+  .wax-seal-button {
+    background-color: var(--chronos-wax-red);
+    color: white;
+    border: 0;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 14px var(--chronos-wax-shadow);
+    font-family: var(--font-spectral), serif;
+    font-size: 0.875rem;
+    transition: all 300ms;
+  }
+  .wax-seal-button:hover {
+    box-shadow: 0 6px 20px rgba(169,51,34,0.6);
+    transform: translateY(-1px);
+  }
+  
+  .glass-panel {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-radius: 0.5rem;
+    border: 1px solid var(--chronos-border);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    padding: 1rem;
+  }
+
+  .chronos-input {
+    width: 100%;
+    background-color: #FCFBF8;
+    border: 1px solid var(--chronos-border);
+    border-radius: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--chronos-text);
+    font-family: var(--font-inter), sans-serif;
+    transition: all 150ms;
+  }
+  
+  .chronos-input:focus {
+    outline: none;
+    border-color: var(--chronos-wax-red);
+    box-shadow: 0 0 0 1px var(--chronos-wax-red);
+  }
+
+  .timeline-event {
+    position: relative;
+    padding-left: 1rem;
+    border-left: 2px solid var(--chronos-border);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    font-family: var(--font-inter), sans-serif;
+    font-size: 0.875rem;
+  }
+  .timeline-event::before {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: var(--chronos-wax-red);
+    border-radius: 9999px;
+    left: -6px;
+    top: 4px;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  }
+}

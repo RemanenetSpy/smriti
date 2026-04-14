@@ -13,6 +13,7 @@ import time
 from fastapi import APIRouter, Depends
 
 from chronos_core.models import (
+    LiteEventRecord,
     QueryRequest,
     QueryResponse,
     QueryResult,
@@ -66,10 +67,18 @@ async def query_memory(
         for sr in semantic_results:
             event = event_map.get(sr["id"])
             if event and event.id not in seen_ids:
-                # Convert cosine distance to similarity score (0-1)
                 similarity = max(0, 1 - sr["distance"])
+                lite_event = LiteEventRecord(
+                    id=event.id,
+                    source_id=event.source_id,
+                    subject=event.subject,
+                    verb=event.verb,
+                    object=event.object,
+                    timestamp=event.timestamp,
+                    confidence=event.confidence,
+                )
                 results.append(QueryResult(
-                    event=event,
+                    event=lite_event,
                     relevance_score=similarity * request.semantic_weight,
                     provenance="semantic_search",
                 ))
@@ -90,8 +99,17 @@ async def query_memory(
 
         for event in temporal_events:
             if event.id not in seen_ids:
+                lite_event = LiteEventRecord(
+                    id=event.id,
+                    source_id=event.source_id,
+                    subject=event.subject,
+                    verb=event.verb,
+                    object=event.object,
+                    timestamp=event.timestamp,
+                    confidence=event.confidence,
+                )
                 results.append(QueryResult(
-                    event=event,
+                    event=lite_event,
                     relevance_score=temporal_weight * 0.8,  # Base temporal relevance
                     provenance="temporal_filter",
                 ))
@@ -115,8 +133,17 @@ async def query_memory(
 
         for event in entity_events:
             if event.id not in seen_ids:
+                lite_event = LiteEventRecord(
+                    id=event.id,
+                    source_id=event.source_id,
+                    subject=event.subject,
+                    verb=event.verb,
+                    object=event.object,
+                    timestamp=event.timestamp,
+                    confidence=event.confidence,
+                )
                 results.append(QueryResult(
-                    event=event,
+                    event=lite_event,
                     relevance_score=temporal_weight * 0.6,
                     provenance="entity_multi_hop",
                 ))

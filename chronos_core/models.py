@@ -86,6 +86,20 @@ class EventRecord(BaseModel):
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 
+class LiteEventRecord(BaseModel):
+    """
+    10x smaller event object for search results.
+    Excludes massive text fields for lightning-fast UI rendering.
+    """
+    id: str
+    source_id: str
+    subject: str
+    verb: str
+    object: str
+    timestamp: datetime
+    confidence: float
+
+
 class TurnRecord(BaseModel):
     """
     Raw conversation turn stored in the Turn Calendar (SQLite).
@@ -194,7 +208,7 @@ class QueryRequest(BaseModel):
 
 class QueryResult(BaseModel):
     """A single result from a /query response."""
-    event: EventRecord
+    event: LiteEventRecord
     relevance_score: float = Field(0.0, description="Combined ranking score")
     provenance: str = Field("", description="How this result was found")
 
