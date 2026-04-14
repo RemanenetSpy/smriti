@@ -128,36 +128,14 @@ class SVOParser:
     """
     Extracts Subject-Verb-Object tuples from raw text.
     
-    Primary: Groq API (free tier — DeepSeek R1 / Llama at 300+ tok/sec)
-    Fallback: Regex patterns (when LLM fails or quota exhausted)
+    Primary: High Speed Model via LiteLLM Router.
+    Fallback: Regex patterns (when LLM fails or limits exhausted)
     """
 
-    def __init__(
-        self,
-        api_key: Optional[str] = None,
-        model: str = "llama-3.3-70b-versatile",
-    ):
-        self.api_key = api_key or os.getenv("GROQ_API_KEY", "")
-        self.model = model
-        self._client = None
-
-        if self.api_key:
-            try:
-                from groq import Groq
-                self._client = Groq(api_key=self.api_key)
-                logger.info(f"Groq SVO parser initialized with model: {self.model}")
-            except ImportError:
-                logger.warning(
-                    "groq not installed. Using regex fallback. "
-                    "Install with: pip install groq"
-                )
-            except Exception as e:
-                logger.warning(f"Failed to init Groq client: {e}. Using regex fallback.")
-        else:
-            logger.warning(
-                "No GROQ_API_KEY set. SVO parser will use regex fallback only. "
-                "Get a free key at https://console.groq.com"
-            )
+    def __init__(self):
+        from .llm_router import get_fast_pipeline_kwargs
+        self._llm_kwargs = get_fast_pipeline_kwargs()
+        logger.info(f"SVO parser initialized with fast pipeline: {self._llm_kwargs.get('model')}")
 
     async def parse(
         self,
@@ -166,51 +144,52 @@ class SVOParser:
     ) -> list[SVOTuple]:
         """
         Extract SVO tuples from text.
-        Tries Groq (DeepSeek R1) first, falls back to regex.
+        Tries Litellm Fast Pipeline first, falls back to regex.
         """
         if not text or not text.strip():
             return []
 
         ts = timestamp or datetime.utcnow()
 
-        # Try LLM extraction
-        if self._client:
-            try:
-                return await self._parse_with_groq(text, ts)
-            except Exception as e:
-                logger.warning(f"Groq SVO extraction failed: {e}. Falling back to regex.")
+        # Try LLM extraction via LiteLLM
+        try:
+            return await self._parse_with_litellm(text, ts)
+        except Exception as e:
+            logger.warning(f"Fast Pipeline SVO extraction failed: {e}. Falling back to regex.")
 
         # Regex fallback
         return _regex_fallback(text, ts)
 
-    async def _parse_with_groq(
+    async def _parse_with_litellm(
         self,
         text: str,
         timestamp: datetime,
     ) -> list[SVOTuple]:
-        """Call Groq API (DeepSeek R1) to extract SVO tuples."""
-        import asyncio
+        """Call LiteLLM unified completion to extract SVO tuples."""
+        import litellm
+        from .llm_router import get_fast_pipeline_kwargs
 
         prompt = SVO_EXTRACTION_PROMPT.format(
             text=text,
             current_time=timestamp.isoformat(),
         )
 
-        # Groq SDK is synchronous — wrap for async
-        response = await asyncio.to_thread(
-            self._client.chat.completions.create,
-            model=self.model,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a precise JSON event extractor. Output ONLY valid JSON arrays.",
-                },
-                {"role": "user", "content": prompt},
-            ],
-            temperature=0.1,
-            max_tokens=2000,
-            response_format={"type": "json_object"},
-        )
+        kwargs = get_fast_pipeline_kwargs()
+        kwargs["messages"] = [
+            {
+                "role": "system",
+                "content": "You are a precise JSON event extractor. Output ONLY valid JSON arrays.",
+            },
+            {"role": "user", "content": prompt},
+        ]
+        kwargs["temperature"] = 0.1
+        kwargs["max_tokens"] = 2000
+        # Not all fallback models gracefully support strict json format enforcement in litellm uniformly if the provider doesn't support it.
+        # But we will use it for safety.
+        kwargs["response_format"] = {"type": "json_object"}
+
+        # LiteLLM acompletion directly leverages the fallback arrays natively!
+        response = await litellm.acompletion(**kwargs)
 
         raw = response.choices[0].message.content.strip()
 

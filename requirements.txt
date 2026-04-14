@@ -13,3 +13,4 @@ razorpay>=1.4.0
 python-dotenv>=1.0.0
 httpx>=0.28.0
 sentence-transformers>=3.0.0
+langchain-community>=0.3.0

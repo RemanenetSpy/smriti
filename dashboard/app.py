@@ -560,7 +560,7 @@ if page == "⟡ Overview":
         with col4:
             st.markdown("""
             <div class="metric-card">
-                <div class="metric-value" style="font-size:1.8rem">Llama 3.3 70B</div>
+                <div class="metric-value" style="font-size:1.4rem; padding-top: 0.3rem;">Qwen 3 + Llama Mixture</div>
                 <div class="metric-label">AI Engine</div>
             </div>
             """, unsafe_allow_html=True)
@@ -613,7 +613,7 @@ elif page == "⭳ Ingest Events":
         label_visibility="collapsed",
     )
 
-    parse_svo = st.checkbox("✧ Enable AI SVO Parsing (Llama 3.3 70B)", value=True)
+    parse_svo = st.checkbox("✧ Enable Fast SVO Parsing (Llama Mixture)", value=True)
 
     if st.button("⭳ Ingest Into Memory") and stored_key and events_text.strip():
         lines = [l.strip() for l in events_text.strip().split("\n") if l.strip()]
@@ -623,7 +623,7 @@ elif page == "⭳ Ingest Events":
             "parse_svo": parse_svo,
         }
 
-        with st.spinner("Llama 3.3 70B is extracting temporal events..."):
+        with st.spinner("Llama Engine is extracting temporal events..."):
             result = api_call("POST", "/ingest", stored_key, json=payload)
 
         if "error" not in result:
