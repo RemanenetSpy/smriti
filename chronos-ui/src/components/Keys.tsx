@@ -40,8 +40,8 @@ export function Keys() {
           className="chronos-input mb-6 bg-white"
         >
           <option value="explorer">Explorer (Free - 10k Events)</option>
-          <option value="builder">Builder ($49 - 500k Events)</option>
-          <option value="scale">Scale ($249 - 5M Events)</option>
+          <option value="builder" disabled>⭐ Builder ($49 - 500k Events) — Coming Soon</option>
+          <option value="scale" disabled>⭐ Scale ($249 - 5M Events) — Coming Soon</option>
         </select>
 
         <button 

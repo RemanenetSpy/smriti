@@ -85,8 +85,8 @@ export function Billing({ apiKey }: { apiKey: string }) {
                   <tr className="bg-[var(--chronos-border)] text-[var(--chronos-ink)] font-semibold text-sm">
                     <th className="p-3">Feature</th>
                     <th className="p-3 bg-[#e8e4d3]">Explorer</th>
-                    <th className="p-3 bg-[#e0dacc]">Builder</th>
-                    <th className="p-3 bg-[#d5cebc]">Scale</th>
+                    <th className="p-3 bg-[#e0dacc]">⭐ Builder <br/><span className="text-xs font-normal text-amber-700">Coming Soon</span></th>
+                    <th className="p-3 bg-[#d5cebc]">⭐ Scale <br/><span className="text-xs font-normal text-amber-700">Coming Soon</span></th>
                   </tr>
                 </thead>
                 <tbody className="text-sm font-inter divide-y divide-[var(--chronos-border)] text-[var(--chronos-text)]">
