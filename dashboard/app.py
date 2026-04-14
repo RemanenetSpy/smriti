@@ -19,26 +19,18 @@ import streamlit as st
 import os
 import base64
 from pathlib import Path
-import streamlit.components.v1 as components
-
 def inject_ga():
-    """Inject Google Analytics. 
-    In Streamlit Cloud, parent.window throws CORS errors. We must trigger it natively inside the component."""
+    """Inject Google Analytics via st.markdown (no iframe overhead)."""
     GA_ID = "G-J0H4WX3FYJ"
-    ga_script = f"""
-    <!-- Google tag (gtag.js) -->
+    st.markdown(f"""
     <script async src="https://www.googletagmanager.com/gtag/js?id={GA_ID}"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){{dataLayer.push(arguments);}}
       gtag('js', new Date());
-      gtag('config', '{GA_ID}', {{
-        'page_title' : 'Chronos OS',
-        'page_path': '/'
-      }});
+      gtag('config', '{GA_ID}', {{'page_title': 'Chronos OS', 'page_path': '/'}});
     </script>
-    """
-    components.html(ga_script, height=0, width=0)
+    """, unsafe_allow_html=True)
 
 # Base configuration
 API_BASE = os.getenv("CHRONOS_API_URL", "http://localhost:8000")
@@ -80,13 +72,17 @@ inject_ga()
 st.markdown("""
 <style>
     /* ═══════════════════════════════════════════════════════════════
-       FONTS — Chronos Identity
+       FONTS — Chronos Identity (loaded via link preload, non-blocking)
        Cormorant Garamond (editorial headings)
        Spectral (body serif)
        Inter (UI text)
        JetBrains Mono (code/data)
     ═══════════════════════════════════════════════════════════════ */
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Spectral:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
 
     /* ═══════════════════════════════════════════════════════════════
        ROOT PALETTE (Parchment & Wax Seal)
@@ -438,6 +434,12 @@ st.markdown("""
 # Helper Functions
 # ---------------------------------------------------------------------------
 
+@st.cache_resource
+def _get_http_client():
+    """Cached httpx client — reuses TCP connections across all API calls."""
+    return httpx.Client(timeout=30)
+
+
 def api_call(method: str, path: str, api_key: str = "", **kwargs) -> dict:
     """Make an API call to the Chronos backend."""
     headers = {}
@@ -445,19 +447,19 @@ def api_call(method: str, path: str, api_key: str = "", **kwargs) -> dict:
         headers["X-API-Key"] = api_key
 
     try:
-        with httpx.Client(timeout=30) as client:
-            url = f"{API_BASE}{path}"
-            if method == "GET":
-                resp = client.get(url, headers=headers, params=kwargs.get("params"))
-            elif method == "POST":
-                resp = client.post(url, headers=headers, json=kwargs.get("json"))
-            else:
-                return {"error": f"Unsupported method: {method}"}
+        client = _get_http_client()
+        url = f"{API_BASE}{path}"
+        if method == "GET":
+            resp = client.get(url, headers=headers, params=kwargs.get("params"))
+        elif method == "POST":
+            resp = client.post(url, headers=headers, json=kwargs.get("json"))
+        else:
+            return {"error": f"Unsupported method: {method}"}
 
-            if resp.status_code == 200:
-                return resp.json()
-            else:
-                return {"error": f"HTTP {resp.status_code}: {resp.text}"}
+        if resp.status_code == 200:
+            return resp.json()
+        else:
+            return {"error": f"HTTP {resp.status_code}: {resp.text}"}
 
     except httpx.ConnectError:
         return {"error": "Cannot connect to Chronos API. Is the server running?"}
