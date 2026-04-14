@@ -16,10 +16,39 @@ import streamlit as st
 # Configuration
 # ---------------------------------------------------------------------------
 
-API_BASE = os.getenv("CHRONOS_API_URL", "http://localhost:8000")
-
+import os
 import base64
 from pathlib import Path
+import streamlit.components.v1 as components
+
+def inject_ga():
+    """Inject Google Analytics into the parent window via Streamlit components."""
+    GA_ID = "G-J0H4WX3FYJ"
+    ga_script = f"""
+    <script>
+        // Check if GA is already injected to avoid duplicates
+        if (!parent.window.document.getElementById('ga-script')) {{
+            var script1 = parent.window.document.createElement('script');
+            script1.id = 'ga-script';
+            script1.async = true;
+            script1.src = 'https://www.googletagmanager.com/gtag/js?id={GA_ID}';
+            parent.window.document.head.appendChild(script1);
+
+            var script2 = parent.window.document.createElement('script');
+            script2.innerHTML = `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){{dataLayer.push(arguments);}}
+              gtag('js', new Date());
+              gtag('config', '{GA_ID}');
+            `;
+            parent.window.document.head.appendChild(script2);
+        }}
+    </script>
+    """
+    components.html(ga_script, height=0, width=0)
+
+# Base configuration
+API_BASE = os.getenv("CHRONOS_API_URL", "http://localhost:8000")
 
 def get_base64_image(image_path: Path) -> str:
     if image_path.exists():
@@ -42,10 +71,13 @@ else:
 
 st.set_page_config(
     page_title="Chronos OS — Temporal AI Agent Ecosystem",
-    page_icon="⧗",
+    page_icon="🕰️",
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
+# Initialize Google Analytics
+inject_ga()
 
 # ---------------------------------------------------------------------------
 # Custom CSS — Chronos Editorial Design System
