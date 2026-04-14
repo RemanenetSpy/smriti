@@ -189,16 +189,35 @@ class SVOParser:
         kwargs["response_format"] = {"type": "json_object"}
 
         # LiteLLM acompletion directly leverages the fallback arrays natively!
-        response = await litellm.acompletion(**kwargs)
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                response = await litellm.acompletion(**kwargs)
+                raw = response.choices[0].message.content.strip()
+                
+                # Aggressively extract the JSON part (handles models that add chatter)
+                json_match = re.search(r"(\[.*\]|\{.*\})", raw, re.DOTALL)
+                if json_match:
+                    raw = json_match.group(0)
 
-        raw = response.choices[0].message.content.strip()
+                # Strip markdown code fences if present
+                if raw.startswith("```"):
+                    raw = re.sub(r"^```(?:json)?\s*", "", raw)
+                    raw = re.sub(r"\s*```$", "", raw)
 
-        # Strip markdown code fences if present
-        if raw.startswith("```"):
-            raw = re.sub(r"^```(?:json)?\s*", "", raw)
-            raw = re.sub(r"\s*```$", "", raw)
-
-        parsed = json.loads(raw)
+                parsed = json.loads(raw)
+                break # Success!
+            except (litellm.RateLimitError, Exception) as e:
+                # If it's a rate limit or high traffic (Cerebras), wait and retry
+                is_rate_limit = "RateLimit" in str(e) or "high traffic" in str(e).lower()
+                if is_rate_limit and attempt < max_retries - 1:
+                    wait_time = (attempt + 1) * 2
+                    logger.warning(f"Rate limited by {kwargs.get('model')}. Waiting {wait_time}s to retry...")
+                    import asyncio
+                    await asyncio.sleep(wait_time)
+                    continue
+                # If we're out of retries or it's a different error, re-raise
+                raise e
 
         # Handle both array and {"events": [...]} formats
         if isinstance(parsed, dict):

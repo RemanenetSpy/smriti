@@ -69,15 +69,19 @@ def get_heavy_pipeline() -> BaseChatModel:
     has_cerebras = bool(os.getenv("CEREBRAS_API_KEY"))
     has_groq = bool(os.getenv("GROQ_API_KEY"))
 
-    if has_cerebras:
-        primary = ChatLiteLLM(model="cerebras/qwen-3-235b-a22b-instruct-2507", temperature=0.4)
-        if has_groq:
-            fallback = ChatLiteLLM(model="groq/llama-3.3-70b-versatile", temperature=0.4)
+    # For Heavy Reasoning, prioritize Groq because it has better RPM (Requests Per Minute)
+    # limits than Cerebras free tier, preventing "RateLimit" hangs during chat.
+    if has_groq:
+        primary = ChatLiteLLM(model="groq/llama-3.3-70b-versatile", temperature=0.4)
+        if has_cerebras:
+            fallback = ChatLiteLLM(model="cerebras/qwen-3-235b-a22b-instruct-2507", temperature=0.4)
             _heavy_pipeline = primary.with_fallbacks([fallback])
         else:
             _heavy_pipeline = primary
+    elif has_cerebras:
+        _heavy_pipeline = ChatLiteLLM(model="cerebras/qwen-3-235b-a22b-instruct-2507", temperature=0.4)
     else:
-        _heavy_pipeline = ChatLiteLLM(model="groq/llama-3.3-70b-versatile", temperature=0.4)
+        raise ValueError("Neither GROQ_API_KEY nor CEREBRAS_API_KEY is set.")
 
     logger.info(f"Heavy pipeline initialized: {_heavy_pipeline}")
     return _heavy_pipeline
