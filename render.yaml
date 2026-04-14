@@ -9,9 +9,7 @@ services:
         sync: false
       - key: CEREBRAS_API_KEY
         sync: false
-      - key: CHRONOS_DB_PATH
-        value: ./data/chronos.db
-      - key: CHROMA_PERSIST_DIR
-        value: ./data/chroma
+      - key: DATABASE_URL
+        sync: false
       - key: API_SECRET_KEY
         generateValue: true

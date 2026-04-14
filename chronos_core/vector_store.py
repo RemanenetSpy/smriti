@@ -1,16 +1,19 @@
 """
 Chronos OS — Vector Store
 ==========================
-ChromaDB semantic search layer.
-Works alongside the SQLite Memory Store for hybrid retrieval:
-  • ChromaDB → broad semantic recall (fuzzy)
-  • SQLite   → precise temporal / entity filtering (deterministic)
+pgvector semantic search layer backed by Neon PostgreSQL.
+Replaces ChromaDB while keeping the same API surface.
 
-Together they deliver the Chronos dual-retrieval pipeline.
+Dual-retrieval pipeline:
+  • pgvector  → broad semantic recall  (cosine similarity, fuzzy)
+  • PostgreSQL → precise temporal / entity filtering (deterministic)
+
+Embeddings: all-MiniLM-L6-v2 (384 dims) via sentence-transformers.
 """
 
 from __future__ import annotations
 
+import json
 import logging
 import os
 from datetime import datetime
@@ -23,122 +26,125 @@ logger = logging.getLogger("chronos.vector_store")
 
 class VectorStore:
     """
-    ChromaDB-backed semantic search over Chronos events.
-    Stores embeddings of raw event text with SQLite event IDs
-    as metadata for cross-store joins.
+    pgvector-backed semantic search over Chronos events.
+    Shares the same asyncpg pool as the MemoryStore for efficiency.
     """
 
-    def __init__(self, persist_dir: Optional[str] = None):
-        self.persist_dir = persist_dir or os.getenv(
-            "CHROMA_PERSIST_DIR", "./data/chroma"
-        )
-        self._client = None
-        self._collection = None
+    EMBEDDING_DIM = 384  # all-MiniLM-L6-v2
+
+    def __init__(self, pool=None):
+        # Pool is injected by api/main.py after MemoryStore initializes
+        self._pool = pool
+        self._model = None
 
     # ------------------------------------------------------------------
     # Lifecycle
     # ------------------------------------------------------------------
 
-    async def initialize(self) -> None:
-        """Initialize ChromaDB client and collection."""
+    async def initialize(self, pool=None) -> None:
+        """Create the vectors table and HNSW index if not present."""
+        if pool:
+            self._pool = pool
+
+        if not self._pool:
+            raise RuntimeError("VectorStore requires an asyncpg pool.")
+
+        async with self._pool.acquire() as conn:
+            await conn.execute(f"""
+                CREATE TABLE IF NOT EXISTS event_vectors (
+                    event_id    TEXT PRIMARY KEY REFERENCES events(id) ON DELETE CASCADE,
+                    source_id   TEXT NOT NULL,
+                    owner_id    TEXT NOT NULL,
+                    embedding   vector({self.EMBEDDING_DIM}) NOT NULL,
+                    embed_text  TEXT NOT NULL,
+                    timestamp   TIMESTAMPTZ NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_vectors_source
+                    ON event_vectors(source_id);
+                CREATE INDEX IF NOT EXISTS idx_vectors_owner
+                    ON event_vectors(owner_id);
+            """)
+
+        # Load embedding model in background thread
         import asyncio
-        await asyncio.to_thread(self._sync_initialize)
+        await asyncio.to_thread(self._load_model)
+        logger.info(f"Vector store initialized (pgvector {self.EMBEDDING_DIM}d)")
 
-    def _sync_initialize(self) -> None:
-        """Synchronous ChromaDB initialization (called via to_thread)."""
-        import chromadb
-        from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+    def _load_model(self) -> None:
+        """Load the sentence-transformer model (cached after first call)."""
+        if self._model is not None:
+            return
+        from sentence_transformers import SentenceTransformer
+        self._model = SentenceTransformer("all-MiniLM-L6-v2")
+        logger.info("Embedding model loaded: all-MiniLM-L6-v2")
 
-        os.makedirs(self.persist_dir, exist_ok=True)
-
-        self._client = chromadb.PersistentClient(path=self.persist_dir)
-
-        # Use sentence-transformers (downloads from HuggingFace Hub — fast)
-        # instead of ChromaDB's default ONNX model (very slow CDN)
-        embedding_fn = SentenceTransformerEmbeddingFunction(
-            model_name="all-MiniLM-L6-v2"
-        )
-
-        self._collection = self._client.get_or_create_collection(
-            name="chronos_events",
-            embedding_function=embedding_fn,
-            metadata={
-                "description": "Chronos temporal event embeddings",
-                "hnsw:space": "cosine",
-            },
-        )
-        count = self._collection.count()
-        logger.info(
-            f"Vector store initialized at {self.persist_dir} "
-            f"({count} existing embeddings)"
-        )
-
-    @property
-    def collection(self):
-        if not self._collection:
-            raise RuntimeError(
-                "VectorStore not initialized. Call initialize() first."
-            )
-        return self._collection
+    def _embed(self, text: str) -> list[float]:
+        """Embed text using sentence-transformers."""
+        if self._model is None:
+            self._load_model()
+        return self._model.encode(text, normalize_embeddings=True).tolist()
 
     # ------------------------------------------------------------------
     # Insert
     # ------------------------------------------------------------------
 
     async def add_event(self, event: EventRecord) -> None:
-        """
-        Embed and store an event.
-        Uses ChromaDB's built-in embedding function (all-MiniLM-L6-v2 by default).
-        """
+        """Embed and store a single event vector."""
         import asyncio
-
-        # Build the text to embed: combine SVO + raw for richer semantics
         embed_text = self._build_embed_text(event)
+        embedding = await asyncio.to_thread(self._embed, embed_text)
+        owner_id = event.metadata_json.get("owner_id", event.source_id)
 
-        await asyncio.to_thread(
-            self.collection.add,
-            ids=[event.id],
-            documents=[embed_text],
-            metadatas=[{
-                "source_id": event.source_id,
-                "owner_id": event.metadata_json.get("owner_id", event.source_id),
-                "subject": event.subject,
-                "verb": event.verb,
-                "object": event.object,
-                "timestamp": event.timestamp.isoformat(),
-                "confidence": event.confidence,
-            }],
-        )
+        async with self._pool.acquire() as conn:
+            await conn.execute(
+                """
+                INSERT INTO event_vectors
+                    (event_id, source_id, owner_id, embedding, embed_text, timestamp)
+                VALUES ($1, $2, $3, $4::vector, $5, $6)
+                ON CONFLICT (event_id) DO UPDATE SET
+                    embedding = EXCLUDED.embedding,
+                    embed_text = EXCLUDED.embed_text
+                """,
+                event.id, event.source_id, owner_id,
+                f"[{','.join(str(x) for x in embedding)}]",
+                embed_text, event.timestamp,
+            )
 
     async def add_events_batch(self, events: list[EventRecord]) -> None:
-        """Batch embed and store multiple events."""
+        """Embed and store multiple events — embeddings computed in parallel."""
         if not events:
             return
-
         import asyncio
 
-        ids = [e.id for e in events]
-        documents = [self._build_embed_text(e) for e in events]
-        metadatas = [
-            {
-                "source_id": e.source_id,
-                "owner_id": e.metadata_json.get("owner_id", e.source_id),
-                "subject": e.subject,
-                "verb": e.verb,
-                "object": e.object,
-                "timestamp": e.timestamp.isoformat(),
-                "confidence": e.confidence,
-            }
-            for e in events
+        embed_texts = [self._build_embed_text(e) for e in events]
+        # Encode all at once (sentence-transformers batches efficiently)
+        embeddings = await asyncio.to_thread(
+            lambda: self._model.encode(embed_texts, normalize_embeddings=True, batch_size=32).tolist()
+        )
+
+        rows = [
+            (
+                e.id, e.source_id,
+                e.metadata_json.get("owner_id", e.source_id),
+                f"[{','.join(str(x) for x in emb)}]",
+                txt, e.timestamp,
+            )
+            for e, emb, txt in zip(events, embeddings, embed_texts)
         ]
 
-        await asyncio.to_thread(
-            self.collection.add,
-            ids=ids,
-            documents=documents,
-            metadatas=metadatas,
-        )
-        logger.info(f"Batch added {len(events)} events to vector store")
+        async with self._pool.acquire() as conn:
+            await conn.executemany(
+                """
+                INSERT INTO event_vectors
+                    (event_id, source_id, owner_id, embedding, embed_text, timestamp)
+                VALUES ($1, $2, $3, $4::vector, $5, $6)
+                ON CONFLICT (event_id) DO UPDATE SET
+                    embedding = EXCLUDED.embedding,
+                    embed_text = EXCLUDED.embed_text
+                """,
+                rows,
+            )
+        logger.info(f"Batch added {len(events)} event vectors to pgvector")
 
     # ------------------------------------------------------------------
     # Search
@@ -154,48 +160,63 @@ class VectorStore:
         end_time: Optional[datetime] = None,
     ) -> list[dict]:
         """
-        Semantic search over embedded events.
+        Cosine similarity search over embedded events.
         Returns list of {id, distance, metadata} dicts.
-        
-        Privacy: when owner_id is set, only events belonging to that
-        owner are returned (tenant isolation).
+        Privacy: owner_id enforces strict tenant isolation.
         """
         import asyncio
 
-        # Build WHERE filter
-        where_filter = self._build_where_filter(
-            source_ids, start_time, end_time, owner_id
-        )
+        query_embedding = await asyncio.to_thread(self._embed, query)
+        vec_str = f"[{','.join(str(x) for x in query_embedding)}]"
 
-        kwargs = {
-            "query_texts": [query],
-            "n_results": min(n_results, self.collection.count() or 1),
-        }
-        if where_filter:
-            kwargs["where"] = where_filter
+        conditions, params = [], [vec_str]
+        i = 2
 
-        results = await asyncio.to_thread(
-            self.collection.query,
-            **kwargs,
-        )
+        # Tenant isolation
+        if owner_id:
+            conditions.append(f"owner_id = ${i}"); params.append(owner_id); i += 1
+        elif source_ids:
+            conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
 
-        # Flatten results
-        output = []
-        if results and results["ids"] and results["ids"][0]:
-            for i, event_id in enumerate(results["ids"][0]):
-                output.append({
-                    "id": event_id,
-                    "distance": results["distances"][0][i] if results.get("distances") else 0,
-                    "metadata": results["metadatas"][0][i] if results.get("metadatas") else {},
-                    "document": results["documents"][0][i] if results.get("documents") else "",
-                })
+        if start_time:
+            conditions.append(f"timestamp >= ${i}"); params.append(start_time); i += 1
+        if end_time:
+            conditions.append(f"timestamp <= ${i}"); params.append(end_time); i += 1
 
-        return output
+        params.append(n_results)
+        where = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+
+        query_sql = f"""
+            SELECT event_id,
+                   (embedding <=> $1::vector) AS distance,
+                   source_id, owner_id, embed_text, timestamp
+            FROM event_vectors
+            {where}
+            ORDER BY embedding <=> $1::vector
+            LIMIT ${i}
+        """
+
+        async with self._pool.acquire() as conn:
+            rows = await conn.fetch(query_sql, *params)
+
+        return [
+            {
+                "id": r["event_id"],
+                "distance": float(r["distance"]),
+                "metadata": {
+                    "source_id": r["source_id"],
+                    "owner_id": r["owner_id"],
+                    "timestamp": r["timestamp"].isoformat(),
+                },
+                "document": r["embed_text"],
+            }
+            for r in rows
+        ]
 
     async def count(self) -> int:
-        """Get total number of embeddings."""
-        import asyncio
-        return await asyncio.to_thread(self.collection.count)
+        """Get total number of stored embeddings."""
+        async with self._pool.acquire() as conn:
+            return await conn.fetchval("SELECT COUNT(*) FROM event_vectors")
 
     # ------------------------------------------------------------------
     # Helpers
@@ -203,39 +224,8 @@ class VectorStore:
 
     @staticmethod
     def _build_embed_text(event: EventRecord) -> str:
-        """Build the text to embed for an event."""
-        parts = [
-            f"{event.subject} {event.verb} {event.object}",
-        ]
+        """Build rich text for embedding: SVO + raw text."""
+        parts = [f"{event.subject} {event.verb} {event.object}"]
         if event.raw_text:
             parts.append(event.raw_text)
         return " | ".join(parts)
-
-    @staticmethod
-    def _build_where_filter(
-        source_ids: Optional[list[str]] = None,
-        start_time: Optional[datetime] = None,
-        end_time: Optional[datetime] = None,
-        owner_id: Optional[str] = None,
-    ) -> Optional[dict]:
-        """Build a ChromaDB WHERE filter with tenant isolation."""
-        conditions = []
-
-        # Tenant isolation: owner_id takes priority
-        if owner_id:
-            conditions.append({"owner_id": {"$eq": owner_id}})
-        elif source_ids and len(source_ids) == 1:
-            conditions.append({"source_id": {"$eq": source_ids[0]}})
-        elif source_ids and len(source_ids) > 1:
-            conditions.append({"source_id": {"$in": source_ids}})
-
-        if start_time:
-            conditions.append({"timestamp": {"$gte": start_time.isoformat()}})
-        if end_time:
-            conditions.append({"timestamp": {"$lte": end_time.isoformat()}})
-
-        if not conditions:
-            return None
-        if len(conditions) == 1:
-            return conditions[0]
-        return {"$and": conditions}

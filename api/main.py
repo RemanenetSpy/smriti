@@ -2,6 +2,7 @@
 Chronos OS — FastAPI Application
 ==================================
 The API gateway for the Chronos Temporal AI Agent Ecosystem.
+Backend: Neon PostgreSQL + pgvector (persistent cloud storage).
 
 Endpoints:
   POST /ingest        — Universal event ingestion
@@ -9,7 +10,7 @@ Endpoints:
   POST /connect       — Register SaaS tools
   GET  /connectors    — List connected tools
   POST /agent/run     — Execute agent with temporal memory
-  POST /billing/*     — Stripe checkout + usage
+  POST /billing/*     — Razorpay checkout + usage
 """
 
 from __future__ import annotations
@@ -47,15 +48,13 @@ async def lifespan(app: FastAPI):
     """Initialize and tear down core services."""
     logger.info("🕰️  Chronos OS starting up...")
 
-    # Initialize Memory Store (SQLite)
-    db_path = os.getenv("CHRONOS_DB_PATH", "./data/chronos.db")
-    memory_store = MemoryStore(db_path)
+    # Initialize Memory Store (Neon PostgreSQL via asyncpg pool)
+    memory_store = MemoryStore()
     await memory_store.initialize()
 
-    # Initialize Vector Store (ChromaDB)
-    chroma_dir = os.getenv("CHROMA_PERSIST_DIR", "./data/chroma")
-    vector_store = VectorStore(chroma_dir)
-    await vector_store.initialize()
+    # Initialize Vector Store (pgvector — shares the same pool)
+    vector_store = VectorStore()
+    await vector_store.initialize(pool=memory_store.pool)
 
     # Initialize SVO Parser (LiteLLM Mixture of Agents Router)
     svo_parser = SVOParser()
@@ -63,7 +62,7 @@ async def lifespan(app: FastAPI):
     # Register singletons for dependency injection
     set_stores(memory_store, vector_store, svo_parser)
 
-    logger.info("✅ Chronos OS ready — all systems online")
+    logger.info("✅ Chronos OS ready — Neon PostgreSQL + pgvector online")
 
     yield  # App is running
 
@@ -84,13 +83,13 @@ app = FastAPI(
         "Structured long-term memory for every agent and SaaS product. "
         "Powered by SVO event tuples + dual calendar architecture."
     ),
-    version="0.1.0",
+    version="0.2.0",
     lifespan=lifespan,
     docs_url="/docs",
     redoc_url="/redoc",
 )
 
-# CORS — allow all origins for development
+# CORS — allow all origins for development / Streamlit
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -125,8 +124,9 @@ async def health_check():
     """Health check — verify Chronos OS is alive."""
     return {
         "service": "Chronos OS",
-        "version": "0.1.0",
+        "version": "0.2.0",
         "status": "operational",
+        "storage": "Neon PostgreSQL + pgvector",
         "tagline": "Letters to the Future — for agents.",
         "docs": "/docs",
     }
@@ -147,8 +147,8 @@ async def detailed_health():
         return {
             "status": "healthy",
             "stores": {
-                "sqlite_events": event_count,
-                "chroma_embeddings": vector_count,
+                "postgres_events": event_count,
+                "pgvector_embeddings": vector_count,
             },
         }
     except Exception as e:

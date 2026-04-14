@@ -5,7 +5,7 @@ WORKDIR /app
 # Install build dependencies for ChromaDB/SQLite
 RUN apt-get update && apt-get install -y \
     build-essential \
-    sqlite3 \
+    libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install python dependencies
