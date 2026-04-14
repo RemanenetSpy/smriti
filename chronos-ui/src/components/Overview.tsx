@@ -59,7 +59,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
           </div>
           <div className="glass-panel text-center flex flex-col items-center justify-center">
             <div className="font-inter text-sm font-semibold text-[var(--chronos-wax-red)]">
-              Qwen 3 + Llama
+              Qwen 3 235B
             </div>
             <div className="font-inter text-[0.65rem] uppercase tracking-wider text-[var(--chronos-text-dim)] mt-3">AI Engine</div>
           </div>

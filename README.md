@@ -9,7 +9,7 @@ pinned: false
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Live-4ADE80?style=for-the-badge" alt="Live" />
-  <img src="https://img.shields.io/badge/AI-Llama%203.3%2070B-C7AB6B?style=for-the-badge" alt="AI" />
+  <img src="https://img.shields.io/badge/AI-Qwen%203%20235B-C7AB6B?style=for-the-badge" alt="AI" />
   <img src="https://img.shields.io/badge/Free%20Tier-10K%20events%2Fmo-6B7194?style=for-the-badge" alt="Free" />
 </p>
 
@@ -44,7 +44,7 @@ pinned: false
 **The solution:** Chronos OS is a **temporal memory API** that any AI agent or SaaS product can plug into. It:
 
 1. **Ingests** text from any source (CRM, chat, email, code commits...)
-2. **Decomposes** it into structured Subject-Verb-Object events using AI (Llama 3.3 70B via Groq)
+2. **Decomposes** it into structured Subject-Verb-Object events using AI (Qwen 3 235B via Cerebras)
 3. **Stores** events in dual calendars — SQLite for temporal queries, ChromaDB for semantic search
 4. **Retrieves** relevant memories via natural language — "What happened with Acme Corp last quarter?"
 5. **Powers** agents that actually remember — an AI that knows *your* history
@@ -93,8 +93,8 @@ LATER, ANY AGENT CAN ASK:
 │                                                              │
 │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────┐  │
 │  │ SVO Parser   │  │ Auth + Tiers │  │ Razorpay Billing   │  │
-│  │ Llama 3.3 70B│  │ API keys     │  │ Explorer/Builder/  │  │
-│  │ via Groq API │  │ SHA-256 hash │  │ Scale              │  │
+│  │ Qwen 3 235B  │  │ API keys     │  │ Explorer/Builder/  │  │
+│  │ via Cerebras │  │ SHA-256 hash │  │ Scale              │  │
 │  └──────────────┘  └──────────────┘  └────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -105,7 +105,7 @@ LATER, ANY AGENT CAN ASK:
 chronos-hub/
 ├── chronos_core/           🧠 Memory Core
 │   ├── models.py           Pydantic models, tier config, pricing
-│   ├── svo_parser.py       AI event extraction (Groq / Llama 3.3)
+│   ├── svo_parser.py       AI event extraction (Cerebras / Qwen 3)
 │   ├── memory_store.py     SQLite dual calendars (events + turns)
 │   └── vector_store.py     ChromaDB semantic search (sentence-transformers)
 │
@@ -439,7 +439,7 @@ User: "What's our biggest contract?"
          │
          ▼
 ┌─────────────────────┐
-│  call_model_node    │  ← Llama 3.3 70B (Groq)
+│  call_model_node    │  ← Qwen 3 235B (Cerebras)
 │  System prompt +    │     with memory context injected
 │  memory context +   │
 │  user question      │
@@ -453,11 +453,11 @@ User: "What's our biggest contract?"
 
 | Property | Value |
 |---|---|
-| **Model** | Llama 3.3 70B Versatile |
-| **Provider** | Groq (free tier) |
-| **Speed** | 300+ tokens/second |
-| **Daily Limit** | 14,400 requests/day |
-| **Cost** | Free (no credit card) |
+| **Model** | Qwen 3 235B Instruct |
+| **Provider** | Cerebras (free tier) |
+| **Speed** | 2,100+ tokens/second |
+| **Daily Limit** | 1,000,000 requests/day |
+| **Cost** | Free |
 
 ---
 
@@ -503,7 +503,7 @@ Chronos OS uses a three-tier model with metered overage:
 | **Structured Storage** | SQLite (via aiosqlite) |
 | **Vector Search** | ChromaDB + sentence-transformers |
 | **Embedding Model** | all-MiniLM-L6-v2 (HuggingFace) |
-| **LLM** | Llama 3.3 70B (Groq, free) |
+| **LLM** | Qwen 3 235B (Cerebras, free) |
 | **Agent Framework** | LangGraph + LangChain |
 | **Dashboard** | Streamlit |
 | **Billing** | Razorpay |
