@@ -12,8 +12,8 @@ import secrets
 import logging
 from typing import Optional
 
-from fastapi import HTTPException, Security
-from fastapi.security import APIKeyHeader
+from fastapi import HTTPException, Security, Request
+from fastapi.security import APIKeyHeader, HTTPBearer, HTTPAuthorizationCredentials
 
 from chronos_core.models import TierName, TIER_LIMITS
 from .deps import get_memory_store
@@ -38,16 +38,22 @@ def generate_api_key() -> str:
 
 
 async def verify_api_key(
-    api_key: Optional[str] = Security(api_key_header),
+    request: Request,
+    api_key_header: Optional[str] = Security(api_key_header),
+    bearer_token: Optional[HTTPAuthorizationCredentials] = Security(bearer_scheme),
 ) -> dict:
     """
-    FastAPI dependency: validate the API key and return source info.
+    FastAPI dependency: validate the API key from either X-API-Key or Bearer token.
     Raises 401 if missing, 403 if invalid.
     """
+    api_key = api_key_header
+    if not api_key and bearer_token:
+        api_key = bearer_token.credentials
+
     if not api_key:
         raise HTTPException(
             status_code=401,
-            detail="Missing API key. Include X-API-Key header.",
+            detail="Missing API key. Include X-API-Key header or Authorization: Bearer token.",
         )
 
     key_hash = hash_api_key(api_key)
