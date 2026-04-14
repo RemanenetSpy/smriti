@@ -25,6 +25,7 @@ logger = logging.getLogger("chronos.auth")
 # ---------------------------------------------------------------------------
 
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 def hash_api_key(key: str) -> str:
