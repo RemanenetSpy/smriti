@@ -171,34 +171,39 @@ class MemoryStore:
         return event.id
 
     async def insert_events_batch(self, events: list[EventRecord]) -> list[str]:
-        """Batch insert multiple events."""
-        ids = []
-        for event in events:
-            await self.db.execute(
-                """INSERT INTO events
-                   (id, source_id, subject, verb, object, timestamp,
-                    datetime_start, datetime_end, entity_aliases,
-                    confidence, metadata_json, raw_text, created_at)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (
-                    event.id,
-                    event.source_id,
-                    event.subject,
-                    event.verb,
-                    event.object,
-                    event.timestamp.isoformat(),
-                    event.datetime_start.isoformat() if event.datetime_start else None,
-                    event.datetime_end.isoformat() if event.datetime_end else None,
-                    json.dumps(event.entity_aliases),
-                    event.confidence,
-                    json.dumps(event.metadata_json),
-                    event.raw_text,
-                    event.created_at.isoformat(),
-                ),
+        """Batch insert multiple events using executemany for efficiency."""
+        if not events:
+            return []
+
+        rows = [
+            (
+                event.id,
+                event.source_id,
+                event.subject,
+                event.verb,
+                event.object,
+                event.timestamp.isoformat(),
+                event.datetime_start.isoformat() if event.datetime_start else None,
+                event.datetime_end.isoformat() if event.datetime_end else None,
+                json.dumps(event.entity_aliases),
+                event.confidence,
+                json.dumps(event.metadata_json),
+                event.raw_text,
+                event.created_at.isoformat(),
             )
-            ids.append(event.id)
+            for event in events
+        ]
+
+        await self.db.executemany(
+            """INSERT INTO events
+               (id, source_id, subject, verb, object, timestamp,
+                datetime_start, datetime_end, entity_aliases,
+                confidence, metadata_json, raw_text, created_at)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            rows,
+        )
         await self.db.commit()
-        return ids
+        return [e.id for e in events]
 
     async def query_temporal(
         self,

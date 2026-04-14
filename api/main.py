@@ -57,7 +57,7 @@ async def lifespan(app: FastAPI):
     vector_store = VectorStore(chroma_dir)
     await vector_store.initialize()
 
-    # Initialize SVO Parser (Gemini 2.5 Flash)
+    # Initialize SVO Parser (LiteLLM Mixture of Agents Router)
     svo_parser = SVOParser()
 
     # Register singletons for dependency injection

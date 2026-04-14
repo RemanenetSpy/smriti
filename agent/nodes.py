@@ -96,7 +96,7 @@ async def retrieve_memory_node(state: dict) -> dict:
 async def call_model_node(state: dict) -> dict:
     """
     Node: Call the LLM with memory-augmented context.
-    Uses Groq API (free tier — Llama 3.3 70B at 300+ tok/sec).
+    Uses the Heavy Pipeline from the Mixture of Agents Router.
     Memory context is injected into the system prompt by retrieve_memory_node,
     so the model can reason about temporal events without tool calling.
     """
@@ -133,8 +133,7 @@ async def call_model_node(state: dict) -> dict:
         logger.error(f"LLM call failed: {e}")
         error_msg = AIMessage(
             content=f"I apologize, but I encountered an error: {str(e)}. "
-            f"Please check your GROQ_API_KEY configuration. "
-            f"Get a free key at https://console.groq.com"
+            f"Please check your API key configuration (CEREBRAS_API_KEY / GROQ_API_KEY)."
         )
         state["messages"] = messages + [error_msg]
 

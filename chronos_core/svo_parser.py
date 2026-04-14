@@ -2,8 +2,8 @@
 Chronos OS — SVO Parser
 ========================
 Extracts Subject-Verb-Object event tuples from raw text using
-Groq API (free tier — hosts DeepSeek R1, Llama, etc. at 300+ tok/sec).
-Falls back to regex extraction when LLM quota is exhausted.
+the Mixture of Agents LiteLLM Router (Cerebras + Groq fallback).
+Falls back to regex extraction when all LLM quotas are exhausted.
 """
 
 from __future__ import annotations
@@ -238,8 +238,9 @@ class SVOParser:
                 logger.warning(f"Failed to parse SVO tuple: {item} — {e}")
                 continue
 
+        model_name = self._llm_kwargs.get('model', 'unknown')
         logger.info(
-            f"Groq ({self.model}) extracted {len(tuples)} SVO tuples "
+            f"Fast Pipeline ({model_name}) extracted {len(tuples)} SVO tuples "
             f"from text ({len(text)} chars)"
         )
         return tuples

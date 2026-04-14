@@ -41,7 +41,7 @@ class TurnRole(str, Enum):
 class SVOTuple(BaseModel):
     """
     Subject-Verb-Object event tuple — the atomic unit of Chronos memory.
-    Decomposed from raw text by the SVO parser (Gemini 2.5 Flash).
+    Decomposed from raw text by the SVO parser (LiteLLM Mixture of Agents).
     """
     subject: str = Field(..., description="The entity performing the action")
     verb: str = Field(..., description="The action being performed")
