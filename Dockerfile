@@ -31,5 +31,5 @@ COPY --chown=user . .
 # Expose port 7860 for Hugging Face Spaces
 EXPOSE 7860
 
-# Start the application
-CMD ["python", "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "7860"]
+# Start the application with debug logging
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "7860", "--log-level", "debug"]

@@ -46,25 +46,36 @@ logger = logging.getLogger("chronos.api")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Initialize and tear down core services."""
-    logger.info("🕰️  Chronos OS starting up...")
+    try:
+        logger.info("🕰️  Chronos OS starting up...")
 
-    # Initialize Memory Store
-    memory_store = MemoryStore()
-    await memory_store.initialize()
-    
-    # Initialize Vector Store
-    vector_store = VectorStore()
-    await vector_store.initialize(pool=memory_store.pool)
+        # Initialize Memory Store
+        memory_store = MemoryStore()
+        await memory_store.initialize()
+        
+        # Initialize Vector Store
+        vector_store = VectorStore()
+        await vector_store.initialize(pool=memory_store.pool)
 
-    # Initialize SVO Parser (LiteLLM Mixture of Agents Router)
-    svo_parser = SVOParser()
+        # Initialize SVO Parser
+        svo_parser = SVOParser()
 
-    # Register singletons for dependency injection
-    set_stores(memory_store, vector_store, svo_parser)
+        # Register singletons
+        set_stores(memory_store, vector_store, svo_parser)
 
-    logger.info("✅ Chronos OS ready — Neon PostgreSQL + pgvector online")
-
-    yield  # App is running
+        logger.info("✅ Chronos OS ready — Systems online")
+        
+        yield  # App is running
+        
+    except Exception as e:
+        import traceback
+        import asyncio
+        error_msg = f"❌ CRITICAL STARTUP FAILURE: {str(e)}"
+        logger.critical(error_msg)
+        print(f"\n\n!!! CRITICAL STARTUP FAILURE !!!\n{error_msg}\n\n", flush=True)
+        traceback.print_exc()
+        await asyncio.sleep(2)
+        raise e
 
     # Shutdown
     logger.info("🔒 Chronos OS shutting down...")
