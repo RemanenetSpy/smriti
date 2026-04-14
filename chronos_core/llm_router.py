@@ -5,9 +5,9 @@ Intelligently routes tasks to different LLMs to aggregate free-tier API limits.
 Falls back safely if rate limits (429) or downtimes occur.
 
 Pipelines:
-  Fast  → Cerebras Llama 3.1 8B  (SVO extraction, high volume)
+  Fast  → Groq Llama 3.1 8B      (SVO extraction, high volume)
   Heavy → Cerebras Qwen 3 235B   (Agent reasoning, deep logic)
-  Fallback → Groq equivalents    (automatic on failure)
+  Fallback → Automated redundancy where applicable
 """
 
 import os
@@ -27,22 +27,22 @@ logger = logging.getLogger("chronos.llm_router")
 def get_fast_pipeline_kwargs() -> dict[str, Any]:
     """
     Return litellm.acompletion kwargs for the Fast Pipeline.
-    Primary: Cerebras Llama 3.1 8B  (1M tokens/day, extreme speed)
-    Fallback: Groq Llama 3.1 8B Instant (14,400 req/day)
+    Primary: Groq Llama 3.1 8B Instant
+    Fallback: Cerebras Llama 3.1 8B
     """
     has_cerebras = bool(os.getenv("CEREBRAS_API_KEY"))
     has_groq = bool(os.getenv("GROQ_API_KEY"))
 
-    if has_cerebras and has_groq:
+    if has_groq and has_cerebras:
         return {
-            "model": "cerebras/llama3.1-8b",
-            "fallbacks": [{"model": "groq/llama-3.1-8b-instant"}],
+            "model": "groq/llama-3.1-8b-instant",
+            "fallbacks": [{"model": "cerebras/llama3.1-8b"}],
             "num_retries": 3,
         }
-    elif has_cerebras:
-        return {"model": "cerebras/llama3.1-8b", "num_retries": 3}
-    else:
+    elif has_groq:
         return {"model": "groq/llama-3.1-8b-instant", "num_retries": 3}
+    else:
+        return {"model": "cerebras/llama3.1-8b", "num_retries": 3}
 
 
 # ---------------------------------------------------------------------------
