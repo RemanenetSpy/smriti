@@ -85,8 +85,24 @@ export function Billing({ apiKey }: { apiKey: string }) {
                   <tr className="bg-[var(--chronos-border)] text-[var(--chronos-ink)] font-semibold text-sm">
                     <th className="p-3">Feature</th>
                     <th className="p-3 bg-[#e8e4d3]">Explorer</th>
-                    <th className="p-3 bg-[#e0dacc]">⭐ Builder <br/><span className="text-xs font-normal text-amber-700">Coming Soon</span></th>
-                    <th className="p-3 bg-[#d5cebc]">⭐ Scale <br/><span className="text-xs font-normal text-amber-700">Coming Soon</span></th>
+                    <th className="p-3 bg-[#e0dacc]">
+                      <div className="flex items-center gap-1.5 font-bold tracking-wider text-[var(--chronos-text-dim)]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#cfab78" className="mt-[1px]">
+                          <path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3-9H9V7a3 3 0 0 1 6 0v3z" />
+                        </svg>
+                        BUILDER
+                      </div>
+                      <div className="text-[10px] font-normal text-amber-700/80 uppercase tracking-[2px] mt-1 ml-[18px]">Coming Soon</div>
+                    </th>
+                    <th className="p-3 bg-[#d5cebc]">
+                      <div className="flex items-center gap-1.5 font-bold tracking-wider text-[var(--chronos-text-dim)]">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#c39d67" className="mt-[1px]">
+                          <path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3-9H9V7a3 3 0 0 1 6 0v3z" />
+                        </svg>
+                        SCALE
+                      </div>
+                      <div className="text-[10px] font-normal text-amber-800/80 uppercase tracking-[2px] mt-1 ml-[18px]">Coming Soon</div>
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="text-sm font-inter divide-y divide-[var(--chronos-border)] text-[var(--chronos-text)]">
