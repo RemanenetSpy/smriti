@@ -84,10 +84,10 @@ LATER, ANY AGENT CAN ASK:
 │  │              🧠 Memory Core                            │  │
 │  │  ┌──────────────────┐  ┌──────────────────────────┐    │  │
 │  │  │  Event Calendar  │  │    Embedding Index       │    │  │
-│  │  │  (SQLite)        │  │    (ChromaDB)            │    │  │
+│  │  │  (PostgreSQL)    │  │    (pgvector)            │    │  │
 │  │  │  • SVO tuples    │  │    • Semantic vectors    │    │  │
 │  │  │  • Timestamps    │  │    • Cosine similarity   │    │  │
-│  │  │  • Turn history  │  │    • Fast nearest-neighbor│   │  │
+│  │  │  • Turn history  │  │    • Fast pgvector scan  │    │  │
 │  │  └──────────────────┘  └──────────────────────────┘    │  │
 │  └────────────────────────────────────────────────────────┘  │
 │                                                              │
@@ -106,8 +106,8 @@ chronos-hub/
 ├── chronos_core/           🧠 Memory Core
 │   ├── models.py           Pydantic models, tier config, pricing
 │   ├── svo_parser.py       AI event extraction (Groq / Llama 3.1)
-│   ├── memory_store.py     SQLite dual calendars (events + turns)
-│   └── vector_store.py     ChromaDB semantic search (sentence-transformers)
+│   ├── memory_store.py     PostgreSQL dual calendars (events + turns)
+│   └── vector_store.py     pgvector semantic search (sentence-transformers)
 │
 ├── api/                    🌐 FastAPI Gateway
 │   ├── main.py             App entry, CORS, lifespan
@@ -125,8 +125,8 @@ chronos-hub/
 │   ├── nodes.py            Processing nodes (retrieve, call LLM)
 │   └── tools.py            Built-in tools for agents
 │
-├── dashboard/              📊 Streamlit Dashboard
-│   └── app.py              7-page UI (navy+gold Chronos design)
+├── chronos-ui/             📊 Next.js Web Dashboard
+│   └── src/app             Full app UI (navy+gold Chronos design)
 │
 ├── .env                    Environment variables (your keys)
 ├── .env.example            Template
@@ -176,10 +176,12 @@ Uvicorn running on http://127.0.0.1:8000
 
 ```bash
 # In a second terminal:
-python -m streamlit run dashboard/app.py --server.port 8501
+cd chronos-ui
+npm install
+npm run dev
 ```
 
-Open **http://localhost:8501** in your browser.
+Open **http://localhost:3000** in your browser.
 
 ### Step 5 — Test It
 
@@ -387,7 +389,7 @@ curl http://localhost:8000/health
 ```json
 {
   "status": "healthy",
-  "stores": {"sqlite_events": 4, "chroma_embeddings": 4}
+  "stores": {"postgres_events": 4, "pgvector_embeddings": 4}
 }
 ```
 
@@ -395,7 +397,7 @@ curl http://localhost:8000/health
 
 ## Dashboard Guide
 
-The dashboard runs at **http://localhost:8501** and provides a visual interface for all Chronos features.
+The dashboard runs at **http://localhost:3000** and provides a visual interface for all Chronos features.
 
 | Page | What It Does |
 |---|---|
@@ -409,7 +411,7 @@ The dashboard runs at **http://localhost:8501** and provides a visual interface 
 
 ### How to Use the Dashboard
 
-1. Open **http://localhost:8501**
+1. Open **http://localhost:3000**
 2. Click **🔑 API Keys** → Click **Generate Key** → Copy the key
 3. Paste the key into the **🔑 API Key** field in the sidebar
 4. Go to **📥 Ingest Events** → Type events → Click **Ingest Into Memory**
@@ -500,12 +502,12 @@ Chronos OS uses a three-tier model with metered overage:
 | Component | Technology |
 |---|---|
 | **API Framework** | FastAPI + Uvicorn |
-| **Structured Storage** | SQLite (via aiosqlite) |
-| **Vector Search** | ChromaDB + sentence-transformers |
+| **Structured Storage** | Neon PostgreSQL |
+| **Vector Search** | PostgreSQL pgvector + sentence-transformers |
 | **Embedding Model** | all-MiniLM-L6-v2 (HuggingFace) |
 | **LLM** | Qwen 3 235B (Cerebras) & Llama 3.1 8B (Groq) |
 | **Agent Framework** | LangGraph + LangChain |
-| **Dashboard** | Streamlit |
+| **Dashboard** | Next.js + React (Vercel) |
 | **Billing** | Razorpay |
 | **Auth** | SHA-256 hashed API keys |
 
@@ -535,8 +537,8 @@ python -m uvicorn api.main:app --port 8000
 
 **Terminal 2 — Dashboard:**
 ```bash
-cd chronos-hub
-python -m streamlit run dashboard/app.py --server.port 8501
+cd chronos-ui
+npm run dev
 ```
 
 ---
