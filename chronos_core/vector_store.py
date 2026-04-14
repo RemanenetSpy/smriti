@@ -65,9 +65,9 @@ class VectorStore:
                     ON event_vectors(owner_id);
             """)
 
-        # Load embedding model in background thread
+        # Load embedding model in background thread without blocking port binding
         import asyncio
-        await asyncio.to_thread(self._load_model)
+        asyncio.create_task(asyncio.to_thread(self._load_model))
         logger.info(f"Vector store initialized (pgvector {self.EMBEDDING_DIM}d)")
 
     def _load_model(self) -> None:
