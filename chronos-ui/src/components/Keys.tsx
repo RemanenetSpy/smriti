@@ -34,15 +34,45 @@ export function Keys() {
 
       <div className="glass-panel p-6 mb-8 max-w-md">
         <label className="block text-sm font-semibold text-[var(--chronos-text)] mb-3">Select Tier</label>
-        <select 
-          value={tier} 
-          onChange={e => setTier(e.target.value)} 
-          className="chronos-input mb-6 bg-white"
-        >
-          <option value="explorer">Explorer (Free - 10k Events)</option>
-          <option value="builder" disabled>🔒 Builder ($49 - 500k Events) — Coming Soon</option>
-          <option value="scale" disabled>🔒 Scale ($249 - 5M Events) — Coming Soon</option>
-        </select>
+        
+        <div className="space-y-3 mb-6">
+          {/* Explorer - Active */}
+          <div className="border-2 border-[#A93322] bg-[#A93322]/5 rounded-lg p-4 cursor-pointer flex justify-between items-center shadow-sm">
+            <div>
+              <div className="font-semibold text-[#A93322]">Explorer</div>
+              <div className="text-xs text-[var(--chronos-text-dim)]">Free - 10k Events</div>
+            </div>
+            <div className="w-5 h-5 rounded-full border-[5px] border-[#A93322] bg-white"></div>
+          </div>
+
+          {/* Builder - Disabled */}
+          <div className="border border-[var(--chronos-border)] bg-[#fdfdfc] rounded-lg p-4 opacity-80 flex justify-between items-center">
+            <div>
+              <div className="font-semibold text-[var(--chronos-text-dim)] flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#cfab78" className="mb-[1px]">
+                  <path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3-9H9V7a3 3 0 0 1 6 0v3z" />
+                </svg>
+                Builder
+              </div>
+              <div className="text-xs text-[var(--chronos-text-dim)] ml-5">$49/mo - 500k Events</div>
+            </div>
+            <div className="text-[10px] font-bold text-amber-800/80 uppercase tracking-wider bg-[#f8f1e3] px-2 py-1 rounded">Coming Soon</div>
+          </div>
+
+          {/* Scale - Disabled */}
+          <div className="border border-[var(--chronos-border)] bg-[#fdfdfc] rounded-lg p-4 opacity-80 flex justify-between items-center">
+            <div>
+              <div className="font-semibold text-[var(--chronos-text-dim)] flex items-center gap-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#c39d67" className="mb-[1px]">
+                  <path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3-9H9V7a3 3 0 0 1 6 0v3z" />
+                </svg>
+                Scale
+              </div>
+              <div className="text-xs text-[var(--chronos-text-dim)] ml-5">$249/mo - 5M Events</div>
+            </div>
+            <div className="text-[10px] font-bold text-amber-800/80 uppercase tracking-wider bg-[#f8f1e3] px-2 py-1 rounded">Coming Soon</div>
+          </div>
+        </div>
 
         <button 
           onClick={generateKey} 
