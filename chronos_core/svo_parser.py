@@ -18,6 +18,8 @@ from typing import Optional
 from .models import SVOTuple
 
 logger = logging.getLogger("chronos.svo_parser")
+logger.info("SVO Parser module loaded — version 9 (robust JSON extraction)")
+print(">>> SVO PARSER v9 LOADED — _extract_json active <<<", flush=True)
 
 # ---------------------------------------------------------------------------
 # SVO extraction prompt

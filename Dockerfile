@@ -25,8 +25,14 @@ ENV HOME=/home/user \
 COPY --chown=user requirements.txt .
 RUN pip install --no-cache-dir --user -r requirements.txt
 
-# Copy application code
+# Cache-bust: change this value to force Docker to re-copy source files
+ARG CACHE_BUST=v9
+
+# Copy application code (fresh, no cache)
 COPY --chown=user . .
+
+# Remove any stale bytecode
+RUN find /app -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null; true
 
 # Expose port 7860 for Hugging Face Spaces
 EXPOSE 7860
