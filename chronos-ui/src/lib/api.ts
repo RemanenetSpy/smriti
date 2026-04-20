@@ -1,5 +1,5 @@
 // API helper for Chronos API
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://spy9191-chronos-api-backend.hf.space";
 
 export async function apiCall(
   method: "GET" | "POST",

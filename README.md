@@ -208,9 +208,9 @@ Found: 4 results in ~80ms
 
 ## API Reference
 
-**Base URL:** `http://localhost:8000`
-**Auth:** Include your API key in the `X-API-Key` header.
-**Docs:** Open `http://localhost:8000/docs` for interactive Swagger UI.
+**Base URL:** `https://spy9191-chronos-api-backend.hf.space`
+**Auth:** Include your API key in the `Authorization: Bearer <key>` header.
+**Docs:** Open `https://spy9191-chronos-api-backend.hf.space/docs` for interactive Swagger UI.
 
 ---
 
@@ -219,7 +219,7 @@ Found: 4 results in ~80ms
 No auth required. Creates a new API key.
 
 ```bash
-curl -X POST "http://localhost:8000/billing/keys?tier=explorer"
+curl -X POST "https://spy9191-chronos-api-backend.hf.space/billing/keys?tier=explorer"
 ```
 
 **Response:**
@@ -239,7 +239,7 @@ curl -X POST "http://localhost:8000/billing/keys?tier=explorer"
 Send raw text; the AI extracts structured SVO events automatically.
 
 ```bash
-curl -X POST http://localhost:8000/ingest \
+curl -X POST https://spy9191-chronos-api-backend.hf.space/ingest \
   -H "X-API-Key: chrn_your_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -285,7 +285,7 @@ curl -X POST http://localhost:8000/ingest \
 Natural language search with optional time filtering.
 
 ```bash
-curl -X POST http://localhost:8000/query \
+curl -X POST https://spy9191-chronos-api-backend.hf.space/query \
   -H "X-API-Key: chrn_your_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -331,7 +331,7 @@ curl -X POST http://localhost:8000/query \
 Conversational AI with full temporal memory access.
 
 ```bash
-curl -X POST http://localhost:8000/agent/run \
+curl -X POST https://spy9191-chronos-api-backend.hf.space/agent/run \
   -H "X-API-Key: chrn_your_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -355,7 +355,7 @@ curl -X POST http://localhost:8000/agent/run \
 ### `POST /connect` — Register a SaaS Tool
 
 ```bash
-curl -X POST http://localhost:8000/connect \
+curl -X POST https://spy9191-chronos-api-backend.hf.space/connect \
   -H "X-API-Key: chrn_your_key" \
   -H "Content-Type: application/json" \
   -d '{
@@ -374,7 +374,7 @@ curl -X POST http://localhost:8000/connect \
 ### `GET /billing/usage` — Check Usage
 
 ```bash
-curl http://localhost:8000/billing/usage \
+curl https://spy9191-chronos-api-backend.hf.space/billing/usage \
   -H "X-API-Key: chrn_your_key"
 ```
 
@@ -383,7 +383,7 @@ curl http://localhost:8000/billing/usage \
 ### `GET /health` — Health Check
 
 ```bash
-curl http://localhost:8000/health
+curl https://spy9191-chronos-api-backend.hf.space/health
 ```
 
 ```json
@@ -576,7 +576,7 @@ print(response.json()["response"])
 ### JavaScript / Node.js
 
 ```javascript
-const API = "http://localhost:8000";
+const API = "https://spy9191-chronos-api-backend.hf.space";
 const headers = { "X-API-Key": "chrn_your_key", "Content-Type": "application/json" };
 
 // Ingest
