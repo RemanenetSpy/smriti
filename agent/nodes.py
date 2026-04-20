@@ -190,7 +190,7 @@ async def _execute_tool(name: str, args: dict, state: dict) -> str:
 
         results = await vector.semantic_search(
             query=args.get("query", ""),
-            n_results=args.get("max_results", 10),
+            n_results=int(args.get("max_results", 10)),
             source_ids=state.get("source_ids"),
         )
 

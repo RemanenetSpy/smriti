@@ -190,40 +190,24 @@ class SVOParser:
         # and it can cause malformed output with some models.
 
         max_retries = 3
-        parsed = None
         for attempt in range(max_retries):
             try:
-                logger.info(f"[DEBUG] Calling litellm.acompletion attempt {attempt+1}...")
                 response = await litellm.acompletion(**kwargs)
-                logger.info(f"[DEBUG] Response received. Type: {type(response)}")
+                raw = response.choices[0].message.content
+                if not raw:
+                    raise ValueError("Empty LLM response")
 
-                msg = response.choices[0].message
-                logger.info(f"[DEBUG] Message type: {type(msg)}, content type: {type(msg.content)}")
-                logger.info(f"[DEBUG] Content repr: {repr(msg.content)[:200]}")
-
-                raw = msg.content
-                if not raw or not isinstance(raw, str):
-                    raise ValueError(f"Bad LLM response: type={type(raw)}, value={repr(raw)[:100]}")
-
-                logger.info(f"[DEBUG] Calling _extract_json with {len(raw)} chars")
                 parsed = self._extract_json(raw)
-                logger.info(f"[DEBUG] _extract_json returned type: {type(parsed)}")
                 break  # Success!
-            except Exception as e:
-                logger.warning(f"[DEBUG] Exception on attempt {attempt+1}: type={type(e).__name__}, msg={e}")
-                import traceback
-                logger.warning(f"[DEBUG] Traceback: {traceback.format_exc()}")
+            except (litellm.RateLimitError, Exception) as e:
                 is_rate_limit = "RateLimit" in str(e) or "high traffic" in str(e).lower()
                 if is_rate_limit and attempt < max_retries - 1:
                     wait_time = (attempt + 1) * 2
-                    logger.warning(f"Rate limited. Waiting {wait_time}s...")
+                    logger.warning(f"Rate limited by {kwargs.get('model')}. Waiting {wait_time}s to retry...")
                     import asyncio
                     await asyncio.sleep(wait_time)
                     continue
                 raise e
-
-        if parsed is None:
-            raise ValueError("All retry attempts failed")
 
         # Handle both array and {"events": [...]} formats
         if isinstance(parsed, dict):
