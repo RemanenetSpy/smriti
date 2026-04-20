@@ -258,6 +258,7 @@ class SVOParser:
         Robustly extract JSON from messy LLM output.
         Handles: bare objects, newlines, markdown fences, partial JSON, etc.
         """
+        logger.info(f"_extract_json called with {len(raw)} chars: {raw[:80]}...")
         # 1. Strip whitespace and markdown fences
         cleaned = raw.strip()
         if cleaned.startswith("```"):
