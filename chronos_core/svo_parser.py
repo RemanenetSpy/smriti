@@ -178,37 +178,26 @@ class SVOParser:
         kwargs["messages"] = [
             {
                 "role": "system",
-                "content": "You are a precise JSON event extractor. Output ONLY valid JSON arrays.",
+                "content": "You are a precise JSON event extractor. Output ONLY a valid JSON array. No markdown, no explanation, no code fences.",
             },
             {"role": "user", "content": prompt},
         ]
         kwargs["temperature"] = 0.1
         kwargs["max_tokens"] = 2000
-        # Not all fallback models gracefully support strict json format enforcement in litellm uniformly if the provider doesn't support it.
-        # But we will use it for safety.
-        kwargs["response_format"] = {"type": "json_object"}
+        # NOTE: Do NOT set response_format — Groq/Cerebras handle it inconsistently
+        # and it can cause malformed output with some models.
 
-        # LiteLLM acompletion directly leverages the fallback arrays natively!
         max_retries = 3
         for attempt in range(max_retries):
             try:
                 response = await litellm.acompletion(**kwargs)
-                raw = response.choices[0].message.content.strip()
+                raw = response.choices[0].message.content
+                if not raw:
+                    raise ValueError("Empty LLM response")
                 
-                # Aggressively extract the JSON part (handles models that add chatter)
-                json_match = re.search(r"(\[.*\]|\{.*\})", raw, re.DOTALL)
-                if json_match:
-                    raw = json_match.group(0)
-
-                # Strip markdown code fences if present
-                if raw.startswith("```"):
-                    raw = re.sub(r"^```(?:json)?\s*", "", raw)
-                    raw = re.sub(r"\s*```$", "", raw)
-
-                parsed = json.loads(raw)
-                break # Success!
+                parsed = self._extract_json(raw)
+                break  # Success!
             except (litellm.RateLimitError, Exception) as e:
-                # If it's a rate limit or high traffic (Cerebras), wait and retry
                 is_rate_limit = "RateLimit" in str(e) or "high traffic" in str(e).lower()
                 if is_rate_limit and attempt < max_retries - 1:
                     wait_time = (attempt + 1) * 2
@@ -216,7 +205,6 @@ class SVOParser:
                     import asyncio
                     await asyncio.sleep(wait_time)
                     continue
-                # If we're out of retries or it's a different error, re-raise
                 raise e
 
         # Handle both array and {"events": [...]} formats
@@ -263,6 +251,60 @@ class SVOParser:
             f"from text ({len(text)} chars)"
         )
         return tuples
+
+    @staticmethod
+    def _extract_json(raw: str) -> list | dict:
+        """
+        Robustly extract JSON from messy LLM output.
+        Handles: bare objects, newlines, markdown fences, partial JSON, etc.
+        """
+        # 1. Strip whitespace and markdown fences
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = re.sub(r"^```(?:json)?\s*", "", cleaned)
+            cleaned = re.sub(r"\s*```$", "", cleaned)
+            cleaned = cleaned.strip()
+
+        # 2. Try direct parse first (best case)
+        try:
+            return json.loads(cleaned)
+        except json.JSONDecodeError:
+            pass
+
+        # 3. Try to find a JSON array [...] in the output
+        array_match = re.search(r"\[.*\]", cleaned, re.DOTALL)
+        if array_match:
+            try:
+                return json.loads(array_match.group(0))
+            except json.JSONDecodeError:
+                pass
+
+        # 4. Try to find a JSON object {...} in the output
+        obj_match = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        if obj_match:
+            try:
+                return json.loads(obj_match.group(0))
+            except json.JSONDecodeError:
+                pass
+
+        # 5. If the model returned bare key-value pairs, wrap in braces
+        if '"subject"' in cleaned:
+            # Try wrapping in array of object
+            try:
+                wrapped = "[{" + cleaned + "}]"
+                return json.loads(wrapped)
+            except json.JSONDecodeError:
+                pass
+            # Try wrapping in just braces
+            try:
+                wrapped = "{" + cleaned + "}"
+                result = json.loads(wrapped)
+                return [result]
+            except json.JSONDecodeError:
+                pass
+
+        # 6. Nothing worked — raise so we fall back to regex
+        raise ValueError(f"Could not extract JSON from LLM output: {cleaned[:100]}")
 
     async def parse_batch(
         self,
