@@ -86,13 +86,13 @@ async def list_connectors(
     key_info: dict = Depends(verify_api_key),
 ):
     """
-    List all registered connectors.
-    If source_id is provided, filter by that source.
+    List all registered connectors for the authenticated user.
+    TENANT ISOLATION: Always scoped to the API key owner.
     """
     memory = get_memory_store()
 
-    # If no source_id filter, show the caller's connectors
-    filter_source = source_id or key_info["source_id"]
+    # Always scope to the authenticated owner — ignore any user-supplied source_id
+    filter_source = key_info["source_id"]
     connectors = await memory.get_connectors(filter_source)
 
     return [
