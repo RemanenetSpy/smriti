@@ -39,7 +39,7 @@ Rules:
 
 Output format (JSON array):
 [
-  {
+  {{
     "subject": "string",
     "verb": "string",
     "object": "string",
@@ -48,7 +48,7 @@ Output format (JSON array):
     "datetime_end": "ISO 8601 or null",
     "entity_aliases": ["alias1", "alias2"],
     "confidence": 0.95
-  }
+  }}
 ]
 
 Text to analyze:
