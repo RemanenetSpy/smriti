@@ -181,14 +181,29 @@ async def run_agent_graph(
         final_response = ""
         for msg in reversed(messages):
             if isinstance(msg, AIMessage) and msg.content and not msg.tool_calls:
-                final_response = msg.content
+                if isinstance(msg.content, list):
+                    text_parts = []
+                    for block in msg.content:
+                        if isinstance(block, dict):
+                            # Handle GLM/DeepSeek reasoning block formats
+                            if block.get("type") == "text" and "text" in block:
+                                text_parts.append(block["text"])
+                            # Some models put text directly in 'text' without type
+                            elif "text" in block and not block.get("type") == "thinking":
+                                text_parts.append(block["text"])
+                        elif isinstance(block, str):
+                            text_parts.append(block)
+                    final_response = "\n".join(text_parts)
+                else:
+                    final_response = str(msg.content)
                 break
 
         # Build step log
         steps = []
         for i, msg in enumerate(messages):
             if isinstance(msg, AIMessage):
-                step = {"type": "ai", "content": msg.content[:200] if msg.content else ""}
+                content_str = str(msg.content) if msg.content else ""
+                step = {"type": "ai", "content": content_str[:200]}
                 if msg.tool_calls:
                     step["tool_calls"] = [
                         {"name": tc["name"], "args": tc["args"]}
