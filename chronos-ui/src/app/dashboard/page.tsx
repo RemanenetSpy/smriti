@@ -1,14 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { Sidebar } from "@/components/Sidebar";
-import { Overview } from "@/components/Overview";
-import { Ingest } from "@/components/Ingest";
-import { Query } from "@/components/Query";
-import { Agent } from "@/components/Agent";
-import { Connect } from "@/components/Connect";
-import { Billing } from "@/components/Billing";
-import { Keys } from "@/components/Keys";
+
+const Overview = dynamic(() => import("@/components/Overview").then(mod => mod.Overview));
+const Ingest = dynamic(() => import("@/components/Ingest").then(mod => mod.Ingest));
+const Query = dynamic(() => import("@/components/Query").then(mod => mod.Query));
+const Agent = dynamic(() => import("@/components/Agent").then(mod => mod.Agent));
+const Connect = dynamic(() => import("@/components/Connect").then(mod => mod.Connect));
+const Billing = dynamic(() => import("@/components/Billing").then(mod => mod.Billing));
+const Keys = dynamic(() => import("@/components/Keys").then(mod => mod.Keys));
 
 export default function App() {
   const [apiKey, setApiKey] = useState("");
@@ -20,12 +22,10 @@ export default function App() {
     if (saved) setApiKey(saved);
   }, []);
 
-  // Save API key on change
+  // Save API key on change (but don't delete on initial render when it's empty)
   useEffect(() => {
     if (apiKey) {
       localStorage.setItem("chronos_api_key", apiKey);
-    } else {
-      localStorage.removeItem("chronos_api_key");
     }
   }, [apiKey]);
 
