@@ -21,63 +21,57 @@ export function Overview({ apiKey }: { apiKey: string }) {
 
   return (
     <div className="max-w-5xl mx-auto p-12">
-      <div className="text-center mb-16">
-        <svg className="mx-auto mb-6" width="64" height="64" viewBox="0 0 100 100" fill="none">
-            <path d="M50 5 L95 25 L95 75 L50 95 L5 75 L5 25 Z" fill="#A93322" />
-            <path d="M50 15 L85 30 L85 70 L50 85 L15 70 L15 30 Z" fill="#F7F5F0"/>
-            <path d="M50 35 L65 42 L65 58 L50 65 L35 58 L35 42 Z" fill="#A93322" opacity="0.8"/>
-        </svg>
-        <h1 className="font-cormorant text-5xl font-bold text-[var(--chronos-ink)] mb-3">Chronos OS</h1>
-        <p className="font-spectral text-xl text-[var(--chronos-text-dim)] italic">Capturing the fragments of today for the clarity of tomorrow.</p>
-        <p className="font-inter text-xs text-[var(--chronos-text-dim)] uppercase tracking-widest mt-4">Temporal AI Agent Ecosystem · v0.2.0</p>
+      <div className="mb-16">
+        <h1 className="text-3xl font-semibold text-black mb-3">Overview</h1>
+        <p className="text-[#666666]">System health and temporal storage statistics.</p>
       </div>
 
       {error ? (
-        <div className="bg-red-50 text-red-800 p-4 rounded-md border border-red-200 mb-8 font-inter text-sm">
+        <div className="bg-red-50 text-red-800 p-4 rounded-md border border-red-200 mb-8 text-sm">
           ⚠ {error}
         </div>
       ) : health ? (
         <div className="grid grid-cols-4 gap-6 mb-16">
           <div className="glass-panel text-center">
-            <div className="font-cormorant text-4xl font-bold text-[var(--chronos-ink)]">
+            <div className="text-4xl font-semibold text-black">
               {(health.stores?.postgres_events || 0).toLocaleString()}
             </div>
-            <div className="font-inter text-[0.65rem] uppercase tracking-wider text-[var(--chronos-text-dim)] mt-2">Events Stored</div>
+            <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-3">Events Stored</div>
           </div>
           <div className="glass-panel text-center">
-            <div className="font-cormorant text-4xl font-bold text-[var(--chronos-ink)]">
+            <div className="text-4xl font-semibold text-black">
               {(health.stores?.pgvector_embeddings || 0).toLocaleString()}
             </div>
-            <div className="font-inter text-[0.65rem] uppercase tracking-wider text-[var(--chronos-text-dim)] mt-2">Embeddings</div>
+            <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-3">Embeddings</div>
           </div>
-          <div className="glass-panel text-center flex flex-col items-center justify-center">
-            <div className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+          <div className="glass-panel flex flex-col items-center justify-center">
+            <div className="bg-[#fafafa] border border-[#eaeaea] text-black text-xs font-medium px-3 py-1 rounded-full flex items-center gap-2">
+              <div className="w-2 h-2 rounded-full bg-[#0a8f44]"></div>
               Operational
             </div>
-            <div className="font-inter text-[0.65rem] uppercase tracking-wider text-[var(--chronos-text-dim)] mt-3">System Status</div>
+            <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">System Status</div>
           </div>
-          <div className="glass-panel text-center flex flex-col items-center justify-center">
-            <div className="font-inter text-sm font-semibold text-[var(--chronos-wax-red)]">
+          <div className="glass-panel flex flex-col items-center justify-center">
+            <div className="text-sm font-medium text-black">
               Qwen 3 + Llama 3.1
             </div>
-            <div className="font-inter text-[0.65rem] uppercase tracking-wider text-[var(--chronos-text-dim)] mt-3">AI Engine</div>
+            <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">AI Engine</div>
           </div>
         </div>
       ) : (
-        <div className="text-center text-[var(--chronos-text-dim)] mb-16 animate-pulse">Connecting to temporal core...</div>
+        <div className="text-[#999999] mb-16 animate-pulse">Connecting to temporal core...</div>
       )}
 
-      <div className="border-t border-[var(--chronos-border)] pt-8">
-        <h2 className="font-inter text-xs uppercase tracking-[3px] text-[var(--chronos-text-dim)] mb-6">Architecture</h2>
-        <h3 className="font-cormorant text-2xl font-bold text-[var(--chronos-ink)] mb-4">The Dual Calendar System</h3>
-        <p className="font-spectral text-lg text-[var(--chronos-text)] leading-relaxed mb-6">
-          Chronos decomposes every piece of text into <strong>Subject-Verb-Object</strong> event tuples,
+      <div className="border-t border-[#eaeaea] pt-8">
+        <h2 className="text-xs font-medium uppercase tracking-wider text-[#666666] mb-6">Architecture</h2>
+        <h3 className="text-xl font-semibold text-black mb-4">The Dual Calendar System</h3>
+        <p className="text-[#666666] leading-relaxed mb-6 max-w-3xl">
+          Chronos decomposes every piece of text into Subject-Verb-Object event tuples,
           stores them in a dual calendar (structured events + raw conversation turns),
-          and indexes them for both <strong>semantic</strong> and <strong>temporal</strong> retrieval.
+          and indexes them for both semantic and temporal retrieval.
         </p>
 
-        <div className="bg-[#2C3048] rounded-lg p-6 font-mono text-sm text-[var(--background)] overflow-x-auto shadow-inner">
+        <div className="border border-[#eaeaea] bg-[#fafafa] rounded-lg p-6 font-mono text-sm text-black overflow-x-auto shadow-sm">
           <pre>
 {`# Feed any text → AI extracts structured events
 POST /ingest

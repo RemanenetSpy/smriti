@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { apiCall } from "@/lib/api";
+import { Lock } from "lucide-react";
 
 export function Billing({ apiKey }: { apiKey: string }) {
   const [data, setData] = useState<any>(null);
@@ -30,86 +31,89 @@ export function Billing({ apiKey }: { apiKey: string }) {
 
   return (
     <div className="max-w-4xl mx-auto p-12">
-      <h2 className="font-inter text-xs uppercase tracking-[3px] text-[var(--chronos-text-dim)] mb-2">Account</h2>
-      <h3 className="font-cormorant text-4xl font-bold text-[var(--chronos-ink)] mb-3">Usage & Billing</h3>
+      <div className="mb-12">
+        <h2 className="text-3xl font-semibold text-black mb-2">Usage & Billing</h2>
+        <p className="text-[#666666]">
+          Monitor your temporal memory usage and account limits.
+        </p>
+      </div>
 
       {loading ? (
-        <div className="text-[var(--chronos-text-dim)] animate-pulse mt-8">Fetching quota...</div>
+        <div className="text-[#999999] animate-pulse mt-8">Fetching quota...</div>
       ) : error ? (
-        <div className="mt-8 bg-red-50 text-red-800 p-4 rounded border border-red-200 text-sm">⚠ {error}</div>
+        <div className="mt-8 bg-red-50 text-red-800 p-4 rounded-md border border-red-200 text-sm">⚠ {error}</div>
       ) : data ? (
         <div className="animate-fade-in mt-8">
-          <div className="flex justify-center mb-10">
-            <span className="font-inter font-bold uppercase tracking-widest text-[#A93322] bg-[#F0ECD8] px-4 py-1 rounded-full border border-[var(--chronos-border)]">
+          <div className="flex justify-start mb-10">
+            <span className="text-xs font-medium uppercase tracking-wider text-black bg-[#fafafa] px-3 py-1.5 rounded border border-[#eaeaea]">
               {data.tier || 'Explorer'} Tier
             </span>
           </div>
 
-          <div className="grid grid-cols-3 gap-6 mb-12">
-            <div className="glass-panel text-center p-6">
-              <div className="font-inter text-xs text-[var(--chronos-text-dim)] uppercase tracking-wider mb-2">Events Used</div>
-              <div className="font-cormorant text-3xl font-bold text-[var(--chronos-ink)]">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+            <div className="glass-panel text-left p-6">
+              <div className="text-xs font-medium text-[#666666] uppercase tracking-wider mb-3">Events Used</div>
+              <div className="text-4xl font-semibold text-black tracking-tight">
                 {data.usage?.events?.used?.toLocaleString() || 0}
               </div>
-              <div className="text-xs text-[var(--chronos-text-dim)] mt-2">
+              <div className="text-sm text-[#999999] mt-3">
                 {data.usage?.events?.remaining?.toLocaleString() || 0} remaining
               </div>
             </div>
-            <div className="glass-panel text-center p-6">
-              <div className="font-inter text-xs text-[var(--chronos-text-dim)] uppercase tracking-wider mb-2">Orchestration</div>
-              <div className="font-cormorant text-3xl font-bold text-[var(--chronos-ink)]">
+            <div className="glass-panel text-left p-6">
+              <div className="text-xs font-medium text-[#666666] uppercase tracking-wider mb-3">Orchestration</div>
+              <div className="text-4xl font-semibold text-black tracking-tight">
                 {data.usage?.orchestration?.used?.toLocaleString() || 0}
               </div>
-              <div className="text-xs text-[var(--chronos-text-dim)] mt-2">
+              <div className="text-sm text-[#999999] mt-3">
                 {data.usage?.orchestration?.remaining === -1 ? 'Unlimited' : (data.usage?.orchestration?.remaining?.toLocaleString() || 0) + ' remaining'}
               </div>
             </div>
-            <div className="glass-panel text-center p-6">
-              <div className="font-inter text-xs text-[var(--chronos-text-dim)] uppercase tracking-wider mb-2">Connected Tools</div>
-              <div className="font-cormorant text-3xl font-bold text-[var(--chronos-ink)]">
+            <div className="glass-panel text-left p-6">
+              <div className="text-xs font-medium text-[#666666] uppercase tracking-wider mb-3">Connected Tools</div>
+              <div className="text-4xl font-semibold text-black tracking-tight">
                 {data.usage?.connectors?.used || 0}
               </div>
-              <div className="text-xs text-[var(--chronos-text-dim)] mt-2">
+              <div className="text-sm text-[#999999] mt-3">
                 of {data.usage?.connectors?.limit === -1 ? 'Unlimited' : data.usage?.connectors?.limit || 0} slots
               </div>
             </div>
           </div>
 
-          <div className="border-t border-[var(--chronos-border)] pt-10">
-            <h3 className="font-inter text-xs uppercase tracking-[3px] text-[var(--chronos-text-dim)] mb-4">Pricing</h3>
-            <h4 className="font-cormorant text-2xl font-bold text-[var(--chronos-ink)] mb-6">Temporal Memory Tiers</h4>
+          <div className="border-t border-[#eaeaea] pt-12">
+            <h3 className="text-2xl font-semibold text-black mb-8">Temporal Memory Tiers</h3>
             
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse border border-[var(--chronos-border)] bg-white/50 backdrop-blur-sm shadow-sm rounded-lg overflow-hidden">
+            <div className="overflow-hidden rounded-lg border border-[#eaeaea]">
+              <table className="w-full text-left border-collapse bg-white">
                 <thead>
-                  <tr className="bg-[var(--chronos-border)] text-[var(--chronos-ink)] font-semibold text-sm">
-                    <th className="p-3">Feature</th>
-                    <th className="p-3 bg-[#e8e4d3]">Explorer</th>
-                    <th className="p-3 bg-[#e0dacc]">
-                      <div className="flex items-center gap-1.5 font-bold tracking-wider text-[var(--chronos-text-dim)]">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#cfab78" className="mt-[1px]">
-                          <path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3-9H9V7a3 3 0 0 1 6 0v3z" />
-                        </svg>
-                        BUILDER
+                  <tr className="bg-[#fafafa] text-black text-sm border-b border-[#eaeaea]">
+                    <th className="p-4 font-medium">Feature</th>
+                    <th className="p-4 font-medium">Explorer</th>
+                    <th className="p-4 font-medium border-l border-[#eaeaea]">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5 text-[#999999]">
+                          <Lock className="w-3.5 h-3.5" />
+                          BUILDER
+                        </div>
+                        <div className="text-[10px] font-medium text-[#999999] uppercase tracking-wider">Coming Soon</div>
                       </div>
-                      <div className="text-[10px] font-normal text-amber-700/80 uppercase tracking-[2px] mt-1 ml-[18px]">Coming Soon</div>
                     </th>
-                    <th className="p-3 bg-[#d5cebc]">
-                      <div className="flex items-center gap-1.5 font-bold tracking-wider text-[var(--chronos-text-dim)]">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#c39d67" className="mt-[1px]">
-                          <path d="M18 10h-1V7A5 5 0 0 0 7 7v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V12a2 2 0 0 0-2-2zm-6 9a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm3-9H9V7a3 3 0 0 1 6 0v3z" />
-                        </svg>
-                        SCALE
+                    <th className="p-4 font-medium border-l border-[#eaeaea]">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center gap-1.5 text-[#999999]">
+                          <Lock className="w-3.5 h-3.5" />
+                          SCALE
+                        </div>
+                        <div className="text-[10px] font-medium text-[#999999] uppercase tracking-wider">Coming Soon</div>
                       </div>
-                      <div className="text-[10px] font-normal text-amber-800/80 uppercase tracking-[2px] mt-1 ml-[18px]">Coming Soon</div>
                     </th>
                   </tr>
                 </thead>
-                <tbody className="text-sm font-inter divide-y divide-[var(--chronos-border)] text-[var(--chronos-text)]">
-                  <tr><td className="p-3 font-semibold">Price</td><td className="p-3">Free</td><td className="p-3">$49/month</td><td className="p-3">$249/month</td></tr>
-                  <tr><td className="p-3 font-semibold">Events/mo</td><td className="p-3">10,000</td><td className="p-3">500,000</td><td className="p-3">5,000,000</td></tr>
-                  <tr><td className="p-3 font-semibold">Orchestration</td><td className="p-3">100</td><td className="p-3">10,000</td><td className="p-3">Unlimited</td></tr>
-                  <tr><td className="p-3 font-semibold">Connected Tools</td><td className="p-3">3</td><td className="p-3">25</td><td className="p-3">Unlimited</td></tr>
+                <tbody className="text-sm divide-y divide-[#eaeaea] text-black">
+                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Price</td><td className="p-4">Free</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">$49/month</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">$249/month</td></tr>
+                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Events/mo</td><td className="p-4">10,000</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">500,000</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">5,000,000</td></tr>
+                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Orchestration</td><td className="p-4">100</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">10,000</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">Unlimited</td></tr>
+                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Connected Tools</td><td className="p-4">3</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">25</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">Unlimited</td></tr>
                 </tbody>
               </table>
             </div>

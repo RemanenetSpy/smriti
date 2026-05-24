@@ -11,17 +11,6 @@
 :root {
   --background: #ffffff;
   --foreground: #000000;
-  
-  /* Dashboard variables */
-  --chronos-bg: #F7F5F0;
-  --chronos-text: #2C3048;
-  --chronos-text-dim: #6B7194;
-  --chronos-wax-red: #A93322;
-  --chronos-wax-shadow: rgba(169, 51, 34, 0.4);
-  --chronos-ink: #1F2232;
-  --chronos-panel: #FFFFFF;
-  --chronos-border: #E8E5DA;
-  --chronos-hover: #F0ECD8;
 }
 
 body {
@@ -31,51 +20,52 @@ body {
 
 /* Dashboard UI components */
 @layer components {
-  .wax-seal-button {
-    background-color: var(--chronos-wax-red);
-    color: white;
-    border: 0;
+  .primary-button {
+    background-color: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
     padding: 0.5rem 1.5rem;
-    border-radius: 0.25rem;
-    box-shadow: 0 4px 14px var(--chronos-wax-shadow);
+    border-radius: 9999px;
     font-size: 0.875rem;
-    transition: all 300ms;
+    font-weight: 500;
+    transition: opacity 200ms;
   }
-  .wax-seal-button:hover {
-    box-shadow: 0 6px 20px rgba(169,51,34,0.6);
-    transform: translateY(-1px);
+  .primary-button:hover {
+    opacity: 0.8;
   }
   
   .glass-panel {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(12px);
+    background-color: #ffffff;
     border-radius: 0.5rem;
-    border: 1px solid var(--chronos-border);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    padding: 1rem;
+    border: 1px solid #eaeaea;
+    padding: 1.5rem;
+    transition: border-color 200ms;
+  }
+  .glass-panel:hover {
+    border-color: #000000;
   }
 
   .chronos-input {
     width: 100%;
-    background-color: #FCFBF8;
-    border: 1px solid var(--chronos-border);
-    border-radius: 0.25rem;
+    background-color: #fafafa;
+    border: 1px solid #eaeaea;
+    border-radius: 0.375rem;
     padding: 0.5rem 0.75rem;
     font-size: 0.875rem;
-    color: var(--chronos-text);
+    color: #000000;
     transition: all 150ms;
   }
   
   .chronos-input:focus {
     outline: none;
-    border-color: var(--chronos-wax-red);
-    box-shadow: 0 0 0 1px var(--chronos-wax-red);
+    border-color: #000000;
+    background-color: #ffffff;
   }
 
   .timeline-event {
     position: relative;
     padding-left: 1rem;
-    border-left: 2px solid var(--chronos-border);
+    border-left: 1px solid #eaeaea;
     padding-bottom: 1rem;
     margin-bottom: 1rem;
     font-size: 0.875rem;
@@ -83,12 +73,11 @@ body {
   .timeline-event::before {
     content: '';
     position: absolute;
-    width: 10px;
-    height: 10px;
-    background-color: var(--chronos-wax-red);
+    width: 7px;
+    height: 7px;
+    background-color: #000000;
     border-radius: 9999px;
-    left: -6px;
-    top: 4px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    left: -4px;
+    top: 6px;
   }
 }

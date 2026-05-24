@@ -46,27 +46,28 @@ export function Query({ apiKey }: { apiKey: string }) {
 
   return (
     <div className="max-w-5xl mx-auto p-12">
-      <h2 className="font-inter text-xs uppercase tracking-[3px] text-[var(--chronos-text-dim)] mb-2">Temporal Retrieval</h2>
-      <h3 className="font-cormorant text-4xl font-bold text-[var(--chronos-ink)] mb-3">Query the Memory</h3>
-      <p className="font-spectral text-lg text-[var(--chronos-text-dim)] italic mb-8">
-        Ask in natural language. Chronos searches across time and meaning.
-      </p>
+      <div className="mb-12">
+        <h2 className="text-3xl font-semibold text-black mb-2">Query the Memory</h2>
+        <p className="text-[#666666]">
+          Ask in natural language. Chronos searches across time and meaning.
+        </p>
+      </div>
 
-      <div className="glass-panel mb-12 p-6">
+      <div className="glass-panel mb-12">
         <div className="mb-6">
           <input 
             type="text" 
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="What happened with contracts this quarter?"
-            className="chronos-input w-full text-lg py-3 px-4 shadow-inner"
+            className="w-full bg-[#fafafa] border border-[#eaeaea] rounded-md px-4 py-3 text-base text-black focus:outline-none focus:border-black transition-colors"
             onKeyDown={(e) => e.key === 'Enter' && handleQuery()}
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div>
-            <label className="block text-xs font-semibold text-[var(--chronos-text-dim)] uppercase tracking-wider mb-2">From Date</label>
+            <label className="block text-xs font-medium text-[#666666] uppercase tracking-wider mb-2">From Date</label>
             <input 
               type="date" 
               value={startDate}
@@ -75,7 +76,7 @@ export function Query({ apiKey }: { apiKey: string }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-[var(--chronos-text-dim)] uppercase tracking-wider mb-2">To Date</label>
+            <label className="block text-xs font-medium text-[#666666] uppercase tracking-wider mb-2">To Date</label>
             <input 
               type="date" 
               value={endDate}
@@ -84,14 +85,14 @@ export function Query({ apiKey }: { apiKey: string }) {
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-[var(--chronos-text-dim)] uppercase tracking-wider mb-2">Results: {maxResults}</label>
+            <label className="block text-xs font-medium text-[#666666] uppercase tracking-wider mb-2">Results: {maxResults}</label>
             <input 
               type="range" 
               min="1" 
               max="50" 
               value={maxResults}
               onChange={(e) => setMaxResults(parseInt(e.target.value))}
-              className="w-full accent-[var(--chronos-wax-red)] h-2 bg-[var(--chronos-border)] rounded-lg appearance-none cursor-pointer mt-2"
+              className="w-full accent-black h-2 bg-[#eaeaea] rounded-lg appearance-none cursor-pointer mt-2"
             />
           </div>
         </div>
@@ -99,28 +100,28 @@ export function Query({ apiKey }: { apiKey: string }) {
         <button 
           onClick={handleQuery} 
           disabled={loading}
-          className={`wax-seal-button ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+          className={`primary-button ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
         >
-          {loading ? "⚲ Searching..." : "⚲ Search Temporal Memory"}
+          {loading ? "Searching..." : "Search Temporal Memory"}
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-800 p-4 rounded-md border border-red-200 mb-8 font-inter text-sm">
+        <div className="bg-red-50 text-red-800 p-4 rounded-md border border-red-200 mb-8 text-sm">
           ⚠ {error}
         </div>
       )}
 
       {result && !error && (
         <div className="animate-fade-in relative min-h-[400px]">
-          <div className="font-inter text-[0.75rem] uppercase tracking-[2px] text-[var(--chronos-text-dim)] mb-8 pb-4 border-b border-[var(--chronos-border)] flex justify-between">
+          <div className="text-xs font-medium uppercase tracking-wider text-[#666666] mb-8 pb-4 border-b border-[#eaeaea] flex justify-between">
             <span>Search Results</span>
             <span>{result.total_found} events found · {result.query_time_ms.toFixed(0)}ms</span>
           </div>
 
-          <div className="space-y-0">
+          <div className="space-y-4">
             {result.results?.length === 0 ? (
-              <div className="text-center text-[var(--chronos-text-dim)] py-12 italic font-spectral">
+              <div className="text-center text-[#999999] py-12">
                 No events found matching your temporal query.
               </div>
             ) : (
@@ -132,16 +133,16 @@ export function Query({ apiKey }: { apiKey: string }) {
                 });
                 
                 return (
-                  <div key={idx} className="timeline-event group hover:bg-white/40 p-4 rounded-md transition-colors -ml-4 pl-8">
-                    <div className="font-mono text-xs text-[var(--chronos-wax-red)] mb-1 opacity-80 decoration-dotted underline-offset-4 decoration-[var(--chronos-border)]">
+                  <div key={idx} className="timeline-event group hover:bg-[#fafafa] p-4 rounded-md transition-colors -ml-4 pl-8 border border-transparent hover:border-[#eaeaea]">
+                    <div className="font-mono text-xs text-[#666666] mb-2">
                       {formatter.format(date)}
                     </div>
-                    <div className="font-spectral text-xl mb-1 mt-1">
-                      <strong className="text-[var(--chronos-ink)]">{event.subject}</strong>
-                      <span className="text-[var(--chronos-text-dim)] mx-1">{event.verb}</span>
-                      <span className="text-[var(--chronos-ink)]">{event.object}</span>
+                    <div className="text-lg mb-2">
+                      <strong className="text-black">{event.subject}</strong>
+                      <span className="text-[#666666] mx-1.5">{event.verb}</span>
+                      <span className="text-black">{event.object}</span>
                     </div>
-                    <div className="text-[0.65rem] uppercase tracking-wider text-[var(--chronos-text-dim)] font-inter mt-3 bg-white/60 inline-block px-2 py-1 rounded border border-[var(--chronos-border)]">
+                    <div className="text-[10px] uppercase tracking-wider text-[#999999] font-mono mt-3 bg-white inline-block px-2 py-1 rounded border border-[#eaeaea]">
                       Relevance: {(item.relevance_score * 100).toFixed(0)}% · via {item.provenance.replace('_', ' ')}
                     </div>
                   </div>

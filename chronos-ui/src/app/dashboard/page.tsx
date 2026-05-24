@@ -50,7 +50,7 @@ export default function App() {
         activePage={activePage} 
         setActivePage={setActivePage} 
       />
-      <main className="flex-1 overflow-y-auto bg-[var(--background)]">
+      <main className="flex-1 overflow-y-auto bg-white">
         {renderPage()}
       </main>
     </div>

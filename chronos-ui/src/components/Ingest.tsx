@@ -41,27 +41,28 @@ export function Ingest({ apiKey }: { apiKey: string }) {
 
   return (
     <div className="max-w-4xl mx-auto p-12">
-      <h2 className="font-inter text-xs uppercase tracking-[3px] text-[var(--chronos-text-dim)] mb-2">Memory Ingestion</h2>
-      <h3 className="font-cormorant text-4xl font-bold text-[var(--chronos-ink)] mb-3">Feed the Temporal Memory</h3>
-      <p className="font-spectral text-lg text-[var(--chronos-text-dim)] italic mb-8">
-        Enter events as natural language. The AI extracts the who, what, and when.
-      </p>
+      <div className="mb-12">
+        <h2 className="text-3xl font-semibold text-black mb-2">Memory Ingestion</h2>
+        <p className="text-[#666666]">
+          Enter events as natural language. The AI extracts the who, what, and when.
+        </p>
+      </div>
 
-      <div className="glass-panel mb-8 p-6">
+      <div className="glass-panel mb-8">
         <div className="mb-6">
-          <label className="block text-sm font-semibold text-[var(--chronos-text)] mb-2">Source ID</label>
+          <label className="block text-sm font-medium text-black mb-2">Source ID</label>
           <input 
             type="text" 
             value={sourceId}
             onChange={(e) => setSourceId(e.target.value)}
             className="chronos-input w-full md:w-1/2"
           />
-          <p className="text-xs text-[var(--chronos-text-dim)] mt-1">Identifies where these events come from</p>
+          <p className="text-xs text-[#666666] mt-2">Identifies where these events come from</p>
         </div>
 
         <div className="mb-6">
-          <label className="block text-sm font-semibold text-[var(--chronos-text)] mb-2">Events</label>
-          <p className="text-xs text-[var(--chronos-text-dim)] mb-2 italic">One event per line — write in plain English:</p>
+          <label className="block text-sm font-medium text-black mb-2">Events</label>
+          <p className="text-xs text-[#666666] mb-3">One event per line — write in plain English:</p>
           <textarea 
             value={eventsText}
             onChange={(e) => setEventsText(e.target.value)}
@@ -70,53 +71,53 @@ export function Ingest({ apiKey }: { apiKey: string }) {
           />
         </div>
 
-        <div className="mb-8 flex items-center gap-2 text-sm text-[var(--chronos-text)]">
+        <div className="mb-8 flex items-center gap-3 text-sm text-black">
           <input 
             type="checkbox" 
             id="parseSvo"
             checked={parseSvo}
             onChange={(e) => setParseSvo(e.target.checked)}
-            className="w-4 h-4 accent-[var(--chronos-wax-red)]"
+            className="w-4 h-4 accent-black"
           />
-          <label htmlFor="parseSvo">✧ Enable Fast SVO Parsing (Llama 3.1 via Groq)</label>
+          <label htmlFor="parseSvo" className="cursor-pointer select-none">Enable Fast SVO Parsing (Llama 3.1 via Groq)</label>
         </div>
 
         <button 
           onClick={handleIngest} 
           disabled={loading}
-          className={`wax-seal-button ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+          className={`primary-button ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
         >
-          {loading ? "⭳ Processing..." : "⭳ Ingest Into Memory"}
+          {loading ? "Processing..." : "Ingest Into Memory"}
         </button>
       </div>
 
       {error && (
-        <div className="bg-red-50 text-red-800 p-4 rounded-md border border-red-200 mb-8 font-inter text-sm">
+        <div className="bg-red-50 text-red-800 p-4 rounded-md border border-red-200 mb-8 text-sm">
           ⚠ {error}
         </div>
       )}
 
       {result && !error && (
         <div className="animate-fade-in">
-          <div className="bg-green-50 text-green-800 border border-green-200 p-4 rounded-md font-inter text-sm mb-8 flex items-center">
-            <span className="font-bold mr-2">✓</span> 
-            Ingested <strong>{result.ingested_count} events</strong> into temporal memory
+          <div className="bg-[#fafafa] border border-[#eaeaea] p-4 rounded-md text-sm mb-8 flex items-center text-black">
+            <span className="font-bold text-[#0a8f44] mr-2">✓</span> 
+            Ingested <strong className="mx-1">{result.ingested_count} events</strong> into temporal memory
           </div>
 
           {result.svo_tuples?.length > 0 && (
             <div>
-              <h4 className="font-inter text-xs uppercase tracking-[3px] text-[var(--chronos-text-dim)] mb-4 pb-2 border-b border-[var(--chronos-border)]">Extracted SVO Tuples</h4>
-              <div className="space-y-2">
+              <h4 className="text-xs font-medium uppercase tracking-wider text-[#666666] mb-4 pb-2 border-b border-[#eaeaea]">Extracted SVO Tuples</h4>
+              <div className="space-y-4">
                 {result.svo_tuples.map((svo: any, idx: number) => (
-                  <div key={idx} className="timeline-event bg-white/50 p-4 rounded-r shadow-sm">
-                    <div className="font-spectral text-lg mb-2">
-                      <strong className="text-[var(--chronos-ink)]">{svo.subject || '?'}</strong>
-                      <span className="text-[var(--chronos-text-dim)] mx-2">→</span>
-                      <em className="text-[var(--chronos-wax-red)]">{svo.verb || '?'}</em>
-                      <span className="text-[var(--chronos-text-dim)] mx-2">→</span>
-                      <span className="text-[var(--chronos-text)]">{svo.object || '?'}</span>
+                  <div key={idx} className="timeline-event">
+                    <div className="text-sm mb-1 font-mono text-black bg-[#fafafa] border border-[#eaeaea] p-3 rounded-md">
+                      <strong className="text-black">{svo.subject || '?'}</strong>
+                      <span className="text-[#999999] mx-2">→</span>
+                      <em className="text-[#0a8f44] not-italic">{svo.verb || '?'}</em>
+                      <span className="text-[#999999] mx-2">→</span>
+                      <span className="text-black">{svo.object || '?'}</span>
                     </div>
-                    <div className="text-xs text-[var(--chronos-text-dim)] font-mono">
+                    <div className="text-xs text-[#999999] font-mono">
                       confidence: {(svo.confidence * 100).toFixed(0)}%
                     </div>
                   </div>
