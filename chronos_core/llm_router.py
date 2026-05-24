@@ -69,7 +69,7 @@ def get_heavy_pipeline() -> BaseChatModel:
     has_groq = bool(os.getenv("GROQ_API_KEY"))
 
     if has_cerebras:
-        primary = ChatLiteLLM(model="cerebras/deepseek-v3.2", temperature=0.4, max_retries=3)
+        primary = ChatLiteLLM(model="cerebras/DeepSeek-V3.2-REAP-345B-A37B", temperature=0.4, max_retries=3)
         if has_groq:
             fallback = ChatLiteLLM(model="groq/llama-3.3-70b-versatile", temperature=0.4, max_retries=3)
             _heavy_pipeline = primary.with_fallbacks([fallback])
