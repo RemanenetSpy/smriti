@@ -46,6 +46,8 @@ export function Hero() {
           <span className="hidden sm:inline text-[#eaeaea]">|</span>
           <span>DID: signed</span>
           <span className="hidden sm:inline text-[#eaeaea]">|</span>
+          <span>WHAT: $50K contract</span>
+          <span className="hidden sm:inline text-[#eaeaea]">|</span>
           <span>WHEN: Q2 2026</span>
         </div>
       </div>
