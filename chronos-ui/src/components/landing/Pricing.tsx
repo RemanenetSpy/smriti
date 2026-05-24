@@ -39,7 +39,7 @@ export function Pricing() {
             
             <ul className="space-y-4 mb-12 flex-1 text-[#666666]">
               <li className="flex items-center gap-3">
-                <span className="text-black">→</span> 100,000 events/month
+                <span className="text-black">→</span> 500,000 events/month
               </li>
               <li className="flex items-center gap-3">
                 <span className="text-black">→</span> Priority query speed (~80ms)
@@ -60,11 +60,11 @@ export function Pricing() {
               COMING SOON
             </div>
             <h3 className="text-xl font-semibold text-black mb-2">Scale</h3>
-            <div className="text-4xl font-semibold text-black mb-8">$249<span className="text-lg text-[#666666] font-normal">/mo</span></div>
+            <div className="text-4xl font-semibold text-black mb-8">$299<span className="text-lg text-[#666666] font-normal">/mo</span></div>
             
             <ul className="space-y-4 mb-12 flex-1 text-[#666666]">
               <li className="flex items-center gap-3">
-                <span className="text-black">→</span> Unlimited events
+                <span className="text-black">→</span> 5,000,000 events/month
               </li>
               <li className="flex items-center gap-3">
                 <span className="text-black">→</span> Dedicated infrastructure

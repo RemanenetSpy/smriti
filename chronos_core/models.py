@@ -269,7 +269,7 @@ class TierLimits(BaseModel):
 TIER_LIMITS: dict[TierName, TierLimits] = {
     TierName.EXPLORER: TierLimits(
         events_per_month=10_000,
-        orchestration_per_month=100,
+        orchestration_per_month=1_000,
         connected_tools=3,
         retention_days=30,
         agent_threads=5,
