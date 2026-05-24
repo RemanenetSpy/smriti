@@ -53,7 +53,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
           </div>
           <div className="glass-panel flex flex-col items-center justify-center">
             <div className="text-sm font-medium text-black">
-              DeepSeek V3.2 + Llama 3.1
+              GLM 4.7 + Llama 3.1
             </div>
             <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">AI Engine</div>
           </div>

@@ -56,7 +56,7 @@ _heavy_pipeline: BaseChatModel | None = None
 def get_heavy_pipeline() -> BaseChatModel:
     """
     Return a LangChain ChatModel for the Heavy Pipeline.
-    Primary: Cerebras Llama 3.3 70B (Temporary fix for API crash)
+    Primary: Cerebras ZAI GLM 4.7 (Long-horizon tasks)
     Fallback: Groq Llama 3.3 70B
     """
     global _heavy_pipeline
@@ -69,7 +69,7 @@ def get_heavy_pipeline() -> BaseChatModel:
     has_groq = bool(os.getenv("GROQ_API_KEY"))
 
     if has_cerebras:
-        primary = ChatLiteLLM(model="cerebras/llama-3.3-70b", temperature=0.4, max_retries=3)
+        primary = ChatLiteLLM(model="cerebras/zai-glm-4.7", temperature=0.4, max_retries=3)
         if has_groq:
             fallback = ChatLiteLLM(model="groq/llama-3.3-70b-versatile", temperature=0.4, max_retries=3)
             _heavy_pipeline = primary.with_fallbacks([fallback])
