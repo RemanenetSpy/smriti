@@ -29,9 +29,9 @@ export function Pricing() {
           </div>
 
           {/* Builder */}
-          <div className="p-8 border-2 border-black rounded-xl bg-white shadow-sm relative h-full flex flex-col transform md:-translate-y-4">
+          <div className="p-8 border-2 border-black rounded-xl bg-white shadow-sm relative h-full flex flex-col transform md:-translate-y-4 opacity-75">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white text-[11px] font-medium px-3 py-1 rounded-full tracking-wide">
-              MOST POPULAR
+              COMING SOON
             </div>
             
             <h3 className="text-xl font-semibold text-black mb-2">Builder</h3>
@@ -49,13 +49,16 @@ export function Pricing() {
               </li>
             </ul>
 
-            <Link href="/dashboard" className="w-full block text-center py-3 rounded-full font-medium bg-black text-white hover:opacity-90 transition-opacity">
-              Start building
-            </Link>
+            <button disabled className="w-full block text-center py-3 rounded-full font-medium bg-[#f5f5f5] text-[#999999] cursor-not-allowed">
+              Coming soon
+            </button>
           </div>
 
           {/* Scale */}
-          <div className="p-8 border border-[#eaeaea] rounded-xl bg-white hover:border-black transition-colors h-full flex flex-col">
+          <div className="p-8 border border-[#eaeaea] rounded-xl bg-white opacity-75 h-full flex flex-col relative">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#eaeaea] text-[#666666] text-[11px] font-medium px-3 py-1 rounded-full tracking-wide">
+              COMING SOON
+            </div>
             <h3 className="text-xl font-semibold text-black mb-2">Scale</h3>
             <div className="text-4xl font-semibold text-black mb-8">$249<span className="text-lg text-[#666666] font-normal">/mo</span></div>
             
@@ -71,9 +74,9 @@ export function Pricing() {
               </li>
             </ul>
 
-            <Link href="mailto:sales@chronosos.com" className="w-full block text-center py-3 rounded-full font-medium border border-[#eaeaea] text-black hover:border-black transition-colors">
-              Contact us
-            </Link>
+            <button disabled className="w-full block text-center py-3 rounded-full font-medium bg-[#f5f5f5] text-[#999999] cursor-not-allowed">
+              Coming soon
+            </button>
           </div>
 
         </div>
