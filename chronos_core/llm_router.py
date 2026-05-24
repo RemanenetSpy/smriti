@@ -27,22 +27,22 @@ logger = logging.getLogger("chronos.llm_router")
 def get_fast_pipeline_kwargs() -> dict[str, Any]:
     """
     Return litellm.acompletion kwargs for the Fast Pipeline.
-    Primary: Groq Llama 3.1 8B Instant
-    Fallback: Cerebras Llama 3.1 8B
+    Primary: Cerebras Llama 3.1 8B (Ultra-fast, 1M limits)
+    Fallback: Groq Llama 3.1 8B Instant
     """
     has_cerebras = bool(os.getenv("CEREBRAS_API_KEY"))
     has_groq = bool(os.getenv("GROQ_API_KEY"))
 
-    if has_groq and has_cerebras:
+    if has_cerebras and has_groq:
         return {
-            "model": "groq/llama-3.1-8b-instant",
-            "fallbacks": [{"model": "cerebras/llama3.1-8b"}],
+            "model": "cerebras/llama3.1-8b",
+            "fallbacks": [{"model": "groq/llama-3.1-8b-instant"}],
             "num_retries": 3,
         }
-    elif has_groq:
-        return {"model": "groq/llama-3.1-8b-instant", "num_retries": 3}
-    else:
+    elif has_cerebras:
         return {"model": "cerebras/llama3.1-8b", "num_retries": 3}
+    else:
+        return {"model": "groq/llama-3.1-8b-instant", "num_retries": 3}
 
 
 # ---------------------------------------------------------------------------
@@ -56,10 +56,8 @@ _heavy_pipeline: BaseChatModel | None = None
 def get_heavy_pipeline() -> BaseChatModel:
     """
     Return a LangChain ChatModel for the Heavy Pipeline.
-    Primary: Cerebras Qwen 3 235B  (rivals Claude 4 logic)
-    Fallback: Groq Llama 3.3 70B   (strong general reasoning)
-
-    Cached as a module-level singleton so connections are reused.
+    Primary: Cerebras Llama 3.3 70B (Ultra-fast, high logic)
+    Fallback: Groq Llama 3.3 70B
     """
     global _heavy_pipeline
     if _heavy_pipeline is not None:
@@ -71,7 +69,7 @@ def get_heavy_pipeline() -> BaseChatModel:
     has_groq = bool(os.getenv("GROQ_API_KEY"))
 
     if has_cerebras:
-        primary = ChatLiteLLM(model="cerebras/qwen-3-235b-a22b-instruct-2507", temperature=0.4, max_retries=3)
+        primary = ChatLiteLLM(model="cerebras/llama-3.3-70b", temperature=0.4, max_retries=3)
         if has_groq:
             fallback = ChatLiteLLM(model="groq/llama-3.3-70b-versatile", temperature=0.4, max_retries=3)
             _heavy_pipeline = primary.with_fallbacks([fallback])
