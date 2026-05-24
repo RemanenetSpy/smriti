@@ -1,7 +1,4 @@
 {
-  "buildCommand": "cd chronos-ui && npm install && npm run build",
-  "outputDirectory": "chronos-ui/.next",
-  "framework": "nextjs",
   "headers": [
     {
       "source": "/api/(.*)",
