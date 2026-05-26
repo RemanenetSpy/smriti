@@ -3,11 +3,177 @@
 import { useState, useEffect } from "react";
 import { apiCall } from "@/lib/api";
 
+// ---------------------------------------------------------------------------
+// Getting Started Steps
+// ---------------------------------------------------------------------------
+const STEPS = [
+  {
+    id: "keys",
+    icon: "🔑",
+    title: "Get your API Key",
+    section: "API Keys",
+    description:
+      "Head to the API Keys section in the sidebar. Generate your first key and keep it safe — you will attach it to every request as the Authorization header.",
+    code: `curl -H "Authorization: Bearer YOUR_KEY" \\
+  https://chronos-api-backend.hf.space/health`,
+  },
+  {
+    id: "ingest",
+    icon: "📥",
+    title: "Ingest your first event",
+    section: "Ingest",
+    description:
+      "The Ingest section lets you send raw text into Chronos. The AI automatically decomposes it into Subject-Verb-Object tuples and stores them with timestamps.",
+    code: `POST /ingest
+{
+  "source_id": "my-app",
+  "events": [{"text": "Acme Corp signed a $50k contract"}]
+}`,
+  },
+  {
+    id: "query",
+    icon: "🔍",
+    title: "Query your memory",
+    section: "Query",
+    description:
+      "Use the Query section to ask natural-language questions. Chronos runs hybrid temporal + semantic search across all stored events and returns ranked results.",
+    code: `POST /query
+{ "query": "What happened with Acme Corp?" }`,
+  },
+  {
+    id: "agent",
+    icon: "🤖",
+    title: "Run an Agent",
+    section: "Agent",
+    description:
+      "The Agent section gives you a full LangGraph-powered agent that has your entire memory as context. Ask it complex questions, schedule tasks, or trigger tools — it reasons across time.",
+    code: `POST /agent/run
+{ "prompt": "Summarize all Q2 deals and flag any risks" }`,
+  },
+  {
+    id: "connect",
+    icon: "🔌",
+    title: "Connect a tool",
+    section: "Connect",
+    description:
+      "Register your SaaS tools (Stripe, Notion, CRM) via the Connect section. Once connected, the Agent can call them mid-conversation and store the results as new events in memory.",
+    code: `POST /connectors/register
+{
+  "name": "Stripe", "base_url": "https://api.stripe.com",
+  "endpoints": [{"method":"GET","path":"/v1/charges"}]
+}`,
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Getting Started Panel
+// ---------------------------------------------------------------------------
+function GettingStarted({ onDismiss }: { onDismiss: () => void }) {
+  const [openStep, setOpenStep] = useState<string | null>("keys");
+  const [done, setDone] = useState<Set<string>>(new Set());
+
+  const toggleDone = (id: string) => {
+    setDone((prev) => {
+      const next = new Set(prev);
+      next.has(id) ? next.delete(id) : next.add(id);
+      return next;
+    });
+  };
+
+  return (
+    <div className="border border-[#eaeaea] rounded-xl bg-white mb-12 overflow-hidden">
+      {/* Header */}
+      <div className="flex items-center justify-between px-6 py-5 border-b border-[#eaeaea]">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-black" />
+          <span className="font-semibold text-black text-sm">Getting Started</span>
+          <span className="text-[#999999] text-xs">
+            {done.size}/{STEPS.length} completed
+          </span>
+        </div>
+        <button
+          onClick={onDismiss}
+          className="text-[#999999] hover:text-black transition-colors text-xs"
+        >
+          Dismiss
+        </button>
+      </div>
+
+      {/* Progress bar */}
+      <div className="h-0.5 bg-[#f0f0f0]">
+        <div
+          className="h-full bg-black transition-all duration-500"
+          style={{ width: `${(done.size / STEPS.length) * 100}%` }}
+        />
+      </div>
+
+      {/* Steps */}
+      <div className="divide-y divide-[#f5f5f5]">
+        {STEPS.map((step) => {
+          const isOpen = openStep === step.id;
+          const isDone = done.has(step.id);
+          return (
+            <div key={step.id}>
+              <button
+                onClick={() => setOpenStep(isOpen ? null : step.id)}
+                className="w-full flex items-center gap-4 px-6 py-4 hover:bg-[#fafafa] transition-colors text-left"
+              >
+                {/* Checkbox */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); toggleDone(step.id); }}
+                  className={`flex-shrink-0 w-5 h-5 rounded border flex items-center justify-center transition-colors ${
+                    isDone ? "bg-black border-black" : "border-[#d0d0d0] hover:border-black"
+                  }`}
+                >
+                  {isDone && (
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none">
+                      <path d="M1 4L3.5 6.5L9 1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  )}
+                </button>
+
+                <span className="text-lg">{step.icon}</span>
+                <div className="flex-1">
+                  <span className={`text-sm font-medium ${isDone ? "text-[#999999] line-through" : "text-black"}`}>
+                    {step.title}
+                  </span>
+                  <span className="ml-2 text-[0.65rem] uppercase tracking-wider text-[#999999]">
+                    → {step.section}
+                  </span>
+                </div>
+                <span className="text-[#cccccc] text-xs">{isOpen ? "▲" : "▼"}</span>
+              </button>
+
+              {/* Expanded content */}
+              {isOpen && (
+                <div className="px-6 pb-5 ml-9 space-y-3">
+                  <p className="text-sm text-[#666666] leading-relaxed">{step.description}</p>
+                  <div className="bg-[#fafafa] border border-[#eaeaea] rounded-lg p-4 font-mono text-xs text-black overflow-x-auto">
+                    <pre>{step.code}</pre>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Overview
+// ---------------------------------------------------------------------------
 export function Overview({ apiKey }: { apiKey: string }) {
   const [health, setHealth] = useState<any>(null);
   const [error, setError] = useState("");
+  const [showGuide, setShowGuide] = useState(false);
 
   useEffect(() => {
+    // Show guide only if user hasn't dismissed it before
+    const dismissed = localStorage.getItem("chronos_guide_dismissed");
+    if (!dismissed) setShowGuide(true);
+
     async function fetchHealth() {
       try {
         const data = await apiCall("GET", "/health", apiKey);
@@ -18,6 +184,11 @@ export function Overview({ apiKey }: { apiKey: string }) {
     }
     fetchHealth();
   }, [apiKey]);
+
+  const dismissGuide = () => {
+    localStorage.setItem("chronos_guide_dismissed", "1");
+    setShowGuide(false);
+  };
 
   return (
     <div className="max-w-5xl mx-auto p-12">
@@ -60,6 +231,21 @@ export function Overview({ apiKey }: { apiKey: string }) {
         </div>
       ) : (
         <div className="text-[#999999] mb-16 animate-pulse">Connecting to temporal core...</div>
+      )}
+
+      {/* Getting Started Guide */}
+      {showGuide && <GettingStarted onDismiss={dismissGuide} />}
+
+      {/* Re-open guide button if dismissed */}
+      {!showGuide && (
+        <div className="mb-12">
+          <button
+            onClick={() => setShowGuide(true)}
+            className="text-xs text-[#999999] hover:text-black transition-colors underline underline-offset-2"
+          >
+            Show getting started guide
+          </button>
+        </div>
       )}
 
       <div className="border-t border-[#eaeaea] pt-8">
