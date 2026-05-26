@@ -2,14 +2,15 @@
 
 import { useState, useEffect } from "react";
 import { apiCall } from "@/lib/api";
+import { Key, Activity, Search, Cpu, Hexagon } from "lucide-react";
 
 // ---------------------------------------------------------------------------
-// Getting Started Steps
+// Getting Started Steps — using same Lucide icons as the sidebar
 // ---------------------------------------------------------------------------
 const STEPS = [
   {
     id: "keys",
-    icon: "🔑",
+    Icon: Key,
     title: "Get your API Key",
     section: "API Keys",
     description:
@@ -19,9 +20,9 @@ const STEPS = [
   },
   {
     id: "ingest",
-    icon: "📥",
+    Icon: Activity,
     title: "Ingest your first event",
-    section: "Ingest",
+    section: "Ingest Events",
     description:
       "The Ingest section lets you send raw text into Chronos. The AI automatically decomposes it into Subject-Verb-Object tuples and stores them with timestamps.",
     code: `POST /ingest
@@ -32,9 +33,9 @@ const STEPS = [
   },
   {
     id: "query",
-    icon: "🔍",
+    Icon: Search,
     title: "Query your memory",
-    section: "Query",
+    section: "Query Memory",
     description:
       "Use the Query section to ask natural-language questions. Chronos runs hybrid temporal + semantic search across all stored events and returns ranked results.",
     code: `POST /query
@@ -42,19 +43,19 @@ const STEPS = [
   },
   {
     id: "agent",
-    icon: "🤖",
+    Icon: Cpu,
     title: "Run an Agent",
-    section: "Agent",
+    section: "Agent Chat",
     description:
       "The Agent section gives you a full LangGraph-powered agent that has your entire memory as context. Ask it complex questions, schedule tasks, or trigger tools — it reasons across time.",
     code: `POST /agent/run
-{ "prompt": "Summarize all Q2 deals and flag any risks" }`,
+{ "prompt": "Summarise all Q2 deals and flag any risks" }`,
   },
   {
     id: "connect",
-    icon: "🔌",
+    Icon: Hexagon,
     title: "Connect a tool",
-    section: "Connect",
+    section: "Connect Tool",
     description:
       "Register your SaaS tools (Stripe, Notion, CRM) via the Connect section. Once connected, the Agent can call them mid-conversation and store the results as new events in memory.",
     code: `POST /connectors/register
@@ -85,10 +86,10 @@ function GettingStarted({ onDismiss }: { onDismiss: () => void }) {
       {/* Header */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-[#eaeaea]">
         <div className="flex items-center gap-3">
-          <div className="w-2 h-2 rounded-full bg-black" />
+          <div className="w-1.5 h-1.5 rounded-full bg-black" />
           <span className="font-semibold text-black text-sm">Getting Started</span>
           <span className="text-[#999999] text-xs">
-            {done.size}/{STEPS.length} completed
+            {done.size} / {STEPS.length} completed
           </span>
         </div>
         <button
@@ -112,6 +113,7 @@ function GettingStarted({ onDismiss }: { onDismiss: () => void }) {
         {STEPS.map((step) => {
           const isOpen = openStep === step.id;
           const isDone = done.has(step.id);
+          const { Icon } = step;
           return (
             <div key={step.id}>
               <button
@@ -132,7 +134,9 @@ function GettingStarted({ onDismiss }: { onDismiss: () => void }) {
                   )}
                 </button>
 
-                <span className="text-lg">{step.icon}</span>
+                {/* Lucide icon matching the sidebar */}
+                <Icon className={`w-4 h-4 flex-shrink-0 ${isDone ? "text-[#cccccc]" : "text-black"}`} strokeWidth={1.5} />
+
                 <div className="flex-1">
                   <span className={`text-sm font-medium ${isDone ? "text-[#999999] line-through" : "text-black"}`}>
                     {step.title}
@@ -141,12 +145,12 @@ function GettingStarted({ onDismiss }: { onDismiss: () => void }) {
                     → {step.section}
                   </span>
                 </div>
-                <span className="text-[#cccccc] text-xs">{isOpen ? "▲" : "▼"}</span>
+                <span className="text-[#cccccc] text-[10px]">{isOpen ? "▲" : "▼"}</span>
               </button>
 
               {/* Expanded content */}
               {isOpen && (
-                <div className="px-6 pb-5 ml-9 space-y-3">
+                <div className="px-6 pb-5 ml-[60px] space-y-3">
                   <p className="text-sm text-[#666666] leading-relaxed">{step.description}</p>
                   <div className="bg-[#fafafa] border border-[#eaeaea] rounded-lg p-4 font-mono text-xs text-black overflow-x-auto">
                     <pre>{step.code}</pre>
@@ -170,7 +174,6 @@ export function Overview({ apiKey }: { apiKey: string }) {
   const [showGuide, setShowGuide] = useState(false);
 
   useEffect(() => {
-    // Show guide only if user hasn't dismissed it before
     const dismissed = localStorage.getItem("chronos_guide_dismissed");
     if (!dismissed) setShowGuide(true);
 
@@ -223,9 +226,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
             <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">System Status</div>
           </div>
           <div className="glass-panel flex flex-col items-center justify-center">
-            <div className="text-sm font-medium text-black">
-              GLM 4.7 + Llama 3.1
-            </div>
+            <div className="text-sm font-medium text-black">GLM 4.7 + Llama 3.1</div>
             <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">AI Engine</div>
           </div>
         </div>
@@ -236,7 +237,6 @@ export function Overview({ apiKey }: { apiKey: string }) {
       {/* Getting Started Guide */}
       {showGuide && <GettingStarted onDismiss={dismissGuide} />}
 
-      {/* Re-open guide button if dismissed */}
       {!showGuide && (
         <div className="mb-12">
           <button
@@ -256,7 +256,6 @@ export function Overview({ apiKey }: { apiKey: string }) {
           stores them in a dual calendar (structured events + raw conversation turns),
           and indexes them for both semantic and temporal retrieval.
         </p>
-
         <div className="border border-[#eaeaea] bg-[#fafafa] rounded-lg p-6 font-mono text-sm text-black overflow-x-auto shadow-sm">
           <pre>
 {`# Feed any text → AI extracts structured events
