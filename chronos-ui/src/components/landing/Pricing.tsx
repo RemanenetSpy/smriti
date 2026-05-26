@@ -4,13 +4,13 @@ export function Pricing() {
   return (
     <section id="pricing" className="py-32 bg-white">
       <div className="max-w-6xl mx-auto px-6">
-        <div className="grid md:grid-cols-3 gap-8 items-start">
-          
-          {/* Explorer */}
-          <div className="p-8 border border-[#eaeaea] rounded-xl bg-white hover:border-black transition-colors h-full flex flex-col">
+        <div className="max-w-sm mx-auto">
+
+          {/* Explorer — only visible tier for now */}
+          <div className="p-8 border border-[#eaeaea] rounded-xl bg-white hover:border-black transition-colors flex flex-col">
             <h3 className="text-xl font-semibold text-black mb-2">Explorer</h3>
             <div className="text-4xl font-semibold text-black mb-8">Free</div>
-            
+
             <ul className="space-y-4 mb-12 flex-1 text-[#666666]">
               <li className="flex items-center gap-3">
                 <span className="text-black">→</span> 10,000 events/month
@@ -21,63 +21,23 @@ export function Pricing() {
               <li className="flex items-center gap-3">
                 <span className="text-black">→</span> Community support
               </li>
+              <li className="flex items-center gap-3">
+                <span className="text-black">→</span> 3 connected tools
+              </li>
+              <li className="flex items-center gap-3">
+                <span className="text-black">→</span> 1,000 orchestrations/month
+              </li>
             </ul>
 
             <Link href="/dashboard" className="w-full block text-center py-3 rounded-full font-medium border border-[#eaeaea] text-black hover:border-black transition-colors">
-              Get started
+              Get started free
             </Link>
+
+            <p className="text-center text-xs text-[#999999] mt-4">No credit card required</p>
           </div>
 
-          {/* Builder */}
-          <div className="p-8 border-2 border-black rounded-xl bg-white shadow-sm relative h-full flex flex-col transform md:-translate-y-4 opacity-75">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black text-white text-[11px] font-medium px-3 py-1 rounded-full tracking-wide">
-              COMING SOON
-            </div>
-            
-            <h3 className="text-xl font-semibold text-black mb-2">Builder</h3>
-            <div className="text-4xl font-semibold text-black mb-8">$49<span className="text-lg text-[#666666] font-normal">/mo</span></div>
-            
-            <ul className="space-y-4 mb-12 flex-1 text-[#666666]">
-              <li className="flex items-center gap-3">
-                <span className="text-black">→</span> 500,000 events/month
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-black">→</span> Priority query speed (~80ms)
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-black">→</span> Priority support
-              </li>
-            </ul>
-
-            <button disabled className="w-full block text-center py-3 rounded-full font-medium bg-[#f5f5f5] text-[#999999] cursor-not-allowed">
-              Coming soon
-            </button>
-          </div>
-
-          {/* Scale */}
-          <div className="p-8 border border-[#eaeaea] rounded-xl bg-white opacity-75 h-full flex flex-col relative">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#eaeaea] text-[#666666] text-[11px] font-medium px-3 py-1 rounded-full tracking-wide">
-              COMING SOON
-            </div>
-            <h3 className="text-xl font-semibold text-black mb-2">Scale</h3>
-            <div className="text-4xl font-semibold text-black mb-8">$299<span className="text-lg text-[#666666] font-normal">/mo</span></div>
-            
-            <ul className="space-y-4 mb-12 flex-1 text-[#666666]">
-              <li className="flex items-center gap-3">
-                <span className="text-black">→</span> 5,000,000 events/month
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-black">→</span> Dedicated infrastructure
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="text-black">→</span> 24/7 Phone support
-              </li>
-            </ul>
-
-            <button disabled className="w-full block text-center py-3 rounded-full font-medium bg-[#f5f5f5] text-[#999999] cursor-not-allowed">
-              Coming soon
-            </button>
-          </div>
+          {/* Builder ($49/mo) and Scale ($299/mo) — hidden until payment is ready */}
+          {/* TODO: Re-enable when Stripe integration is complete */}
 
         </div>
       </div>
