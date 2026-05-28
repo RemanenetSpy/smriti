@@ -112,7 +112,22 @@ async def call_model_node(state: dict) -> dict:
     augmented = [SystemMessage(content=system_content)]
     for msg in messages:
         if not isinstance(msg, SystemMessage):
-            augmented.append(msg)
+            if isinstance(msg, AIMessage):
+                # Strip reasoning_content from prior assistant messages to prevent 
+                # "property reasoning_content is unsupported" errors in multi-turn
+                clean_kwargs = dict(msg.additional_kwargs)
+                clean_kwargs.pop("reasoning_content", None)
+                
+                clean_msg = AIMessage(
+                    content=msg.content,
+                    additional_kwargs=clean_kwargs,
+                    id=msg.id,
+                    tool_calls=msg.tool_calls,
+                    invalid_tool_calls=msg.invalid_tool_calls,
+                )
+                augmented.append(clean_msg)
+            else:
+                augmented.append(msg)
 
     # Get the LLM from the Mixture of Agents Router (Heavy Pipeline)
     try:

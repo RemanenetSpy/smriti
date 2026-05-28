@@ -9,7 +9,7 @@ pinned: false
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Live-4ADE80?style=for-the-badge" alt="Live" />
-  <img src="https://img.shields.io/badge/AI-Qwen%203%20235B-C7AB6B?style=for-the-badge" alt="AI" />
+  <img src="https://img.shields.io/badge/AI-GLM%204.7%20+%20Llama%203.1-C7AB6B?style=for-the-badge" alt="AI" />
   <img src="https://img.shields.io/badge/Free%20Tier-10K%20events%2Fmo-6B7194?style=for-the-badge" alt="Free" />
 </p>
 
@@ -45,7 +45,7 @@ pinned: false
 
 1. **Ingests** text from any source (CRM, chat, email, code commits...)
 2. **Decomposes** it into structured Subject-Verb-Object events using AI (Llama 3.1 8B via Groq)
-3. **Stores** events in dual calendars — SQLite for temporal queries, ChromaDB for semantic search
+3. **Stores** events in dual calendars — Postgres for temporal queries, pgvector for semantic search
 4. **Retrieves** relevant memories via natural language — "What happened with Acme Corp last quarter?"
 5. **Powers** agents that actually remember — an AI that knows *your* history
 
@@ -93,8 +93,8 @@ LATER, ANY AGENT CAN ASK:
 │                                                              │
 │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────┐  │
 │  │ SVO Parser   │  │ Auth + Tiers │  │ Razorpay Billing   │  │
-│  │ Qwen 3 235B  │  │ API keys     │  │ Explorer/Builder/  │  │
-│  │ via Cerebras │  │ SHA-256 hash │  │ Scale              │  │
+│  │ GLM 4.7      │  │ API keys     │  │ Explorer/Builder/  │  │
+│  │ + Llama 3.1  │  │ SHA-256 hash │  │ Scale              │  │
 │  └──────────────┘  └──────────────┘  └────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
 ```
@@ -435,13 +435,13 @@ User: "What's our biggest contract?"
          │
          ▼
 ┌─────────────────────┐
-│ retrieve_memory_node │  ← Searches ChromaDB + SQLite
+│ retrieve_memory_node │  ← Searches pgvector + Postgres
 │ ("contract" → Acme) │     for relevant past events
 └────────┬────────────┘
          │
          ▼
 ┌─────────────────────┐
-│  call_model_node    │  ← Qwen 3 235B (Cerebras)
+│  call_model_node    │  ← GLM 4.7
 │  System prompt +    │     with memory context injected
 │  memory context +   │
 │  user question      │
@@ -455,8 +455,8 @@ User: "What's our biggest contract?"
 
 | Property | Value |
 |---|---|
-| **Model** | Qwen 3 235B Instruct (Agent) + Llama 3.1 8B (Parsing) |
-| **Provider** | Cerebras (free tier) |
+| **Model** | GLM 4.7 (Agent) + Llama 3.1 8B (Parsing) |
+| **Provider** | Zhipu AI & Groq |
 | **Speed** | 2,100+ tokens/second |
 | **Daily Limit** | 1,000,000 requests/day |
 | **Cost** | Free |
@@ -488,8 +488,8 @@ Chronos OS uses a three-tier model with metered overage:
 | Variable | Required | Description |
 |---|---|---|
 | `GROQ_API_KEY` | ✅ | Free API key from [console.groq.com](https://console.groq.com) |
-| `CHRONOS_DB_PATH` | No | SQLite path (default: `./data/chronos.db`) |
-| `CHROMA_PERSIST_DIR` | No | ChromaDB path (default: `./data/chroma`) |
+| `CHRONOS_DB_URL` | No | Postgres DB URL |
+| `PGVECTOR_DB_URL` | No | Postgres DB URL for pgvector |
 | `API_SECRET_KEY` | No | Secret for signing API keys |
 | `RAZORPAY_KEY_ID` | No | Razorpay key ID for billing |
 | `RAZORPAY_KEY_SECRET` | No | Razorpay secret key |
@@ -505,7 +505,7 @@ Chronos OS uses a three-tier model with metered overage:
 | **Structured Storage** | Neon PostgreSQL |
 | **Vector Search** | PostgreSQL pgvector + sentence-transformers |
 | **Embedding Model** | all-MiniLM-L6-v2 (HuggingFace) |
-| **LLM** | Qwen 3 235B (Cerebras) & Llama 3.1 8B (Groq) |
+| **LLM** | GLM 4.7 & Llama 3.1 8B (Groq) |
 | **Agent Framework** | LangGraph + LangChain |
 | **Dashboard** | Next.js + React (Vercel) |
 | **Billing** | Razorpay |

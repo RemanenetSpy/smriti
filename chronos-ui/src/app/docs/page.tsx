@@ -41,7 +41,10 @@ export default function DocsPage() {
 {`curl -X POST https://your-api.hf.space/ingest \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
-  -d '{"text": "Acme Corp signed a new $50k contract today"}'`}
+  -d '{
+    "source_id": "my-app",
+    "events": [{"text": "Acme Corp signed a new $50k contract today"}]
+  }'`}
               </pre>
             </div>
           </section>
