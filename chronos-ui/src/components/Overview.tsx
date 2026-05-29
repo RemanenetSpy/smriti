@@ -226,7 +226,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
             <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">System Status</div>
           </div>
           <div className="glass-panel flex flex-col items-center justify-center">
-            <div className="text-sm font-medium text-black">GLM 4.7 + Llama 3.1</div>
+            <div className="text-sm font-medium text-black">GPT OSS 120B + Llama 3.1</div>
             <div className="text-[0.65rem] font-medium uppercase tracking-wider text-[#666666] mt-4">AI Engine</div>
           </div>
         </div>

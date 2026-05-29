@@ -9,7 +9,7 @@ pinned: false
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Live-4ADE80?style=for-the-badge" alt="Live" />
-  <img src="https://img.shields.io/badge/AI-GLM%204.7%20+%20Llama%203.1-C7AB6B?style=for-the-badge" alt="AI" />
+  <img src="https://img.shields.io/badge/AI-GPT%20120B%20+%20Llama%203.1-C7AB6B?style=for-the-badge" alt="AI" />
   <img src="https://img.shields.io/badge/Free%20Tier-10K%20events%2Fmo-6B7194?style=for-the-badge" alt="Free" />
 </p>
 
@@ -93,7 +93,7 @@ LATER, ANY AGENT CAN ASK:
 │                                                              │
 │  ┌──────────────┐  ┌──────────────┐  ┌────────────────────┐  │
 │  │ SVO Parser   │  │ Auth + Tiers │  │ Razorpay Billing   │  │
-│  │ GLM 4.7      │  │ API keys     │  │ Explorer/Builder/  │  │
+│  │ GPT 120B     │  │ API keys     │  │ Explorer/Builder/  │  │
 │  │ + Llama 3.1  │  │ SHA-256 hash │  │ Scale              │  │
 │  └──────────────┘  └──────────────┘  └────────────────────┘  │
 └──────────────────────────────────────────────────────────────┘
@@ -441,7 +441,7 @@ User: "What's our biggest contract?"
          │
          ▼
 ┌─────────────────────┐
-│  call_model_node    │  ← GLM 4.7
+│  call_model_node    │  ← GPT 120B
 │  System prompt +    │     with memory context injected
 │  memory context +   │
 │  user question      │
@@ -455,7 +455,7 @@ User: "What's our biggest contract?"
 
 | Property | Value |
 |---|---|
-| **Model** | GLM 4.7 (Agent) + Llama 3.1 8B (Parsing) |
+| **Model** | GPT OSS 120B (Agent) + Llama 3.1 8B (Parsing) |
 | **Provider** | Zhipu AI & Groq |
 | **Speed** | 2,100+ tokens/second |
 | **Daily Limit** | 1,000,000 requests/day |
@@ -505,7 +505,7 @@ Chronos OS uses a three-tier model with metered overage:
 | **Structured Storage** | Neon PostgreSQL |
 | **Vector Search** | PostgreSQL pgvector + sentence-transformers |
 | **Embedding Model** | all-MiniLM-L6-v2 (HuggingFace) |
-| **LLM** | GLM 4.7 & Llama 3.1 8B (Groq) |
+| **LLM** | GPT OSS 120B & Llama 3.1 8B (Cerebras) |
 | **Agent Framework** | LangGraph + LangChain |
 | **Dashboard** | Next.js + React (Vercel) |
 | **Billing** | Razorpay |
