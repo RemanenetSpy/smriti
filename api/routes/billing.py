@@ -1,5 +1,5 @@
 """
-Chronos OS — Billing Route
+KAAL — Billing Route
 ============================
 Stripe Checkout integration for premium tier subscriptions.
 POST /billing/checkout — Create a Stripe checkout session

@@ -1,5 +1,5 @@
 """
-Chronos OS — Vector Store
+KAAL — Vector Store
 ==========================
 pgvector semantic search layer backed by Neon PostgreSQL.
 Replaces ChromaDB while keeping the same API surface.

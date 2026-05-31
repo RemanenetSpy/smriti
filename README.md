@@ -1,5 +1,5 @@
 ---
-title: Chronos API Backend
+title: Kaal API Backend
 emoji: 🕰️
 colorFrom: red
 colorTo: gray
@@ -13,11 +13,11 @@ pinned: false
   <img src="https://img.shields.io/badge/Free%20Tier-10K%20events%2Fmo-6B7194?style=for-the-badge" alt="Free" />
 </p>
 
-<h1 align="center">🕰️ CHRONOS OS</h1>
+<h1 align="center">🕰️ KAAL</h1>
 <p align="center"><em>Temporal AI Agent Ecosystem — Letters to the Future, for agents.</em></p>
 <p align="center">
   <strong>Give any AI agent structured, temporal long-term memory.</strong><br>
-  Chronos decomposes text into Subject-Verb-Object events, stores them across dual calendars,<br>
+  Kaal decomposes text into Subject-Verb-Object events, stores them across dual calendars,<br>
   and lets agents query what happened, when, and why — across any connected SaaS tool.
 </p>
 
@@ -25,7 +25,7 @@ pinned: false
 
 ## Table of Contents
 
-- [What is Chronos OS?](#what-is-chronos-os)
+- [What is KAAL?](#what-is-chronos-os)
 - [Architecture](#architecture)
 - [Quick Start (5 Minutes)](#quick-start-5-minutes)
 - [API Reference](#api-reference)
@@ -37,11 +37,11 @@ pinned: false
 
 ---
 
-## What is Chronos OS?
+## What is KAAL?
 
 **The problem:** AI agents are goldfish. They process a request, forget everything, and start from zero next time. No memory of what happened yesterday, last week, or across your other tools.
 
-**The solution:** Chronos OS is a **temporal memory API** that any AI agent or SaaS product can plug into. It:
+**The solution:** KAAL is a **temporal memory API** that any AI agent or SaaS product can plug into. It:
 
 1. **Ingests** text from any source (CRM, chat, email, code commits...)
 2. **Decomposes** it into structured Subject-Verb-Object events using AI (Llama 3.1 8B via Groq)
@@ -71,7 +71,7 @@ LATER, ANY AGENT CAN ASK:
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
-│                    CHRONOS OS v0.1.0                         │
+│                    KAAL v0.1.0                         │
 ├──────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌─────────────┐  ┌──────────────┐  ┌────────────────────┐  │
@@ -168,7 +168,7 @@ python -m uvicorn api.main:app --port 8000
 
 You should see:
 ```
-✅ Chronos OS ready — all systems online
+✅ KAAL ready — all systems online
 Uvicorn running on http://127.0.0.1:8000
 ```
 
@@ -465,7 +465,7 @@ User: "What's our biggest contract?"
 
 ## Pricing Tiers
 
-Chronos OS uses a three-tier model with metered overage:
+KAAL uses a three-tier model with metered overage:
 
 | Feature | Explorer | Builder | Scale |
 |---|---|---|---|

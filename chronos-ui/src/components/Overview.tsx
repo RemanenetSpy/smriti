@@ -24,7 +24,7 @@ const STEPS = [
     title: "Ingest your first event",
     section: "Ingest Events",
     description:
-      "The Ingest section lets you send raw text into Chronos. The AI automatically decomposes it into Subject-Verb-Object tuples and stores them with timestamps.",
+      "The Ingest section lets you send raw text into Kaal. The AI automatically decomposes it into Subject-Verb-Object tuples and stores them with timestamps.",
     code: `POST /ingest
 {
   "source_id": "my-app",
@@ -37,7 +37,7 @@ const STEPS = [
     title: "Query your memory",
     section: "Query Memory",
     description:
-      "Use the Query section to ask natural-language questions. Chronos runs hybrid temporal + semantic search across all stored events and returns ranked results.",
+      "Use the Query section to ask natural-language questions. Kaal runs hybrid temporal + semantic search across all stored events and returns ranked results.",
     code: `POST /query
 { "query": "What happened with Acme Corp?" }`,
   },
@@ -174,7 +174,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
   const [showGuide, setShowGuide] = useState(false);
 
   useEffect(() => {
-    const dismissed = localStorage.getItem("chronos_guide_dismissed");
+    const dismissed = localStorage.getItem("kaal_guide_dismissed");
     if (!dismissed) setShowGuide(true);
 
     async function fetchHealth() {
@@ -189,7 +189,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
   }, [apiKey]);
 
   const dismissGuide = () => {
-    localStorage.setItem("chronos_guide_dismissed", "1");
+    localStorage.setItem("kaal_guide_dismissed", "1");
     setShowGuide(false);
   };
 
@@ -252,7 +252,7 @@ export function Overview({ apiKey }: { apiKey: string }) {
         <h2 className="text-xs font-medium uppercase tracking-wider text-[#666666] mb-6">Architecture</h2>
         <h3 className="text-xl font-semibold text-black mb-4">The Dual Calendar System</h3>
         <p className="text-[#666666] leading-relaxed mb-6 max-w-3xl">
-          Chronos decomposes every piece of text into Subject-Verb-Object event tuples,
+          Kaal decomposes every piece of text into Subject-Verb-Object event tuples,
           stores them in a dual calendar (structured events + raw conversation turns),
           and indexes them for both semantic and temporal retrieval.
         </p>

@@ -23,7 +23,7 @@ export function HowItWorks() {
                   <span className="text-[#666666]">POST</span> <span className="text-black font-semibold">/ingest</span> any text →
                 </div>
                 <p className="text-[#666666] leading-relaxed">
-                  Send raw data from CRMs, chats, emails, or git commits. Chronos accepts completely unstructured text.
+                  Send raw data from CRMs, chats, emails, or git commits. Kaal accepts completely unstructured text.
                 </p>
               </div>
             </div>

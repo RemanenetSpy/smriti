@@ -1,5 +1,5 @@
 """
-Chronos OS — Agent State Graph
+KAAL — Agent State Graph
 ================================
 LangGraph state graph that orchestrates the Chronos agent.
 Architecture: retrieve_memory → call_model → (tools loop) → END

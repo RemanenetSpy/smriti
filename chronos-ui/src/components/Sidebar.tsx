@@ -1,6 +1,7 @@
 "use client";
 
-import { Disc3, Search, Activity, Cpu, Hexagon, Banknote, Key, Info } from "lucide-react";
+import { Disc3, Search, Activity, Cpu, Banknote, Key, Info } from "lucide-react";
+import { Logo } from "./Logo";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -22,13 +23,13 @@ const PAGES = [
     id: "ingest",
     label: "Ingest Events",
     icon: Activity,
-    tip: "Send raw text into Chronos. The AI extracts Subject-Verb-Object tuples and stores them with timestamps.",
+    tip: "Send raw text into Kaal. The AI extracts Subject-Verb-Object tuples and stores them with timestamps.",
   },
   {
     id: "query",
     label: "Query Memory",
     icon: Search,
-    tip: "Ask natural-language questions. Chronos runs hybrid temporal + semantic search across all your stored events.",
+    tip: "Ask natural-language questions. Kaal runs hybrid temporal + semantic search across all your stored events.",
   },
   {
     id: "agent",
@@ -63,9 +64,8 @@ export function Sidebar({ apiKey, setApiKey, activePage, setActivePage }: Sideba
     <div className="w-64 border-r border-[#eaeaea] h-screen flex flex-col bg-[#fafafa]">
       {/* Logo Area */}
       <div className="p-6 border-b border-[#eaeaea]">
-        <Link href="/" className="flex items-center gap-2">
-          <Hexagon className="w-5 h-5 fill-black text-black" strokeWidth={1.5} />
-          <span className="font-medium text-black">Chronos OS</span>
+        <Link href="/">
+          <Logo variant="compact" />
         </Link>
       </div>
 

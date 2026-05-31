@@ -1,5 +1,5 @@
 """
-Chronos OS — Pydantic Models
+KAAL — Pydantic Models
 ============================
 Data models for the Chronos temporal memory system.
 SVO event tuples, calendar records, API payloads, and query structures.
@@ -130,7 +130,7 @@ class ConnectorEndpoint(BaseModel):
 
 
 class ConnectorRegistration(BaseModel):
-    """Schema for registering a SaaS product with Chronos OS."""
+    """Schema for registering a SaaS product with KAAL."""
     name: str = Field(..., description="Display name (e.g., 'Stripe', 'Notion')")
     description: str = Field("", description="What this tool does")
     base_url: str = Field(..., description="Base API URL")

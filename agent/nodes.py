@@ -1,5 +1,5 @@
 """
-Chronos OS — Agent Nodes
+KAAL — Agent Nodes
 ==========================
 Individual processing nodes for the LangGraph state graph.
 Each node performs a single responsibility in the agent pipeline.
@@ -16,7 +16,7 @@ from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 logger = logging.getLogger("chronos.agent.nodes")
 
 # System prompt for the Chronos agent
-CHRONOS_SYSTEM_PROMPT = """You are a Chronos OS Agent — an AI assistant with structured temporal long-term memory.
+CHRONOS_SYSTEM_PROMPT = """You are a KAAL Agent — an AI assistant with structured temporal long-term memory.
 
 You have access to the Chronos temporal memory system, which stores events as Subject-Verb-Object (SVO) tuples with timestamps. This gives you the ability to:
 

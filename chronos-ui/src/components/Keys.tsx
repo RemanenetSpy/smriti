@@ -30,7 +30,7 @@ export function Keys() {
       <div className="mb-12">
         <h2 className="text-3xl font-semibold text-black mb-2">Generate API Key</h2>
         <p className="text-[#666666]">
-          Create a new key to authenticate with Chronos OS. Store it safely — it's shown only once.
+          Create a new key to authenticate with KAAL. Store it safely — it's shown only once.
         </p>
       </div>
 

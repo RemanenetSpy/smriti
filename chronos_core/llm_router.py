@@ -1,5 +1,5 @@
 """
-Chronos OS — Multi-Model Mixture of Agents Router
+KAAL — Multi-Model Mixture of Agents Router
 ===================================================
 Intelligently routes tasks to different LLMs to aggregate free-tier API limits.
 Falls back safely if rate limits (429) or downtimes occur.

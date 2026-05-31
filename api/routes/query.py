@@ -1,5 +1,5 @@
 """
-Chronos OS — Query Route
+KAAL — Query Route
 ==========================
 POST /query — Hybrid temporal + semantic retrieval.
 The core value of Chronos: agents query structured temporal memory.

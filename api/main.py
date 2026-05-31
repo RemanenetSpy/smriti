@@ -1,5 +1,5 @@
 """
-Chronos OS — FastAPI Application
+KAAL — FastAPI Application
 ==================================
 The API gateway for the Chronos Temporal AI Agent Ecosystem.
 Backend: Neon PostgreSQL + pgvector (persistent cloud storage).
@@ -47,7 +47,7 @@ logger = logging.getLogger("chronos.api")
 async def lifespan(app: FastAPI):
     """Initialize and tear down core services."""
     try:
-        logger.info("🕰️  Chronos OS starting up...")
+        logger.info("🕰️  KAAL starting up...")
 
         # Initialize Memory Store
         memory_store = MemoryStore()
@@ -63,7 +63,7 @@ async def lifespan(app: FastAPI):
         # Register singletons
         set_stores(memory_store, vector_store, svo_parser)
 
-        logger.info("✅ Chronos OS ready — Systems online")
+        logger.info("✅ KAAL ready — Systems online")
         
         yield  # App is running
         
@@ -78,9 +78,9 @@ async def lifespan(app: FastAPI):
         raise e
 
     # Shutdown
-    logger.info("🔒 Chronos OS shutting down...")
+    logger.info("🔒 KAAL shutting down...")
     await memory_store.close()
-    logger.info("👋 Goodbye from Chronos OS")
+    logger.info("👋 Goodbye from KAAL")
 
 
 # ---------------------------------------------------------------------------
@@ -88,7 +88,7 @@ async def lifespan(app: FastAPI):
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="Chronos OS",
+    title="KAAL",
     description=(
         "The Temporal AI Agent Ecosystem. "
         "Structured long-term memory for every agent and SaaS product. "
@@ -132,9 +132,9 @@ app.include_router(billing_router)
 
 @app.get("/", tags=["Health"])
 async def health_check():
-    """Health check — verify Chronos OS is alive."""
+    """Health check — verify KAAL is alive."""
     return {
-        "service": "Chronos OS",
+        "service": "KAAL",
         "version": "0.2.0",
         "status": "operational",
         "storage": "Neon PostgreSQL + pgvector",

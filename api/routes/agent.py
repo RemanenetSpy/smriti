@@ -1,5 +1,5 @@
 """
-Chronos OS — Agent Route
+KAAL — Agent Route
 ==========================
 POST /agent/run — Execute an agent prompt with full Chronos temporal memory.
 """

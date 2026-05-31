@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Hexagon } from "lucide-react";
+import { Logo } from "../Logo";
 
 export function Footer() {
   return (
@@ -7,9 +7,8 @@ export function Footer() {
       <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
         
         <div className="flex items-center gap-8">
-          <Link href="/" className="flex items-center gap-2">
-            <Hexagon className="w-4 h-4 fill-black text-black" strokeWidth={1.5} />
-            <span className="font-medium text-black text-sm">Chronos OS</span>
+          <Link href="/">
+            <Logo variant="compact" />
           </Link>
           
           <div className="flex items-center gap-6 text-sm text-[#666666]">
@@ -21,7 +20,7 @@ export function Footer() {
         </div>
 
         <div className="text-sm text-[#999999]">
-          © 2026 Chronos OS · v0.2.0
+          © 2026 Kaal · the absolute · v0.2.0
         </div>
         
       </div>

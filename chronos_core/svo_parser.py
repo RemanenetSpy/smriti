@@ -1,5 +1,5 @@
 """
-Chronos OS — SVO Parser
+KAAL — SVO Parser
 ========================
 Extracts Subject-Verb-Object event tuples from raw text using
 the Mixture of Agents LiteLLM Router (Cerebras + Groq fallback).

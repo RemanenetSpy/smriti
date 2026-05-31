@@ -1,5 +1,5 @@
 """
-Chronos OS — Agent Tools
+KAAL — Agent Tools
 ==========================
 Built-in tools that agents can use during execution.
 These connect the LangGraph agent to the Chronos memory system.
@@ -73,7 +73,7 @@ def ingest_chronos_event(
 @tool
 def list_connected_tools() -> str:
     """
-    List all SaaS tools connected to Chronos OS.
+    List all SaaS tools connected to KAAL.
     Use this to discover what external services and APIs are available.
     """
     return json.dumps({

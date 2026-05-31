@@ -1,5 +1,5 @@
 """
-Chronos OS — Connectors Route
+KAAL — Connectors Route
 ===============================
 POST /connect  — Register a SaaS product's API schema
 GET  /connectors — List all connected tools
@@ -33,7 +33,7 @@ async def register_connector(
     key_info: dict = Depends(verify_api_key),
 ):
     """
-    Register a SaaS product with Chronos OS.
+    Register a SaaS product with KAAL.
     The product's API endpoints become available as tools for agents.
     Non-agentic SaaS instantly becomes agent-actionable.
     """
@@ -76,7 +76,7 @@ async def register_connector(
         "connector_id": connector_id,
         "name": registration.name,
         "endpoints_count": len(registration.endpoints),
-        "message": f"'{registration.name}' is now agent-actionable in Chronos OS.",
+        "message": f"'{registration.name}' is now agent-actionable in KAAL.",
     }
 
 

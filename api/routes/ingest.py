@@ -1,5 +1,5 @@
 """
-Chronos OS — Ingest Route
+KAAL — Ingest Route
 ===========================
 POST /ingest — Universal event ingestion endpoint.
 Any SaaS or agent sends events here to get temporal memory.

@@ -1,5 +1,5 @@
 """
-Chronos OS — Memory Store
+KAAL — Memory Store
 ==========================
 Dual-calendar PostgreSQL storage engine backed by Neon.
   • Event Calendar — structured SVO events with temporal indexing

@@ -1,5 +1,5 @@
 """
-Chronos OS — API Key Authentication
+KAAL — API Key Authentication
 =====================================
 Middleware to validate X-API-Key headers against the SQLite api_keys table.
 Supports tier-based rate limiting and usage tracking.

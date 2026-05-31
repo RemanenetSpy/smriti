@@ -18,14 +18,14 @@ export default function App() {
 
   // Load API key from local storage on mount
   useEffect(() => {
-    const saved = localStorage.getItem("chronos_api_key");
+    const saved = localStorage.getItem("kaal_api_key");
     if (saved) setApiKey(saved);
   }, []);
 
   // Save API key on change (but don't delete on initial render when it's empty)
   useEffect(() => {
     if (apiKey) {
-      localStorage.setItem("chronos_api_key", apiKey);
+      localStorage.setItem("kaal_api_key", apiKey);
     }
   }, [apiKey]);
 

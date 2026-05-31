@@ -49,7 +49,7 @@ export function Query({ apiKey }: { apiKey: string }) {
       <div className="mb-12">
         <h2 className="text-3xl font-semibold text-black mb-2">Query the Memory</h2>
         <p className="text-[#666666]">
-          Ask in natural language. Chronos searches across time and meaning.
+          Ask in natural language. Kaal searches across time and meaning.
         </p>
       </div>
 

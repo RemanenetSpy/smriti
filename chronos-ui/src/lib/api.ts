@@ -1,4 +1,4 @@
-// API helper for Chronos API
+// API helper for Kaal API
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://spy9191-chronos-api-backend.hf.space";
 
 export async function apiCall(
@@ -35,6 +35,6 @@ export async function apiCall(
     
     return await res.json();
   } catch (error: any) {
-    throw new Error(error.message || "Failed to connect to Chronos API");
+    throw new Error(error.message || "Failed to connect to Kaal API");
   }
 }

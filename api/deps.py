@@ -1,5 +1,5 @@
 """
-Chronos OS — Dependency Injection
+KAAL — Dependency Injection
 ==================================
 Provides shared instances of core services to FastAPI routes.
 """

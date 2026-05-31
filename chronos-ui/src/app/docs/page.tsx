@@ -8,7 +8,7 @@ export default function DocsPage() {
       <main className="flex-1 max-w-4xl mx-auto px-6 py-24 w-full">
         <h1 className="text-4xl font-bold text-black mb-4">Documentation</h1>
         <p className="text-[#666666] text-lg mb-12">
-          Everything you need to integrate and build with Chronos OS.
+          Everything you need to integrate and build with KAAL.
         </p>
 
         <div className="space-y-12">
@@ -29,7 +29,7 @@ export default function DocsPage() {
           <section>
             <h2 className="text-2xl font-semibold text-black mb-4 pb-2 border-b border-[#eaeaea]">Ingest Event</h2>
             <p className="text-[#666666] mb-4">
-              Feed unstructured text to your agent's memory. Chronos OS automatically extracts the relationships, entities, and temporal data.
+              Feed unstructured text to your agent's memory. KAAL automatically extracts the relationships, entities, and temporal data.
             </p>
             <div className="mb-4">
               <span className="inline-block bg-[#f5f5f5] text-black border border-[#eaeaea] px-2 py-1 rounded font-mono text-sm font-medium mr-3">POST</span>
