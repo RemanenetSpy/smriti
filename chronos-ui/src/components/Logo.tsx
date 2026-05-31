@@ -1,5 +1,4 @@
 import React from 'react';
-import { HourglassIcon } from './HourglassIcon';
 
 interface LogoProps {
   className?: string;
@@ -30,16 +29,10 @@ export const Logo: React.FC<LogoProps> = ({ className = '', variant = 'full' }) 
         </g>
       </svg>
 
-      <div className={`text-[#1a1a1a] ${isCompact ? 'flex items-center tracking-[0.3em]' : 'flex items-center justify-center gap-2 sm:gap-4 md:gap-6 w-full'}`}>
+      <div className={`text-[#1a1a1a] ${isCompact ? 'flex items-center tracking-[0.3em]' : 'flex items-center justify-center w-full'}`}>
         <span className={`serif ${isCompact ? 'text-xl font-bold uppercase' : isSplash ? 'text-2xl sm:text-4xl md:text-5xl tracking-wide' : 'text-2xl tracking-wide'} text-[#1a1a1a]`}>
           {isCompact ? 'KAAL' : 'Kaal'}
         </span>
-
-        {!isCompact && (
-          <span className={`serif ${isSplash ? 'text-xl sm:text-3xl md:text-4xl tracking-wide' : 'text-xl tracking-wide'} text-[#1a1a1a] whitespace-nowrap`}>
-            · the absolute
-          </span>
-        )}
       </div>
     </div>
   );
