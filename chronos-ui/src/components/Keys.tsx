@@ -46,30 +46,6 @@ export function Keys() {
             </div>
             <div className="w-5 h-5 rounded-full border-[6px] border-black bg-white"></div>
           </div>
-
-          {/* Builder - Disabled */}
-          <div className="border border-[#eaeaea] bg-[#fafafa] rounded-lg p-4 flex justify-between items-center">
-            <div>
-              <div className="font-medium text-[#999999] flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5" />
-                Builder
-              </div>
-              <div className="text-xs text-[#999999] ml-5">$49/mo - 500k Events</div>
-            </div>
-            <div className="text-[10px] font-bold text-[#999999] uppercase tracking-wider bg-[#eaeaea] px-2 py-1 rounded">Coming Soon</div>
-          </div>
-
-          {/* Scale - Disabled */}
-          <div className="border border-[#eaeaea] bg-[#fafafa] rounded-lg p-4 flex justify-between items-center">
-            <div>
-              <div className="font-medium text-[#999999] flex items-center gap-2">
-                <Lock className="w-3.5 h-3.5" />
-                Scale
-              </div>
-              <div className="text-xs text-[#999999] ml-5">$249/mo - 5M Events</div>
-            </div>
-            <div className="text-[10px] font-bold text-[#999999] uppercase tracking-wider bg-[#eaeaea] px-2 py-1 rounded">Coming Soon</div>
-          </div>
         </div>
 
         <button 
