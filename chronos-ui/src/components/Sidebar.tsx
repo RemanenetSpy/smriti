@@ -1,6 +1,6 @@
 "use client";
 
-import { Disc3, Search, Activity, Cpu, Banknote, Key, Info } from "lucide-react";
+import { Disc3, Search, Activity, Cpu, Banknote, Key, Info, Hexagon } from "lucide-react";
 import { Logo } from "./Logo";
 import Link from "next/link";
 import { useState } from "react";
