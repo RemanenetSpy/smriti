@@ -80,44 +80,7 @@ export function Billing({ apiKey }: { apiKey: string }) {
             </div>
           </div>
 
-          <div className="border-t border-[#eaeaea] pt-12">
-            <h3 className="text-2xl font-semibold text-black mb-8">Temporal Memory Tiers</h3>
-            
-            <div className="overflow-hidden rounded-lg border border-[#eaeaea]">
-              <table className="w-full text-left border-collapse bg-white">
-                <thead>
-                  <tr className="bg-[#fafafa] text-black text-sm border-b border-[#eaeaea]">
-                    <th className="p-4 font-medium">Feature</th>
-                    <th className="p-4 font-medium">Explorer</th>
-                    <th className="p-4 font-medium border-l border-[#eaeaea]">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5 text-[#999999]">
-                          <Lock className="w-3.5 h-3.5" />
-                          BUILDER
-                        </div>
-                        <div className="text-[10px] font-medium text-[#999999] uppercase tracking-wider">Coming Soon</div>
-                      </div>
-                    </th>
-                    <th className="p-4 font-medium border-l border-[#eaeaea]">
-                      <div className="flex flex-col gap-1">
-                        <div className="flex items-center gap-1.5 text-[#999999]">
-                          <Lock className="w-3.5 h-3.5" />
-                          SCALE
-                        </div>
-                        <div className="text-[10px] font-medium text-[#999999] uppercase tracking-wider">Coming Soon</div>
-                      </div>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="text-sm divide-y divide-[#eaeaea] text-black">
-                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Price</td><td className="p-4">Free</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">$49/month</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">$249/month</td></tr>
-                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Events/mo</td><td className="p-4">10,000</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">500,000</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">5,000,000</td></tr>
-                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Orchestration</td><td className="p-4">100</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">10,000</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">Unlimited</td></tr>
-                  <tr className="hover:bg-[#fafafa] transition-colors"><td className="p-4 font-medium text-[#666666]">Connected Tools</td><td className="p-4">3</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">25</td><td className="p-4 border-l border-[#eaeaea] text-[#999999]">Unlimited</td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+
         </div>
       ) : null}
     </div>
