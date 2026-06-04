@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { Sidebar } from "@/components/Sidebar";
+import { KaalChat } from "@/components/KaalChat";
 
 const Overview = dynamic(() => import("@/components/Overview").then(mod => mod.Overview));
 const Ingest = dynamic(() => import("@/components/Ingest").then(mod => mod.Ingest));
@@ -53,6 +54,8 @@ export default function App() {
       <main className="flex-1 overflow-y-auto bg-white">
         {renderPage()}
       </main>
+      {/* Floating AI chat — available on all dashboard pages */}
+      <KaalChat />
     </div>
   );
 }
