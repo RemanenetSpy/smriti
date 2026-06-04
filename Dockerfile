@@ -9,10 +9,13 @@ ENV PYTHONUNBUFFERED=1 \
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (including audio libs for XTTSv2)
 RUN apt-get update && apt-get install -y \
     build-essential \
     libpq-dev \
+    libsndfile1 \
+    ffmpeg \
+    espeak-ng \
     && rm -rf /var/lib/apt/lists/*
 
 # Create a non-root user (Hugging Face runs as UID 1000)
