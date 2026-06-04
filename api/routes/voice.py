@@ -23,8 +23,28 @@ logger = logging.getLogger("chronos.routes.voice")
 
 router = APIRouter(tags=["Voice & Chat"])
 
-# Path to Amber's voice reference file (committed to repo)
-SPEAKER_WAV = Path(__file__).parent.parent.parent / "assets" / "amber_voice.wav"
+# Lazy-decoded speaker wav — decoded from base64 on first use into /tmp
+_speaker_wav_path: Optional[str] = None
+
+def _get_speaker_wav() -> str:
+    """Decode Amber's base64-encoded voice reference to /tmp on first call."""
+    global _speaker_wav_path
+    if _speaker_wav_path and Path(_speaker_wav_path).exists():
+        return _speaker_wav_path
+
+    tmp_path = "/tmp/amber_voice.wav"
+    try:
+        from assets.amber_b64 import AMBER_VOICE_B64
+        import base64
+        with open(tmp_path, "wb") as f:
+            f.write(base64.b64decode(AMBER_VOICE_B64))
+        _speaker_wav_path = tmp_path
+        logger.info("[TTS] Amber voice reference decoded to /tmp/amber_voice.wav")
+    except Exception as e:
+        logger.error(f"[TTS] Failed to decode voice reference: {e}")
+        raise RuntimeError("Voice reference unavailable") from e
+
+    return _speaker_wav_path
 
 # Lazy-loaded TTS instance
 _tts_instance = None
@@ -77,11 +97,8 @@ async def speak(req: TTSRequest):
     if len(req.text) > 500:
         return JSONResponse(status_code=400, content={"error": "text too long (max 500 chars)"})
 
-    if not SPEAKER_WAV.exists():
-        logger.error(f"[TTS] Speaker wav not found at {SPEAKER_WAV}")
-        return JSONResponse(status_code=503, content={"error": "Voice reference file missing."})
-
     try:
+        speaker_wav = _get_speaker_wav()
         tts = _get_tts()
 
         with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
@@ -89,7 +106,7 @@ async def speak(req: TTSRequest):
 
         tts.tts_to_file(
             text=req.text.strip(),
-            speaker_wav=str(SPEAKER_WAV),
+            speaker_wav=speaker_wav,
             language=req.language,
             file_path=tmp_path,
         )
