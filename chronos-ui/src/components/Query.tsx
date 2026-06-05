@@ -72,7 +72,7 @@ export function Query({ apiKey }: { apiKey: string }) {
               type="date" 
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
-              className="chronos-input w-full"
+              className="kaal-input w-full"
             />
           </div>
           <div>
@@ -81,7 +81,7 @@ export function Query({ apiKey }: { apiKey: string }) {
               type="date" 
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
-              className="chronos-input w-full"
+              className="kaal-input w-full"
             />
           </div>
           <div>

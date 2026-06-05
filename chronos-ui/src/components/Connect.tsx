@@ -84,27 +84,27 @@ export function Connect({ apiKey }: { apiKey: string }) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <div>
             <label className="block text-sm font-medium text-black mb-2">Tool Name</label>
-            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Stripe, Notion, Slack..." className="chronos-input" />
+            <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Stripe, Notion, Slack..." className="kaal-input" />
           </div>
           <div>
             <label className="block text-sm font-medium text-black mb-2">Auth Header</label>
-            <input type="text" value={authHeader} onChange={e => setAuthHeader(e.target.value)} placeholder="Authorization" className="chronos-input" />
+            <input type="text" value={authHeader} onChange={e => setAuthHeader(e.target.value)} placeholder="Authorization" className="kaal-input" />
           </div>
         </div>
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-black mb-2">Base API URL</label>
-          <input type="text" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} placeholder="https://api.myproduct.com" className="chronos-input" />
+          <input type="text" value={baseUrl} onChange={e => setBaseUrl(e.target.value)} placeholder="https://api.myproduct.com" className="kaal-input" />
         </div>
 
         <div className="mb-6">
           <label className="block text-sm font-medium text-black mb-2">Description</label>
-          <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="What does this tool do?" rows={2} className="chronos-input resize-y"></textarea>
+          <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="What does this tool do?" rows={2} className="kaal-input resize-y"></textarea>
         </div>
 
         <div className="mb-8">
           <label className="block text-sm font-medium text-black mb-2">Endpoints <span className="font-normal text-[#999999] text-xs">(JSON format)</span></label>
-          <textarea value={endpointsJson} onChange={e => setEndpointsJson(e.target.value)} rows={6} className="chronos-input font-mono text-xs text-[#666666]"></textarea>
+          <textarea value={endpointsJson} onChange={e => setEndpointsJson(e.target.value)} rows={6} className="kaal-input font-mono text-xs text-[#666666]"></textarea>
         </div>
 
         <button onClick={handleConnect} disabled={loading} className={`primary-button ${loading ? 'opacity-70' : ''}`}>

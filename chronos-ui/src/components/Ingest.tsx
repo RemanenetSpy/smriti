@@ -55,7 +55,7 @@ export function Ingest({ apiKey }: { apiKey: string }) {
             type="text" 
             value={sourceId}
             onChange={(e) => setSourceId(e.target.value)}
-            className="chronos-input w-full md:w-1/2"
+            className="kaal-input w-full md:w-1/2"
           />
           <p className="text-xs text-[#666666] mt-2">Identifies where these events come from</p>
         </div>
@@ -67,7 +67,7 @@ export function Ingest({ apiKey }: { apiKey: string }) {
             value={eventsText}
             onChange={(e) => setEventsText(e.target.value)}
             rows={5}
-            className="chronos-input w-full resize-y min-h-[120px]"
+            className="kaal-input w-full resize-y min-h-[120px]"
           />
         </div>
 

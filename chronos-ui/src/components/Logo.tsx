@@ -29,9 +29,9 @@ export const Logo: React.FC<LogoProps> = ({ className = '', variant = 'full' }) 
         </g>
       </svg>
 
-      <div className={`text-[#1a1a1a] ${isCompact ? 'flex items-center tracking-[0.3em]' : 'flex items-center justify-center w-full'}`}>
-        <span className={`serif ${isCompact ? 'text-xl font-bold uppercase' : isSplash ? 'text-2xl sm:text-4xl md:text-5xl tracking-wide' : 'text-2xl tracking-wide'} text-[#1a1a1a]`}>
-          {isCompact ? 'KAAL' : 'Kaal'}
+      <div className={`${isCompact ? 'flex items-center tracking-[0.15em]' : 'flex items-center justify-center w-full'}`}>
+        <span className={`serif ${isCompact ? 'text-base font-semibold' : isSplash ? 'text-2xl sm:text-4xl md:text-5xl tracking-wide' : 'text-2xl tracking-wide'} text-[#1a1a1a]`}>
+          {isCompact ? 'Smriti' : 'Smriti'}
         </span>
       </div>
     </div>

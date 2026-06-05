@@ -20,7 +20,7 @@ export function Footer() {
         </div>
 
         <div className="text-sm text-[#999999]">
-          © 2026 Kaal · v0.2.0
+          © 2026 Smriti by Kaal the Absolute · v0.2.0
         </div>
         
       </div>

@@ -17,7 +17,7 @@ export function Hero() {
 
       {/* Subheading */}
       <p className="text-lg md:text-xl text-[#666666] max-w-2xl mb-12 leading-relaxed">
-        KAAL gives any agent structured, persistent, queryable memory in 3 API calls. Never start from zero again.
+        Smriti gives any agent structured, persistent, queryable memory in 3 API calls. Never start from zero again.
       </p>
 
       {/* CTAs */}

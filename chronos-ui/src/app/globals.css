@@ -45,7 +45,7 @@ body {
     border-color: #000000;
   }
 
-  .chronos-input {
+  .kaal-input {
     width: 100%;
     background-color: #fafafa;
     border: 1px solid #eaeaea;
@@ -56,7 +56,7 @@ body {
     transition: all 150ms;
   }
   
-  .chronos-input:focus {
+  .kaal-input:focus {
     outline: none;
     border-color: #000000;
     background-color: #ffffff;

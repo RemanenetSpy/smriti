@@ -70,17 +70,6 @@ export function Sidebar({ apiKey, setApiKey, activePage, setActivePage }: Sideba
       </div>
 
       <div className="p-4 flex flex-col h-full">
-        {/* API Key Input */}
-        <div className="mb-8">
-          <label className="text-xs text-[#666666] mb-2 block uppercase tracking-wider font-medium">Auth Token</label>
-          <input
-            type="password"
-            value={apiKey}
-            onChange={(e) => setApiKey(e.target.value)}
-            placeholder="chrn_..."
-            className="w-full bg-white border border-[#eaeaea] rounded-md px-3 py-2 text-sm font-mono focus:outline-none focus:border-black transition-colors"
-          />
-        </div>
 
         {/* Navigation */}
         <div className="flex-1 space-y-0.5">
