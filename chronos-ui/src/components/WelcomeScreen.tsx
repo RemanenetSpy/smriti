@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { TurnstileWidget } from "./TurnstileWidget";
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ||
@@ -76,10 +77,26 @@ function useTypewriter(text: string, speed = 28) {
   return displayed;
 }
 
-// ─── Phase 0: Hook + Use Case (merged) ────────────────────────────────────────
-function PhaseHookUseCase({ onNext }: { onNext: (uc: UseCase) => void }) {
+// ─── Phase 0: Hook + Use Case + Email + Captcha ───────────────────────────────
+function PhaseHookUseCase({
+  onNext,
+}: {
+  onNext: (uc: UseCase, email: string, cfToken: string) => void;
+}) {
   const [visible, setVisible]   = useState(false);
   const [selected, setSelected] = useState<UseCase>(null);
+  const [email, setEmail]       = useState("");
+  const [cfToken, setCfToken]   = useState("");
+
+  const emailValid = email.trim().includes("@") && email.includes(".");
+  const canSubmit  = !!selected && emailValid && !!cfToken;
+
+  function buttonLabel() {
+    if (!selected) return "Select one to continue";
+    if (!emailValid) return "Enter your email →";
+    if (!cfToken) return "Verifying you're human…";
+    return "Get your API key →";
+  }
 
   const line1 = useTypewriter("Every agent you build forgets everything", 34);
   const line2 = useTypewriter(line1.length >= 40 ? "the moment it stops running." : "", 34);
@@ -196,24 +213,68 @@ function PhaseHookUseCase({ onNext }: { onNext: (uc: UseCase) => void }) {
           })}
         </div>
 
+        {/* Email + Captcha — appear after use case picked */}
+        {selected && (
+          <div
+            style={{
+              opacity: 1,
+              animation: "fadeSlideIn 0.3s ease",
+              marginTop: 4,
+              marginBottom: 16,
+            }}
+          >
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@company.com"
+              autoFocus
+              style={{
+                width: "100%",
+                padding: "11px 14px",
+                background: "rgba(255,255,255,0.06)",
+                border: emailValid
+                  ? "1px solid rgba(255,255,255,0.3)"
+                  : "1px solid rgba(255,255,255,0.1)",
+                borderRadius: 8,
+                color: "white",
+                fontSize: 14,
+                outline: "none",
+                marginBottom: 12,
+                boxSizing: "border-box",
+                transition: "border-color 0.2s",
+              }}
+            />
+            {/* Turnstile — renders once email field appears */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <TurnstileWidget
+                theme="dark"
+                onToken={setCfToken}
+                onError={() => setCfToken("")}
+                style={{ minHeight: 65 }}
+              />
+            </div>
+          </div>
+        )}
+
         <button
-          onClick={() => selected && onNext(selected)}
-          disabled={!selected}
+          onClick={() => canSubmit && onNext(selected!, email.trim(), cfToken)}
+          disabled={!canSubmit}
           style={{
             width: "100%",
             padding: "13px 0",
-            background: selected ? "white" : "rgba(255,255,255,0.1)",
-            color: selected ? "#000" : "rgba(255,255,255,0.25)",
+            background: canSubmit ? "white" : "rgba(255,255,255,0.1)",
+            color: canSubmit ? "#000" : "rgba(255,255,255,0.25)",
             border: "none",
             borderRadius: 10,
             fontSize: 14,
             fontWeight: 600,
-            cursor: selected ? "pointer" : "not-allowed",
+            cursor: canSubmit ? "pointer" : "not-allowed",
             transition: "all 0.3s ease",
             letterSpacing: "-0.01em",
           }}
         >
-          {selected ? "Get your API key →" : "Select one to continue"}
+          {buttonLabel()}
         </button>
       </div>
 
@@ -236,7 +297,17 @@ function PhaseHookUseCase({ onNext }: { onNext: (uc: UseCase) => void }) {
 }
 
 // ─── Phase 1: Activation ───────────────────────────────────────────────────────
-function PhaseActivate({ useCase, onDone }: { useCase: UseCase; onDone: (key: string, sourceId: string) => void }) {
+function PhaseActivate({
+  useCase,
+  email,
+  cfToken,
+  onDone,
+}: {
+  useCase: UseCase;
+  email: string;
+  cfToken: string;
+  onDone: (key: string, sourceId: string) => void;
+}) {
   const [progress, setProgress] = useState(0);
   const [statusIdx, setStatusIdx] = useState(0);
   const [error, setError] = useState("");
@@ -265,7 +336,7 @@ function PhaseActivate({ useCase, onDone }: { useCase: UseCase; onDone: (key: st
     fetch(`${API_BASE}/billing/keys?tier=explorer`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ use_case: useCase }),
+      body: JSON.stringify({ use_case: useCase, email, cf_token: cfToken }),
     })
       .then((r) => r.json())
       .then((data) => {
@@ -477,9 +548,11 @@ function PhaseReveal({ apiKey, sourceId, onComplete }: { apiKey: string; sourceI
 
 // ─── Root ──────────────────────────────────────────────────────────────────────
 export function WelcomeScreen({ onComplete }: Props) {
-  const [phase, setPhase]             = useState<Phase>(0);
-  const [useCase, setUseCase]         = useState<UseCase>(null);
-  const [revealKey, setRevealKey]     = useState("");
+  const [phase, setPhase]               = useState<Phase>(0);
+  const [useCase, setUseCase]           = useState<UseCase>(null);
+  const [email, setEmail]               = useState("");
+  const [cfToken, setCfToken]           = useState("");
+  const [revealKey, setRevealKey]       = useState("");
   const [revealSource, setRevealSource] = useState("");
 
   return (
@@ -521,8 +594,10 @@ export function WelcomeScreen({ onComplete }: Props) {
       >
         {phase === 0 && (
           <PhaseHookUseCase
-            onNext={(uc) => {
+            onNext={(uc, em, tok) => {
               setUseCase(uc);
+              setEmail(em);
+              setCfToken(tok);
               if (uc) localStorage.setItem("kaal_use_case", uc);
               setPhase(1);
             }}
@@ -531,6 +606,8 @@ export function WelcomeScreen({ onComplete }: Props) {
         {phase === 1 && (
           <PhaseActivate
             useCase={useCase}
+            email={email}
+            cfToken={cfToken}
             onDone={(key, sid) => {
               setRevealKey(key);
               setRevealSource(sid);
