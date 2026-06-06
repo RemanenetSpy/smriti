@@ -338,16 +338,23 @@ function PhaseActivate({
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ use_case: useCase, email, cf_token: cfToken }),
     })
-      .then((r) => r.json())
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) {
+          // Surface the real server error (detail from FastAPI)
+          throw new Error(data?.detail || `Server error ${r.status}`);
+        }
+        return data;
+      })
       .then((data) => {
         clearInterval(iv);
         setProgress(100);
         setStatusIdx(statuses.length - 1);
         setTimeout(() => onDone(data.api_key, data.source_id), 500);
       })
-      .catch(() => {
+      .catch((err: Error) => {
         clearInterval(iv);
-        setError("Could not reach the API. Please try again.");
+        setError(err.message || "Could not reach the API. Please try again.");
       });
 
     return () => clearInterval(iv);

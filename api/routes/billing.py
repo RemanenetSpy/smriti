@@ -13,6 +13,7 @@ import logging
 import os
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel
 
 from chronos_core.models import (
     BillingCheckoutRequest,
@@ -27,6 +28,13 @@ from api.deps import get_memory_store
 logger = logging.getLogger("chronos.routes.billing")
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
+
+
+class KeyRequest(BaseModel):
+    """Body for POST /billing/keys."""
+    email:    str | None = None
+    cf_token: str | None = None
+    use_case: str | None = None
 
 # Razorpay plan IDs (set these in your Razorpay dashboard)
 RAZORPAY_PLAN_IDS = {
@@ -151,10 +159,8 @@ async def get_usage(
 @router.post("/keys")
 async def generate_new_key(
     request: Request,
+    body: KeyRequest,
     tier: TierName = TierName.EXPLORER,
-    email: str | None = None,
-    cf_token: str | None = None,
-    use_case: str | None = None,
 ):
     """
     Generate a new API key.
@@ -164,7 +170,9 @@ async def generate_new_key(
     import hashlib
     import uuid
     from datetime import datetime, timezone
-    from collections import defaultdict
+
+    email    = body.email
+    cf_token = body.cf_token
 
     ip = (request.client.host if request.client else None) or "unknown"
 
