@@ -23,13 +23,13 @@ const PAGES = [
     id: "ingest",
     label: "Ingest Events",
     icon: Activity,
-    tip: "Send raw text into Kaal. The AI extracts Subject-Verb-Object tuples and stores them with timestamps.",
+    tip: "Send raw text into Smriti. The AI extracts Subject-Verb-Object tuples and stores them with timestamps.",
   },
   {
     id: "query",
     label: "Query Memory",
     icon: Search,
-    tip: "Ask natural-language questions. Kaal runs hybrid temporal + semantic search across all your stored events.",
+    tip: "Ask natural-language questions. Smriti runs hybrid temporal + semantic search across all your stored events.",
   },
   {
     id: "agent",

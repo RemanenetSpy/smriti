@@ -15,11 +15,9 @@ const Billing  = dynamic(() => import("@/components/Billing").then(mod => mod.Bi
 const Keys     = dynamic(() => import("@/components/Keys").then(mod => mod.Keys));
 
 export default function App() {
-  const [apiKey, setApiKey]       = useState("");
+  const [apiKey, setApiKey]         = useState("");
   const [activePage, setActivePage] = useState("overview");
   const [showWelcome, setShowWelcome] = useState(false);
-  // After onboarding, open Kaal chat centered for first interaction
-  const [chatFirstVisit, setChatFirstVisit] = useState(false);
 
   useEffect(() => {
     const saved     = localStorage.getItem("kaal_api_key");
@@ -27,12 +25,7 @@ export default function App() {
     const chatSeen  = localStorage.getItem("kaal_chat_seen");
 
     if (saved) setApiKey(saved);
-    if (!onboarded) {
-      setShowWelcome(true);
-    } else if (!chatSeen) {
-      // Returning-but-never-chatted user: open chat centered
-      setChatFirstVisit(true);
-    }
+    if (!onboarded) setShowWelcome(true);
   }, []);
 
   useEffect(() => {
@@ -48,13 +41,6 @@ export default function App() {
     localStorage.setItem("kaal_api_key", key);
     localStorage.setItem("kaal_onboarded", "true");
     setShowWelcome(false);
-    // Open Kaal chat centered immediately after onboarding
-    setChatFirstVisit(true);
-  };
-
-  const handleChatFirstVisitDone = () => {
-    localStorage.setItem("kaal_chat_seen", "true");
-    setChatFirstVisit(false);
   };
 
   const renderPage = () => {
@@ -82,11 +68,8 @@ export default function App() {
         {renderPage()}
       </main>
 
-      {/* AI chat — centered on first visit, corner thereafter */}
-      <KaalChat
-        forceOpen={chatFirstVisit}
-        onFirstVisitDone={handleChatFirstVisitDone}
-      />
+      {/* AI chat — always available as corner widget */}
+      <KaalChat />
 
       {/* Onboarding overlay */}
       {showWelcome && <WelcomeScreen onComplete={handleOnboardingComplete} />}
