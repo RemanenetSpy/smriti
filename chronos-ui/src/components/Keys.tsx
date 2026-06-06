@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { apiCall } from "@/lib/api";
 import { Eye, EyeOff, Check } from "lucide-react";
+import { TurnstileWidget } from "./TurnstileWidget";
 
 interface KeysProps {
   onKeySet?: (key: string) => void;
@@ -25,18 +26,22 @@ export function Keys({ onKeySet }: KeysProps) {
 
   // ── Generate new key ──────────────────────────────────────────────────────
   const [email, setEmail]     = useState("");
+  const [cfToken, setCfToken] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult]   = useState<any>(null);
   const [error, setError]     = useState("");
   const [copied, setCopied]   = useState(false);
 
   const generateKey = async () => {
-    if (!email.trim().includes("@")) return;
+    if (!email.trim().includes("@") || !cfToken) return;
     setLoading(true);
     setError("");
     setResult(null);
     try {
-      const data = await apiCall("POST", `/billing/keys?tier=explorer&email=${encodeURIComponent(email.trim())}`, "");
+      const data = await apiCall("POST", "/billing/keys?tier=explorer", "", {
+        email: email.trim(),
+        cf_token: cfToken
+      });
       setResult(data);
       localStorage.setItem("kaal_api_key", data.api_key);
       onKeySet?.(data.api_key);
@@ -143,12 +148,24 @@ export function Keys({ onKeySet }: KeysProps) {
           <div className="w-4 h-4 rounded-full border-[5px] border-black bg-white" />
         </div>
 
+        {/* Turnstile */}
+        {email.trim().includes("@") && (
+          <div className="mb-4 flex justify-center">
+            <TurnstileWidget
+              theme="light"
+              onToken={setCfToken}
+              onError={() => setCfToken("")}
+              style={{ minHeight: 65 }}
+            />
+          </div>
+        )}
+
         <button
           onClick={generateKey}
-          disabled={loading || !email.trim().includes("@")}
+          disabled={loading || !email.trim().includes("@") || !cfToken}
           className="primary-button w-full disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {loading ? "Generating…" : "Generate Key"}
+          {loading ? "Generating…" : !cfToken && email.trim().includes("@") ? "Verifying…" : "Generate Key"}
         </button>
 
         <p className="text-[10px] text-[#bbb] text-center mt-3">
