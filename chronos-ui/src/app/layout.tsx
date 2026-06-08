@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Smriti | Temporal Memory API for AI",
     description: "Give any AI agent structured, persistent, queryable memory in 3 API calls.",
-    url: "https://kaal.ai", // Replace with your actual domain when ready
+    url: "https://smriti-kaal.vercel.app", // Kaal.ai isn't live yet, use Vercel URL to prevent backlink fragmentation
     siteName: "Smriti",
     images: [
       {
