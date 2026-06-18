@@ -25,8 +25,8 @@ pinned: false
 
 ## Table of Contents
 
-- [What is KAAL?](#what-is-chronos-os)
-- [Architecture](#architecture)
+- [What is Smriti?](#what-is-smriti)
+- [Architecture & Deployments](#architecture--deployments)
 - [Quick Start (5 Minutes)](#quick-start-5-minutes)
 - [API Reference](#api-reference)
 - [Dashboard Guide](#dashboard-guide)
@@ -37,7 +37,20 @@ pinned: false
 
 ---
 
-## What is KAAL?
+## Architecture & Deployments
+
+To maximize performance while keeping the service accessible, this project uses a **decoupled, dual-deployment architecture**:
+
+1. **Frontend Dashboard (Vercel)**: `https://smriti-kaal.vercel.app`
+   * Provides the blazing-fast Next.js web interface, API key generation, and visual memory management.
+2. **Backend API (Hugging Face Spaces)**: `https://spy9191-chronos-api-backend.hf.space`
+   * Houses the heavy FastAPI inference engine, memory vector database, and LangGraph agent pipelines. 
+
+**Note for developers:** When you generate an API key on the Vercel site, you use that key to authenticate your backend requests directly to the Hugging Face API base URL. They are the same system working in tandem.
+
+---
+
+## What is Smriti?
 
 **The problem:** AI agents are goldfish. They process a request, forget everything, and start from zero next time. No memory of what happened yesterday, last week, or across your other tools.
 
