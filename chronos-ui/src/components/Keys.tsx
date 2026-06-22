@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { apiCall } from "@/lib/api";
 import { Eye, EyeOff, Check } from "lucide-react";
 import { TurnstileWidget } from "./TurnstileWidget";
@@ -14,6 +14,13 @@ export function Keys({ onKeySet }: KeysProps) {
   const [existingKey, setExistingKey] = useState("");
   const [showKey, setShowKey]         = useState(false);
   const [keySaved, setKeySaved]       = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("kaal_api_key");
+    if (saved) {
+      setExistingKey(saved);
+    }
+  }, []);
 
   const saveExistingKey = () => {
     const trimmed = existingKey.trim();
