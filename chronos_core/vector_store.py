@@ -60,12 +60,6 @@ class VectorStore:
                     embed_text  TEXT NOT NULL,
                     timestamp   TIMESTAMPTZ NOT NULL
                 );
-                CREATE INDEX IF NOT EXISTS idx_vectors_source
-                    ON event_vectors(source_id);
-                CREATE INDEX IF NOT EXISTS idx_vectors_owner
-                    ON event_vectors(owner_id);
-                CREATE INDEX IF NOT EXISTS idx_vectors_scope
-                    ON event_vectors(scope);
             """)
             # Migration: add scope column if upgrading from an older schema
             await conn.execute("""
@@ -73,6 +67,13 @@ class VectorStore:
                     ALTER TABLE event_vectors ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'default';
                 EXCEPTION WHEN others THEN NULL;
                 END $$;
+                
+                CREATE INDEX IF NOT EXISTS idx_vectors_source
+                    ON event_vectors(source_id);
+                CREATE INDEX IF NOT EXISTS idx_vectors_owner
+                    ON event_vectors(owner_id);
+                CREATE INDEX IF NOT EXISTS idx_vectors_scope
+                    ON event_vectors(scope);
             """)
 
         # Load embedding model in background thread without blocking port binding
