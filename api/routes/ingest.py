@@ -20,12 +20,16 @@ from chronos_core.models import (
     TurnRecord,
     TurnRole,
 )
+from chronos_core.supersession import SupersessionEngine
 from api.auth import verify_api_key, check_event_quota
 from api.deps import get_memory_store, get_vector_store, get_svo_parser
 
 logger = logging.getLogger("chronos.routes.ingest")
 
 router = APIRouter(tags=["Ingest"])
+
+# Module-level engine instance — stateless, safe to reuse
+_supersession = SupersessionEngine()
 
 
 @router.post("/ingest", response_model=IngestResponse)
@@ -56,6 +60,9 @@ async def ingest_events(
 
     for ingest_event in payload.events:
         ts = ingest_event.timestamp or datetime.utcnow()
+
+        # Resolve scope: per-event override wins over payload-level default
+        scope = ingest_event.scope or payload.scope or "default"
 
         # Merge owner_id into event metadata for tenant isolation
         event_meta = {**ingest_event.metadata, "owner_id": owner_id}
@@ -88,6 +95,7 @@ async def ingest_events(
                     confidence=svo.confidence,
                     metadata_json=event_meta,
                     raw_text=ingest_event.text,
+                    scope=scope,
                 )
                 event_records.append(event)
         else:
@@ -101,19 +109,42 @@ async def ingest_events(
                 raw_text=ingest_event.text,
                 metadata_json=event_meta,
                 confidence=0.0,
+                scope=scope,
             )
             event_records.append(event)
 
-        # 3. Persist to SQLite Event Calendar
+        # 3. Supersession check: invalidate outdated active facts
+        #    Only runs if we have named subjects (not 'unknown')
+        for new_event in event_records:
+            if new_event.subject == "unknown":
+                continue
+            candidates = await memory.find_active_by_subject(
+                owner_id=owner_id,
+                scope=scope,
+                subject=new_event.subject,
+            )
+            for candidate in candidates:
+                if _supersession.should_supersede(candidate, new_event):
+                    await memory.invalidate_event(
+                        event_id=candidate.id,
+                        superseded_by=new_event.id,
+                    )
+                    logger.info(
+                        f"Superseded event {candidate.id!r} "
+                        f"(score={_supersession.score(candidate, new_event):.2f}) "
+                        f"by {new_event.id!r} | scope={scope!r}"
+                    )
+
+        # 4. Persist to Event Calendar
         if event_records:
             ids = await memory.insert_events_batch(event_records)
             all_event_ids.extend(ids)
             turn.event_ids = ids
 
-            # 4. Persist to ChromaDB vector store
+            # 5. Persist to pgvector store
             await vector.add_events_batch(event_records)
 
-        # 5. Persist turn to Turn Calendar
+        # 6. Persist turn to Turn Calendar
         turn_id = await memory.insert_turn(turn)
         all_turn_ids.append(turn_id)
 

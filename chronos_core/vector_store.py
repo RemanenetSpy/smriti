@@ -55,6 +55,7 @@ class VectorStore:
                     event_id    TEXT PRIMARY KEY REFERENCES events(id) ON DELETE CASCADE,
                     source_id   TEXT NOT NULL,
                     owner_id    TEXT NOT NULL,
+                    scope       TEXT NOT NULL DEFAULT 'default',
                     embedding   vector({self.EMBEDDING_DIM}) NOT NULL,
                     embed_text  TEXT NOT NULL,
                     timestamp   TIMESTAMPTZ NOT NULL
@@ -63,6 +64,15 @@ class VectorStore:
                     ON event_vectors(source_id);
                 CREATE INDEX IF NOT EXISTS idx_vectors_owner
                     ON event_vectors(owner_id);
+                CREATE INDEX IF NOT EXISTS idx_vectors_scope
+                    ON event_vectors(scope);
+            """)
+            # Migration: add scope column if upgrading from an older schema
+            await conn.execute("""
+                DO $$ BEGIN
+                    ALTER TABLE event_vectors ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'default';
+                EXCEPTION WHEN others THEN NULL;
+                END $$;
             """)
 
         # Load embedding model in background thread without blocking port binding
@@ -99,13 +109,14 @@ class VectorStore:
             await conn.execute(
                 """
                 INSERT INTO event_vectors
-                    (event_id, source_id, owner_id, embedding, embed_text, timestamp)
-                VALUES ($1, $2, $3, $4::vector, $5, $6)
+                    (event_id, source_id, owner_id, scope, embedding, embed_text, timestamp)
+                VALUES ($1, $2, $3, $4, $5::vector, $6, $7)
                 ON CONFLICT (event_id) DO UPDATE SET
                     embedding = EXCLUDED.embedding,
-                    embed_text = EXCLUDED.embed_text
+                    embed_text = EXCLUDED.embed_text,
+                    scope = EXCLUDED.scope
                 """,
-                event.id, event.source_id, owner_id,
+                event.id, event.source_id, owner_id, event.scope,
                 f"[{','.join(str(x) for x in embedding)}]",
                 embed_text, event.timestamp,
             )
@@ -126,6 +137,7 @@ class VectorStore:
             (
                 e.id, e.source_id,
                 e.metadata_json.get("owner_id", e.source_id),
+                e.scope,
                 f"[{','.join(str(x) for x in emb)}]",
                 txt, e.timestamp,
             )
@@ -136,11 +148,12 @@ class VectorStore:
             await conn.executemany(
                 """
                 INSERT INTO event_vectors
-                    (event_id, source_id, owner_id, embedding, embed_text, timestamp)
-                VALUES ($1, $2, $3, $4::vector, $5, $6)
+                    (event_id, source_id, owner_id, scope, embedding, embed_text, timestamp)
+                VALUES ($1, $2, $3, $4, $5::vector, $6, $7)
                 ON CONFLICT (event_id) DO UPDATE SET
                     embedding = EXCLUDED.embedding,
-                    embed_text = EXCLUDED.embed_text
+                    embed_text = EXCLUDED.embed_text,
+                    scope = EXCLUDED.scope
                 """,
                 rows,
             )
@@ -158,11 +171,19 @@ class VectorStore:
         owner_id: Optional[str] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
+        scope: Optional[str] = None,
+        similarity_threshold: float = 0.15,
     ) -> list[dict]:
         """
         Cosine similarity search over embedded events.
+
+        Optimizations applied:
+          • Hard distance threshold — configurable, returns [] if no match qualifies
+          • JOIN with events to exclude superseded facts (valid_to IS NULL)
+          • Scope isolation via SQL WHERE (not post-filter)
+          • owner_id enforces strict tenant isolation
+
         Returns list of {id, distance, metadata} dicts.
-        Privacy: owner_id enforces strict tenant isolation.
         """
         import asyncio
 
@@ -172,28 +193,41 @@ class VectorStore:
         conditions, params = [], [vec_str]
         i = 2
 
-        # Tenant isolation
+        # Tenant isolation (highest priority)
         if owner_id:
-            conditions.append(f"owner_id = ${i}"); params.append(owner_id); i += 1
+            conditions.append(f"ev.owner_id = ${i}"); params.append(owner_id); i += 1
         elif source_ids:
-            conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
+            conditions.append(f"ev.source_id = ANY(${i})"); params.append(source_ids); i += 1
 
+        # Hard scope isolation
+        if scope:
+            conditions.append(f"ev.scope = ${i}"); params.append(scope); i += 1
+
+        # Time range filters
         if start_time:
-            conditions.append(f"timestamp >= ${i}"); params.append(start_time); i += 1
+            conditions.append(f"ev.timestamp >= ${i}"); params.append(start_time); i += 1
         if end_time:
-            conditions.append(f"timestamp <= ${i}"); params.append(end_time); i += 1
+            conditions.append(f"ev.timestamp <= ${i}"); params.append(end_time); i += 1
+
+        # Configurable similarity threshold (cosine distance, not similarity)
+        params.append(similarity_threshold)
+        threshold_param = i; i += 1
 
         params.append(n_results)
+        limit_param = i
+
         where = f"WHERE {' AND '.join(conditions)}" if conditions else ""
 
         query_sql = f"""
-            SELECT event_id,
-                   (embedding <=> $1::vector) AS distance,
-                   source_id, owner_id, embed_text, timestamp
-            FROM event_vectors
+            SELECT ev.event_id,
+                   (ev.embedding <=> $1::vector) AS distance,
+                   ev.source_id, ev.owner_id, ev.scope, ev.embed_text, ev.timestamp
+            FROM event_vectors ev
+            JOIN events e ON ev.event_id = e.id AND e.valid_to IS NULL
             {where}
-            ORDER BY embedding <=> $1::vector
-            LIMIT ${i}
+              AND (ev.embedding <=> $1::vector) <= ${threshold_param}
+            ORDER BY ev.embedding <=> $1::vector
+            LIMIT ${limit_param}
         """
 
         async with self._pool.acquire() as conn:
@@ -206,6 +240,7 @@ class VectorStore:
                 "metadata": {
                     "source_id": r["source_id"],
                     "owner_id": r["owner_id"],
+                    "scope": r["scope"],
                     "timestamp": r["timestamp"].isoformat(),
                 },
                 "document": r["embed_text"],

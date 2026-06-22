@@ -68,8 +68,13 @@ class SVOTuple(BaseModel):
 
 class EventRecord(BaseModel):
     """
-    Structured event stored in the Event Calendar (SQLite).
+    Structured event stored in the Event Calendar.
     One SVO tuple + metadata = one EventRecord.
+
+    Bi-temporal validity (Zep-style):
+      valid_from  — when this fact became true (ingest time by default)
+      valid_to    — when this fact was superseded (NULL = currently active)
+      superseded_by — ID of the newer event that replaced this one
     """
     id: str = Field(default_factory=lambda: uuid.uuid4().hex)
     source_id: str = Field(..., description="ID of the connected SaaS/agent source")
@@ -84,6 +89,11 @@ class EventRecord(BaseModel):
     metadata_json: dict[str, Any] = Field(default_factory=dict)
     raw_text: str = Field(default="", description="Original text this event was parsed from")
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    # ── Scope & Bi-temporal validity ──────────────────────────────────────────
+    scope: str = Field(default="default", description="Logical namespace (e.g. 'work', 'personal')")
+    valid_from: datetime = Field(default_factory=datetime.utcnow, description="When this fact became active")
+    valid_to: Optional[datetime] = Field(None, description="When this fact was superseded (NULL = active)")
+    superseded_by: Optional[str] = Field(None, description="ID of the event that replaced this one")
 
 
 class LiteEventRecord(BaseModel):
@@ -157,6 +167,10 @@ class IngestEvent(BaseModel):
         None, description="When this event happened (defaults to now)"
     )
     metadata: dict[str, Any] = Field(default_factory=dict)
+    scope: Optional[str] = Field(
+        None,
+        description="Scope override for this specific event (overrides payload-level scope)"
+    )
 
 
 class IngestPayload(BaseModel):
@@ -171,6 +185,10 @@ class IngestPayload(BaseModel):
     )
     parse_svo: bool = Field(
         True, description="Whether to extract SVO tuples (uses LLM)"
+    )
+    scope: str = Field(
+        default="default",
+        description="Logical namespace for all events in this payload (e.g. 'work', 'personal')"
     )
 
 
@@ -203,6 +221,15 @@ class QueryRequest(BaseModel):
     semantic_weight: float = Field(
         default=0.5, ge=0.0, le=1.0,
         description="Balance between semantic (1.0) and temporal (0.0) ranking"
+    )
+    scope: Optional[str] = Field(
+        None,
+        description="Restrict results to this scope only (None = all scopes for this owner)"
+    )
+    similarity_threshold: float = Field(
+        default=0.15, ge=0.0, le=1.0,
+        description="Max cosine distance to include. 0.15 = strict (≥85% similar). "
+                    "0.30 = lenient (≥70%). 0.0 = near-exact only."
     )
 
 

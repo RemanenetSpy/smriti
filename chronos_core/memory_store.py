@@ -52,13 +52,29 @@ CREATE TABLE IF NOT EXISTS events (
     confidence      REAL DEFAULT 1.0,
     metadata_json   JSONB DEFAULT '{}',
     raw_text        TEXT DEFAULT '',
-    created_at      TIMESTAMPTZ NOT NULL
+    created_at      TIMESTAMPTZ NOT NULL,
+    -- Scope & Bi-temporal validity
+    scope           TEXT NOT NULL DEFAULT 'default',
+    valid_from      TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    valid_to        TIMESTAMPTZ,
+    superseded_by   TEXT
 );
 
 CREATE INDEX IF NOT EXISTS idx_events_source    ON events(source_id);
 CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp DESC);
 CREATE INDEX IF NOT EXISTS idx_events_subject   ON events(subject);
 CREATE INDEX IF NOT EXISTS idx_events_verb      ON events(verb);
+CREATE INDEX IF NOT EXISTS idx_events_scope     ON events(scope);
+CREATE INDEX IF NOT EXISTS idx_events_active    ON events(valid_to) WHERE valid_to IS NULL;
+
+-- Migration: add new columns if upgrading from an older schema
+DO $$ BEGIN
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'default';
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS valid_from TIMESTAMPTZ NOT NULL DEFAULT NOW();
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS valid_to TIMESTAMPTZ;
+    ALTER TABLE events ADD COLUMN IF NOT EXISTS superseded_by TEXT;
+EXCEPTION WHEN others THEN NULL;
+END $$;
 
 -- Turn Calendar: raw conversation turns
 CREATE TABLE IF NOT EXISTS turns (
@@ -157,28 +173,22 @@ class MemoryStore:
                 INSERT INTO events
                     (id, source_id, subject, verb, object, timestamp,
                      datetime_start, datetime_end, entity_aliases,
-                     confidence, metadata_json, raw_text, created_at)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+                     confidence, metadata_json, raw_text, created_at,
+                     scope, valid_from, valid_to, superseded_by)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
                 ON CONFLICT (id) DO NOTHING
                 """,
-                event.id,
-                event.source_id,
-                event.subject,
-                event.verb,
-                event.object,
-                event.timestamp,
-                event.datetime_start,
-                event.datetime_end,
-                json.dumps(event.entity_aliases),
-                event.confidence,
-                json.dumps(event.metadata_json),
-                event.raw_text,
-                event.created_at,
+                event.id, event.source_id, event.subject, event.verb,
+                event.object, event.timestamp, event.datetime_start,
+                event.datetime_end, json.dumps(event.entity_aliases),
+                event.confidence, json.dumps(event.metadata_json),
+                event.raw_text, event.created_at,
+                event.scope, event.valid_from, event.valid_to, event.superseded_by,
             )
         return event.id
 
     async def insert_events_batch(self, events: list[EventRecord]) -> list[str]:
-        """Batch insert multiple events using COPY protocol — fastest possible."""
+        """Batch insert multiple events using executemany — fastest possible."""
         if not events:
             return []
 
@@ -188,6 +198,7 @@ class MemoryStore:
                 e.timestamp, e.datetime_start, e.datetime_end,
                 json.dumps(e.entity_aliases), e.confidence,
                 json.dumps(e.metadata_json), e.raw_text, e.created_at,
+                e.scope, e.valid_from, e.valid_to, e.superseded_by,
             )
             for e in events
         ]
@@ -198,8 +209,9 @@ class MemoryStore:
                 INSERT INTO events
                     (id, source_id, subject, verb, object, timestamp,
                      datetime_start, datetime_end, entity_aliases,
-                     confidence, metadata_json, raw_text, created_at)
-                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13)
+                     confidence, metadata_json, raw_text, created_at,
+                     scope, valid_from, valid_to, superseded_by)
+                VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17)
                 ON CONFLICT (id) DO NOTHING
                 """,
                 rows,
@@ -211,10 +223,12 @@ class MemoryStore:
         start: Optional[datetime] = None,
         end: Optional[datetime] = None,
         source_ids: Optional[list[str]] = None,
+        scope: Optional[str] = None,
         limit: int = 50,
     ) -> list[EventRecord]:
-        """Query events by time range."""
-        conditions, params = [], []
+        """Query ACTIVE (non-superseded) events by time range."""
+        conditions: list[str] = ["valid_to IS NULL"]  # active facts only
+        params: list = []
         i = 1
 
         if start:
@@ -223,8 +237,10 @@ class MemoryStore:
             conditions.append(f"timestamp <= ${i}"); params.append(end); i += 1
         if source_ids:
             conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
+        if scope:
+            conditions.append(f"scope = ${i}"); params.append(scope); i += 1
 
-        where = f"WHERE {' AND '.join(conditions)}" if conditions else ""
+        where = f"WHERE {' AND '.join(conditions)}"
         params.append(limit)
         query = f"SELECT * FROM events {where} ORDER BY timestamp DESC LIMIT ${i}"
 
@@ -236,16 +252,22 @@ class MemoryStore:
         self,
         entity: str,
         source_ids: Optional[list[str]] = None,
+        scope: Optional[str] = None,
         limit: int = 50,
     ) -> list[EventRecord]:
-        """Find events involving a specific entity (subject or object)."""
+        """Find ACTIVE events involving a specific entity (subject or object)."""
         pattern = f"%{entity}%"
-        conditions = ["(subject ILIKE $1 OR object ILIKE $1 OR entity_aliases::text ILIKE $1)"]
+        conditions = [
+            "valid_to IS NULL",
+            "(subject ILIKE $1 OR object ILIKE $1 OR entity_aliases::text ILIKE $1)",
+        ]
         params: list = [pattern]
         i = 2
 
         if source_ids:
             conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
+        if scope:
+            conditions.append(f"scope = ${i}"); params.append(scope); i += 1
 
         params.append(limit)
         where = f"WHERE {' AND '.join(conditions)}"
@@ -261,11 +283,11 @@ class MemoryStore:
         start: Optional[datetime] = None,
         end: Optional[datetime] = None,
         source_ids: Optional[list[str]] = None,
+        scope: Optional[str] = None,
         limit: int = 50,
     ) -> list[EventRecord]:
         """
-        Multi-hop temporal query: find events connecting multiple entities.
-        The key Chronos differentiator.
+        Multi-hop temporal query: find ACTIVE events connecting multiple entities.
         """
         entity_parts, params = [], []
         i = 1
@@ -276,7 +298,7 @@ class MemoryStore:
             )
             params.append(pattern); i += 1
 
-        conditions = [f"({' OR '.join(entity_parts)})"]
+        conditions = ["valid_to IS NULL", f"({' OR '.join(entity_parts)})"]
 
         if start:
             conditions.append(f"timestamp >= ${i}"); params.append(start); i += 1
@@ -284,6 +306,8 @@ class MemoryStore:
             conditions.append(f"timestamp <= ${i}"); params.append(end); i += 1
         if source_ids:
             conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
+        if scope:
+            conditions.append(f"scope = ${i}"); params.append(scope); i += 1
 
         params.append(limit)
         where = f"WHERE {' AND '.join(conditions)}"
@@ -292,6 +316,52 @@ class MemoryStore:
         async with self.pool.acquire() as conn:
             rows = await conn.fetch(query, *params)
         return [self._row_to_event(r) for r in rows]
+
+    # ------------------------------------------------------------------
+    # Supersession (Bi-temporal validity)
+    # ------------------------------------------------------------------
+
+    async def find_active_by_subject(
+        self,
+        owner_id: str,
+        scope: str,
+        subject: str,
+        limit: int = 10,
+    ) -> list[EventRecord]:
+        """
+        Efficiently fetch active facts with a matching subject for supersession checks.
+        Uses the partial index on valid_to IS NULL — very fast even at scale.
+        """
+        pattern = f"%{subject.lower()}%"
+        async with self.pool.acquire() as conn:
+            rows = await conn.fetch(
+                """
+                SELECT * FROM events
+                WHERE valid_to IS NULL
+                  AND scope = $1
+                  AND metadata_json->>'owner_id' = $2
+                  AND LOWER(subject) ILIKE $3
+                ORDER BY valid_from DESC
+                LIMIT $4
+                """,
+                scope, owner_id, pattern, limit,
+            )
+        return [self._row_to_event(r) for r in rows]
+
+    async def invalidate_event(self, event_id: str, superseded_by: Optional[str] = None) -> None:
+        """
+        Close the validity window of an event (Zep-style bi-temporal invalidation).
+        Sets valid_to = NOW() rather than deleting — history is preserved.
+        """
+        async with self.pool.acquire() as conn:
+            await conn.execute(
+                """
+                UPDATE events
+                SET valid_to = NOW(), superseded_by = $2
+                WHERE id = $1 AND valid_to IS NULL
+                """,
+                event_id, superseded_by,
+            )
 
     async def get_event(self, event_id: str) -> Optional[EventRecord]:
         """Fetch a single event by ID."""
@@ -495,6 +565,10 @@ class MemoryStore:
             metadata_json=json.loads(row["metadata_json"]) if isinstance(row["metadata_json"], str) else (row["metadata_json"] or {}),
             raw_text=row["raw_text"] or "",
             created_at=row["created_at"],
+            scope=row["scope"] if "scope" in row.keys() else "default",
+            valid_from=row["valid_from"] if "valid_from" in row.keys() else row["created_at"],
+            valid_to=row["valid_to"] if "valid_to" in row.keys() else None,
+            superseded_by=row["superseded_by"] if "superseded_by" in row.keys() else None,
         )
 
     @staticmethod
