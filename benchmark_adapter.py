@@ -51,9 +51,17 @@ from fastapi.responses import JSONResponse
 
 API_URL       = os.getenv("SMRITI_API_URL", "https://spy9191-chronos-api-backend.hf.space")
 API_KEY       = os.getenv("SMRITI_API_KEY", "")
-THRESHOLD     = float(os.getenv("SMRITI_THRESHOLD", "0.15"))
 SCOPE_MODE    = os.getenv("SMRITI_SCOPE_MODE", "test_id")   # "test_id" | "fixed"
 ADAPTER_PORT  = int(os.getenv("ADAPTER_PORT", "8765"))
+
+# Numeric defaults — all overridable by env var (no hardcoded numbers in logic)
+# SMRITI_THRESHOLD and SMRITI_SEMANTIC_WEIGHT are read lazily so that the adapter
+# picks up any value set BEFORE it starts, without importing the full chronos stack.
+def _get_threshold() -> float:
+    return float(os.getenv("SMRITI_THRESHOLD") or os.getenv("SMRITI_SIMILARITY_THRESHOLD", "0.15"))
+
+def _get_semantic_weight() -> float:
+    return float(os.getenv("SMRITI_SEMANTIC_WEIGHT", "0.7"))
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("smriti_adapter")
@@ -84,7 +92,12 @@ async def lifespan(app: FastAPI):
         headers={"X-API-Key": API_KEY, "Content-Type": "application/json"},
         timeout=httpx.Timeout(30.0, connect=10.0),
     )
-    logger.info(f"Adapter started → {API_URL} | threshold={THRESHOLD} | scope_mode={SCOPE_MODE}")
+    logger.info(
+        f"Adapter started → {API_URL} | "
+        f"threshold={_get_threshold()} | "
+        f"semantic_weight={_get_semantic_weight()} | "
+        f"scope_mode={SCOPE_MODE}"
+    )
     yield
     await _client.aclose()
 
@@ -230,7 +243,7 @@ async def recall(payload: dict) -> dict[str, Any]:
     """
     scope = _resolve_scope(payload)
     query = payload.get("query", "")
-    threshold = float(payload.get("threshold", THRESHOLD))  # FLEXIBLE: per-test override
+    threshold = float(payload.get("threshold") or _get_threshold())  # per-test override or env default
     max_results = int(payload.get("max_results", 10))
 
     if not query:
@@ -241,7 +254,7 @@ async def recall(payload: dict) -> dict[str, Any]:
         "scope": scope,
         "similarity_threshold": threshold,
         "max_results": max_results,
-        "semantic_weight": 0.7,
+        "semantic_weight": _get_semantic_weight(),  # from SMRITI_SEMANTIC_WEIGHT env var
     }
 
     data = await _smriti_post("/query", smriti_payload)

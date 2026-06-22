@@ -61,8 +61,8 @@ async def query_memory(
         source_ids=request.source_ids or None,
         start_time=request.time_range.start if request.time_range else None,
         end_time=request.time_range.end if request.time_range else None,
-        scope=request.scope,                              # NEW: hard scope isolation
-        similarity_threshold=request.similarity_threshold,  # NEW: configurable threshold
+        scope=request.scope,
+        similarity_threshold=request.resolved_threshold(),  # reads env var if not set by caller
     )
 
     # Fetch full event records from PostgreSQL

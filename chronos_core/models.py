@@ -227,10 +227,19 @@ class QueryRequest(BaseModel):
         description="Restrict results to this scope only (None = all scopes for this owner)"
     )
     similarity_threshold: float = Field(
-        default=0.15, ge=0.0, le=1.0,
-        description="Max cosine distance to include. 0.15 = strict (≥85% similar). "
-                    "0.30 = lenient (≥70%). 0.0 = near-exact only."
+        default=None,  # None → resolved from config at request time
+        ge=0.0, le=1.0,
+        description="Max cosine distance to include (cosine distance, not similarity). "
+                    "None = use SMRITI_SIMILARITY_THRESHOLD env var (default 0.15). "
+                    "Lower = stricter: 0.10 ≈ ≥90%%, 0.15 ≈ ≥85%%, 0.30 ≈ ≥70%%.",
     )
+
+    def resolved_threshold(self) -> float:
+        """Return the effective threshold, falling back to config if not set."""
+        from chronos_core.config import SIMILARITY_THRESHOLD
+        if self.similarity_threshold is None:
+            return SIMILARITY_THRESHOLD
+        return self.similarity_threshold
 
 
 class QueryResult(BaseModel):

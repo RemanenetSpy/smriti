@@ -172,19 +172,19 @@ class VectorStore:
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
         scope: Optional[str] = None,
-        similarity_threshold: float = 0.15,
+        similarity_threshold: Optional[float] = None,
     ) -> list[dict]:
         """
         Cosine similarity search over embedded events.
 
-        Optimizations applied:
-          • Hard distance threshold — configurable, returns [] if no match qualifies
-          • JOIN with events to exclude superseded facts (valid_to IS NULL)
-          • Scope isolation via SQL WHERE (not post-filter)
-          • owner_id enforces strict tenant isolation
-
-        Returns list of {id, distance, metadata} dicts.
+        similarity_threshold: cosine distance cutoff (lower = stricter).
+          None  → read from SMRITI_SIMILARITY_THRESHOLD env var (default 0.15).
+          0.10  → ≥90% cosine similarity (very strict)
+          0.15  → ≥85% cosine similarity (default)
+          0.30  → ≥70% cosine similarity (lenient)
         """
+        from chronos_core.config import SIMILARITY_THRESHOLD
+        threshold = similarity_threshold if similarity_threshold is not None else SIMILARITY_THRESHOLD
         import asyncio
 
         query_embedding = await asyncio.to_thread(self._embed, query)
@@ -210,7 +210,7 @@ class VectorStore:
             conditions.append(f"ev.timestamp <= ${i}"); params.append(end_time); i += 1
 
         # Configurable similarity threshold (cosine distance, not similarity)
-        params.append(similarity_threshold)
+        params.append(threshold)  # resolved: never None
         threshold_param = i; i += 1
 
         params.append(n_results)
