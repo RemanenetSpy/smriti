@@ -60,13 +60,6 @@ CREATE TABLE IF NOT EXISTS events (
     superseded_by   TEXT
 );
 
-CREATE INDEX IF NOT EXISTS idx_events_source    ON events(source_id);
-CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp DESC);
-CREATE INDEX IF NOT EXISTS idx_events_subject   ON events(subject);
-CREATE INDEX IF NOT EXISTS idx_events_verb      ON events(verb);
-CREATE INDEX IF NOT EXISTS idx_events_scope     ON events(scope);
-CREATE INDEX IF NOT EXISTS idx_events_active    ON events(valid_to) WHERE valid_to IS NULL;
-
 -- Migration: add new columns if upgrading from an older schema
 DO $$ BEGIN
     ALTER TABLE events ADD COLUMN IF NOT EXISTS scope TEXT NOT NULL DEFAULT 'default';
@@ -75,6 +68,13 @@ DO $$ BEGIN
     ALTER TABLE events ADD COLUMN IF NOT EXISTS superseded_by TEXT;
 EXCEPTION WHEN others THEN NULL;
 END $$;
+
+CREATE INDEX IF NOT EXISTS idx_events_source    ON events(source_id);
+CREATE INDEX IF NOT EXISTS idx_events_timestamp ON events(timestamp DESC);
+CREATE INDEX IF NOT EXISTS idx_events_subject   ON events(subject);
+CREATE INDEX IF NOT EXISTS idx_events_verb      ON events(verb);
+CREATE INDEX IF NOT EXISTS idx_events_scope     ON events(scope);
+CREATE INDEX IF NOT EXISTS idx_events_active    ON events(valid_to) WHERE valid_to IS NULL;
 
 -- Turn Calendar: raw conversation turns
 CREATE TABLE IF NOT EXISTS turns (
