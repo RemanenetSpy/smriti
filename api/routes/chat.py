@@ -91,55 +91,7 @@ async def chat_demo(request: ChatDemoRequest):
     if not message:
         raise HTTPException(status_code=400, detail="Message cannot be empty.")
 
-    # ── 1. Retrieve relevant memory ───────────────────────────────────────────
-    memory_context = ""
-    search_results = []
-    try:
-        from api.deps import get_vector_store, get_memory_store
-
-        vector = get_vector_store()
-        memory = get_memory_store()
-
-        # Use a very loose threshold (0.70 cosine distance = ~30% similarity)
-        # so that CSV-ingested raw rows (which have no SVO structure) are still found.
-        # n_results=30 ensures we grab enough rows to reason over.
-        search_results = await vector.semantic_search(
-            query=message,
-            n_results=30,
-            owner_id=None,       # Search all data (no tenant filter for demo)
-            similarity_threshold=0.70,  # Much looser than default 0.15
-        )
-
-        if search_results:
-            event_ids = [r["id"] for r in search_results]
-            events = await memory.get_events_by_ids(event_ids) if event_ids else []
-
-            if events:
-                lines = ["[Smriti Memory — Retrieved Data]"]
-                for event in events:
-                    ts = event.timestamp.strftime("%Y-%m-%d")
-                    # Prefer raw_text (full CSV row) over SVO when subject is "unknown"
-                    if event.raw_text and event.subject == "unknown":
-                        lines.append(f"  [{ts}] {event.raw_text}")
-                    else:
-                        lines.append(
-                            f"  [{ts}] {event.subject} {event.verb} {event.object}"
-                            + (f" | {event.raw_text[:120]}" if event.raw_text else "")
-                        )
-                memory_context = "\n".join(lines)
-
-    except Exception as e:
-        logger.warning(f"Memory retrieval failed in /chat/demo: {e}")
-        memory_context = ""
-
-    # ── 2. Build augmented system prompt ─────────────────────────────────────
-    system_content = _SYSTEM_PROMPT
-    if memory_context:
-        system_content += f"\n\n{memory_context}"
-    else:
-        system_content += "\n\n[Smriti Memory: No relevant past events found for this query]"
-
-    # ── 3. Call the LLM ───────────────────────────────────────────────────────
+    # ── 1. Call the LLM (no memory search — this is a public guide bot) ─────────
     try:
         from chronos_core.llm_router import get_heavy_pipeline
         from langchain_core.messages import HumanMessage, SystemMessage
