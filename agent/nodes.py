@@ -58,26 +58,34 @@ async def retrieve_memory_node(state: dict) -> dict:
         vector = get_vector_store()
         memory = get_memory_store()
 
-        # Semantic search — filtered by owner for privacy
+        # Semantic search — filtered by owner for privacy.
+        # Threshold 0.70 (cosine distance) allows matching CSV-ingested raw rows
+        # which have low structural similarity to natural language queries.
         search_results = await vector.semantic_search(
             query=last_user_msg,
-            n_results=10,
+            n_results=30,
             owner_id=owner_id or None,  # Tenant isolation
+            similarity_threshold=0.70,
         )
 
         # Fetch full events
         event_ids = [r["id"] for r in search_results]
         events = await memory.get_events_by_ids(event_ids) if event_ids else []
 
-        # Build memory context
+        # Build memory context.
+        # For CSV-ingested rows (subject="unknown"), use raw_text as the primary
+        # display so the LLM sees the actual data (e.g. "Node: 64 | Views: 94200").
         if events:
             memory_lines = ["[Chronos Temporal Memory Context]"]
             for event in events:
-                memory_lines.append(
-                    f"  [{event.timestamp.strftime('%Y-%m-%d %H:%M')}] "
-                    f"{event.subject} {event.verb} {event.object}"
-                    + (f" | {event.raw_text[:100]}" if event.raw_text else "")
-                )
+                ts = event.timestamp.strftime("%Y-%m-%d %H:%M")
+                if event.raw_text and event.subject == "unknown":
+                    memory_lines.append(f"  [{ts}] {event.raw_text}")
+                else:
+                    memory_lines.append(
+                        f"  [{ts}] {event.subject} {event.verb} {event.object}"
+                        + (f" | {event.raw_text[:120]}" if event.raw_text else "")
+                    )
             memory_context = "\n".join(memory_lines)
         else:
             memory_context = "[Chronos Memory: No relevant past events found]"
