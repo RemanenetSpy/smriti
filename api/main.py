@@ -119,6 +119,7 @@ from api.routes.connectors import router as connectors_router
 from api.routes.agent import router as agent_router
 from api.routes.billing import router as billing_router
 from api.routes.voice import router as voice_router
+from api.routes.chat import router as chat_router
 
 app.include_router(ingest_router)
 app.include_router(query_router)
@@ -126,6 +127,7 @@ app.include_router(connectors_router)
 app.include_router(agent_router)
 app.include_router(billing_router)
 app.include_router(voice_router)
+app.include_router(chat_router)
 
 
 # ---------------------------------------------------------------------------
