@@ -69,8 +69,8 @@ export default function App() {
         {renderPage()}
       </main>
 
-      {/* AI chat — always available as corner widget */}
-      <KaalChat />
+      {/* AI chat — hide on Agent page to avoid covering the send button */}
+      {activePage !== "agent" && <KaalChat />}
 
       {/* Onboarding overlay */}
       {showWelcome && <WelcomeScreen onComplete={handleOnboardingComplete} />}
