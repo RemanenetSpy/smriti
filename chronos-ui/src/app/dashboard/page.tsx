@@ -64,7 +64,8 @@ export default function App() {
         activePage={activePage}
         setActivePage={setActivePage}
       />
-      <main className="flex-1 overflow-y-auto bg-white">
+      {/* pt-14 on mobile gives room for the hamburger button */}
+      <main className="flex-1 overflow-y-auto bg-white pt-14 md:pt-0">
         {renderPage()}
       </main>
 
