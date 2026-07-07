@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     description: "Give any AI agent structured, persistent, queryable memory in 3 API calls.",
     images: ["/og.png"],
   },
+  verification: {
+    google: "LcpqtTeE5e5DzzsqX8lIU8UCePd6v1-WaDjgDS6xIh0",
+  },
 };
 
 export default function RootLayout({
