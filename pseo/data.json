@@ -1,0 +1,34 @@
+{
+  "frameworks": [
+    "LangChain", "LlamaIndex", "AutoGPT", "CrewAI", "AutoGen",
+    "ChatGPT Plugins", "Claude API", "Gemini API", "Mistral AI",
+    "OpenAI Assistants", "Haystack", "Semantic Kernel", "Flowise",
+    "Dify", "AgentGPT", "BabyAGI", "SuperAGI", "Dust", "Vertex AI",
+    "AWS Bedrock", "Cohere API", "Ollama", "LM Studio", "PrivateGPT"
+  ],
+  "use_cases": [
+    "Customer Support Bot", "Coding Assistant", "Medical Diagnosis AI",
+    "Legal Research AI", "Financial Advisor AI", "HR Onboarding Bot",
+    "Sales CRM AI", "Educational Tutor AI", "Mental Health Chatbot",
+    "Personal AI Assistant", "Research Summarizer", "Document Q&A Bot",
+    "Call Center AI", "E-commerce Recommendation AI", "Security Analyst AI",
+    "DevOps Incident Response AI", "Content Writing Assistant",
+    "Meeting Notes AI", "Email Drafting AI", "Contract Review AI"
+  ],
+  "problems": [
+    "AI forgets context between sessions",
+    "chatbot loses memory after restart",
+    "LLM cannot remember past conversations",
+    "AI agent has no long-term memory",
+    "vector database not preserving conversation history",
+    "RAG system missing temporal context",
+    "AI cannot recall user preferences",
+    "GPT loses thread after token limit",
+    "agent memory resets every session",
+    "AI cannot trace cause and effect in conversations"
+  ],
+  "comparisons": [
+    "Redis", "Pinecone", "Weaviate", "Chroma", "Qdrant",
+    "PostgreSQL", "MongoDB", "Zep", "Mem0", "MemGPT"
+  ]
+}
