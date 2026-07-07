@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Document Q&A Bot with Long-Term Memory — Smriti | Smriti Memory Architecture</title>
+<meta name="description" content="Build a Document Q&A Bot that actually remembers. Smriti adds persistent, causal memory to any AI system — cross-session, encrypted, O(1) retrieval."/>
+<meta property="og:title" content="Document Q&A Bot with Long-Term Memory — Smriti"/>
+<meta property="og:description" content="Build a Document Q&A Bot that actually remembers. Smriti adds persistent, causal memory to any AI system — cross-session, encrypted, O(1) retrieval."/>
+<meta property="og:type" content="article"/>
+<link rel="canonical" href="https://smriti.dev/use-case/document-q-a-bot"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#050509;color:#fff;font-family:'Inter',sans-serif;line-height:1.6}
+
+/* Nav */
+nav{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{font-weight:800;font-size:20px;color:#00f5d4;letter-spacing:-.02em}
+.nav-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;
+           transition:color .2s}
+.nav-link:hover{color:#fff}
+
+/* Hero */
+.hero{max-width:860px;margin:80px auto 60px;padding:0 40px;text-align:center}
+.badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;
+       font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+       background:rgba(0,245,212,.1);color:#00f5d4;border:1px solid rgba(0,245,212,.2);
+       margin-bottom:28px}
+h1{font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.15;
+   letter-spacing:-.03em;margin-bottom:24px}
+h1 span{color:#00f5d4}
+.hero-sub{font-size:20px;font-weight:300;color:rgba(255,255,255,.65);
+          max-width:620px;margin:0 auto 40px}
+.cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;
+             background:#00f5d4;color:#050509;text-decoration:none;transition:.2s}
+.btn-primary:hover{background:#00d4b8}
+.btn-ghost{padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;
+           border:1px solid rgba(255,255,255,.15);color:#fff;text-decoration:none;
+           transition:.2s}
+.btn-ghost:hover{border-color:rgba(255,255,255,.4)}
+
+/* Stats */
+.stats{display:flex;gap:40px;justify-content:center;padding:40px;flex-wrap:wrap;
+       border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+.stat{text-align:center}
+.stat-num{font-size:36px;font-weight:800;color:#00f5d4}
+.stat-label{font-size:13px;color:rgba(255,255,255,.45);margin-top:4px}
+
+/* Content */
+.content{max-width:860px;margin:0 auto;padding:60px 40px}
+h2{font-size:28px;font-weight:800;margin:48px 0 16px;letter-spacing:-.02em}
+h2:first-child{margin-top:0}
+p{color:rgba(255,255,255,.72);margin-bottom:16px;font-size:17px}
+.highlight{color:#fff;font-weight:600}
+
+/* Problem / Solution boxes */
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;padding:28px;margin:24px 0}
+.card.problem{border-color:rgba(255,48,120,.2);background:rgba(255,48,120,.04)}
+.card.solution{border-color:rgba(0,245,212,.2);background:rgba(0,245,212,.04)}
+.card-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+            margin-bottom:12px}
+.card.problem .card-label{color:#ff3066}
+.card.solution .card-label{color:#00f5d4}
+.card p{margin:0;color:rgba(255,255,255,.8)}
+
+/* Code block */
+.code-block{background:#0a0a12;border:1px solid rgba(255,255,255,.08);border-radius:10px;
+            padding:24px;margin:24px 0;overflow-x:auto}
+.code-block code{font-family:'JetBrains Mono',monospace;font-size:14px;
+                 color:#00f5d4;line-height:1.7}
+.code-comment{color:rgba(255,255,255,.3)}
+
+/* Comparison table */
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px}
+.compare-table th{padding:14px 20px;text-align:left;font-weight:600;font-size:12px;
+                  text-transform:uppercase;letter-spacing:.1em;
+                  color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.08)}
+.compare-table td{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.04)}
+.compare-table tr:last-child td{border-bottom:none}
+.tick{color:#00f5d4;font-weight:700}
+.cross{color:#ff3066}
+.col-smriti{background:rgba(0,245,212,.04)}
+
+/* Footer */
+footer{padding:40px;text-align:center;border-top:1px solid rgba(255,255,255,.06);
+       color:rgba(255,255,255,.3);font-size:14px;margin-top:80px}
+footer a{color:#00f5d4;text-decoration:none}
+
+/* SEO article (visible to Google, subtle to users) */
+.seo-article{max-width:860px;margin:0 auto;padding:0 40px 60px;
+             color:rgba(255,255,255,.45);font-size:15px}
+.seo-article h3{font-size:18px;font-weight:600;color:rgba(255,255,255,.6);
+                margin:32px 0 12px}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <span class="logo">smriti</span>
+  <a href="/docs" class="nav-link">Docs</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">Memory Architecture</div>
+  <h1>Build a <span>Document Q&A Bot</span> That Actually Remembers</h1>
+  <p class="hero-sub">Most AI-powered document q&a bot systems forget everything when the session ends. Smriti gives your document q&a bot a persistent timeline — so it understands context, cause, and consequence.</p>
+  <div class="cta-row">
+    <a href="/docs/quickstart" class="btn-primary">Read the Docs</a>
+    <a href="/node97" class="btn-ghost">Watch Explainer</a>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">O(1)</div><div class="stat-label">Connection Retrieval</div></div>
+  <div class="stat"><div class="stat-num">S-V-O</div><div class="stat-label">Extraction Engine</div></div>
+  <div class="stat"><div class="stat-num">Dual</div><div class="stat-label">pgvector Architecture</div></div>
+  <div class="stat"><div class="stat-num">âˆž</div><div class="stat-label">Context Retention</div></div>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+
+  <div class="card problem">
+    <div class="card-label">The Problem</div>
+    <p>A document q&a bot that forgets its users is not intelligent — it is a search engine with a chat interface. Every session reset destroys trust, increases user friction, and makes the system feel broken.</p>
+  </div>
+
+  <div class="card solution">
+    <div class="card-label">The Smriti Solution</div>
+    <p>Smriti gives your document q&a bot a persistent causal memory. Every interaction is stored as a Subject-Verb-Object triple on a chronological timeline. When a user returns after days or weeks, the system remembers not just what happened — but why.</p>
+  </div>
+
+  <h2>How It Works with Document Q&A Bot</h2>
+  <p>For a document q&a bot, Smriti stores the full history of every user interaction in a dual pgvector space. When the user asks a question, Smriti retrieves the most causally relevant memories — not just the most recent ones — and passes them to your language model as structured context.</p>
+
+  <div class="code-block">
+    <code>
+<span class="code-comment"># Install Smriti</span>
+pip install smriti
+
+<span class="code-comment"># Initialize with document-q-a-bot</span>
+from smriti import SmritiMemory
+
+memory = SmritiMemory(
+    backend="pgvector",
+    mode="dual",          <span class="code-comment"># semantic + episodic</span>
+    svo_extraction=True   <span class="code-comment"># auto S-V-O tagging</span>
+)
+
+<span class="code-comment"># Store any interaction</span>
+memory.store("User bought flowers on Tuesday")
+
+<span class="code-comment"># Retrieve with causal context</span>
+result = memory.recall("why did we argue on Friday?")
+<span class="code-comment"># Returns: Tuesday â†’ flowers â†’ context â†’ Friday</span>
+    </code>
+  </div>
+
+  <h2>Smriti vs Session-Only Memory</h2>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Session-Only Memory</th>
+        <th class="col-smriti">Smriti</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Long-term memory</td>
+        <td><span class="cross">Partial</span></td>
+        <td class="col-smriti"><span class="tick">Full timeline</span></td>
+      </tr>
+      <tr>
+        <td>Causal context (A caused B)</td>
+        <td><span class="cross">No</span></td>
+        <td class="col-smriti"><span class="tick">S-V-O graph</span></td>
+      </tr>
+      <tr>
+        <td>Cross-session retention</td>
+        <td><span class="cross">Session only</span></td>
+        <td class="col-smriti"><span class="tick">Persistent</span></td>
+      </tr>
+      <tr>
+        <td>Encrypted memory blocks</td>
+        <td><span class="cross">No</span></td>
+        <td class="col-smriti"><span class="tick">Block-level</span></td>
+      </tr>
+      <tr>
+        <td>Query speed</td>
+        <td>O(n) scan</td>
+        <td class="col-smriti"><span class="tick">O(1) via index</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- SEO Article (crawlable text) -->
+<article class="seo-article">
+  <h3>Why document q&a bot AI systems fail without long-term memory</h3>
+  <p>The majority of document q&a bot AI systems today rely on in-session context windows. Once the session ends, all memory is lost. Users are forced to repeat their preferences, history, and background every time they interact. This creates frustration and destroys the value of AI personalization.</p>
+  <h3>Smriti's causal memory model for document q&a bot applications</h3>
+  <p>Smriti does not simply store and retrieve text. It extracts the causal structure of every interaction — who did what, when, and why — and organises these events on a chronological timeline. For a document q&a bot, this means the AI can answer questions like 'why did this user's situation change?' with real contextual evidence.</p>
+  <h3>Technical architecture for document q&a bot memory with Smriti</h3>
+  <p>Smriti uses a dual pgvector architecture. The semantic space captures meaning and similarity. The episodic space captures temporal ordering and causal relationships. For a document q&a bot, this means both fuzzy recall ('something about pricing') and precise recall ('the user asked about pricing after their contract expired') are supported simultaneously.</p>
+</article>
+
+<footer>
+  Built by <a href="/">Chronos OS</a> Â· Smriti Memory Architecture Â· Node 97
+</footer>
+
+</body>
+</html>

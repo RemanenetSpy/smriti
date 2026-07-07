@@ -1,0 +1,340 @@
+﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Node 97 — DNA Bio-Computing</title><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/><script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body,html{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Inter',sans-serif;color:#fff}
+#canvas-container{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1}
+#ui-layer{position:absolute;top:0;left:0;width:100%;height:100%;z-index:10;pointer-events:none;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.scene-text{
+  position:absolute;
+  width:90%;
+  max-width:1000px;
+  text-align:center;
+  opacity:0;
+  transform:translateY(30px);
+  /* Massive legibility improvement */
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 70%);
+  padding: 60px;
+}
+.eyebrow{font-size:22px;font-weight:600;text-transform:uppercase;letter-spacing:0.2em;color:rgba(255,255,255,0.6);margin-bottom:20px}
+.headline{font-size:72px;font-weight:800;line-height:1.2;letter-spacing:-0.02em;margin-bottom:30px;text-shadow:0 10px 40px rgba(0,0,0,1)}
+.subtext{font-size:32px;font-weight:300;color:rgba(255,255,255,0.8);line-height:1.5;text-shadow:0 5px 20px rgba(0,0,0,1)}
+.cyan{color:#00f5d4}
+.amber{color:#ffb703}
+.red{color:#ff3366}
+.white{color:#fff}
+#progress{position:fixed;bottom:0;left:0;height:4px;background:linear-gradient(90deg, #ff3366, #00f5d4, #ffb703);width:0%;z-index:100}
+#replay{position:fixed;top:20px;right:20px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:10px 20px;border-radius:8px;cursor:pointer;z-index:100;pointer-events:auto;display:none;font-family:'Inter'}
+</style>
+</head>
+<body>
+<div id="canvas-container"></div>
+<div id="ui-layer">
+  
+  <div id="s0" class="scene-text" style="background:radial-gradient(ellipse at center, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0) 70%);">
+    <div class="headline" style="font-size:90px">Your DNA is <span class="red">NOT</span><br>read-only.</div>
+  </div>
+
+  <div id="s1" class="scene-text">
+    <div class="headline">DNA is the ultimate<br><span class="white">read-only memory.</span></div>
+    <div class="subtext">The hardware of life.</div>
+  </div>
+
+  <div id="s2" class="scene-text">
+    <div class="headline">But the hardware can be modified<br>without changing the code.</div>
+    <div class="subtext">Enter <span class="cyan">DNA Methylation.</span></div>
+  </div>
+
+  <div id="s3" class="scene-text">
+    <div class="headline">Trauma. Diet. Environment.</div>
+    <div class="subtext">Experience writes <span class="cyan">chemical tags</span> onto the DNA, turning genes on or off.</div>
+  </div>
+
+  <div id="s4" class="scene-text">
+    <div class="eyebrow">The Hardware Analogy</div>
+    <div class="headline">It’s biological Phase-Change Memory <span class="amber">(PCM)</span>.</div>
+    <div class="subtext">Applying a voltage locks a state.<br>Living an experience locks a methyl group.</div>
+  </div>
+
+  <div id="s5" class="scene-text">
+    <div class="headline">Unlike a genetic mutation,<br><span class="cyan">it’s reversible.</span></div>
+    <div class="subtext">Stable enough to endure.<br>Malleable enough to adapt.</div>
+  </div>
+
+  <div id="s6" class="scene-text">
+    <div class="headline">When the cell divides,<br>the methyl marks are copied.</div>
+    <div class="subtext">The cell remembers what it learned.</div>
+  </div>
+
+  <div id="s7" class="scene-text">
+    <div class="headline">Mice taught to fear a scent pass that fear<br>to their grandchildren.</div>
+    <div class="subtext">Memory inherited through chemistry,<br>not genetics.</div>
+  </div>
+
+  <div id="s8" class="scene-text">
+    <div class="eyebrow">The Neural Link</div>
+    <div class="headline">Synapses store short-term patterns.</div>
+    <div class="subtext"><span class="cyan">Epigenetics stores multi-generational states.</span></div>
+  </div>
+
+  <div id="s9" class="scene-text">
+    <div class="headline">If experience writes to biological memory...</div>
+    <div class="subtext">What happens when we learn the syntax?</div>
+  </div>
+
+  <div id="s10" class="scene-text">
+    <div class="headline">Can we program biology<br>like <span class="amber">hardware?</span></div>
+    <div class="subtext" style="font-family:'JetBrains Mono'; margin-top:40px; font-size:24px; color:#fff">Node 97: The Epigenetic Compiler</div>
+  </div>
+
+</div>
+<div id="progress"></div>
+<button id="replay" onclick="location.reload()">↺ Replay Tour</button>
+<script>
+const container = document.getElementById('canvas-container');
+const scene = new THREE.Scene();
+scene.fog = new THREE.FogExp2(0x000000, 0.001);
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 4000);
+camera.position.set(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+container.appendChild(renderer.domElement);
+
+// --- 1. DNA HELIX ---
+const dnaGroup = new THREE.Group();
+dnaGroup.position.z = -600;
+scene.add(dnaGroup);
+
+const dnaGeom = new THREE.BufferGeometry();
+const dnaPos = [];
+const dnaColors = [];
+const numBasePairs = 400; // Longer helix for the drop effect
+const radius = 80;
+const heightStep = 10;
+const angleStep = 0.2;
+
+for(let i=0; i<numBasePairs; i++) {
+  const y = (i - numBasePairs/2) * heightStep;
+  const angle1 = i * angleStep;
+  const angle2 = angle1 + Math.PI;
+  
+  const x1 = Math.cos(angle1) * radius;
+  const z1 = Math.sin(angle1) * radius;
+  dnaPos.push(x1, y, z1);
+  dnaColors.push(1,1,1);
+  
+  const x2 = Math.cos(angle2) * radius;
+  const z2 = Math.sin(angle2) * radius;
+  dnaPos.push(x2, y, z2);
+  dnaColors.push(1,1,1);
+  
+  dnaPos.push(x1, y, z1); dnaColors.push(0.5,0.5,0.5);
+  dnaPos.push(x2, y, z2); dnaColors.push(0.5,0.5,0.5);
+}
+dnaGeom.setAttribute('position', new THREE.Float32BufferAttribute(dnaPos, 3));
+dnaGeom.setAttribute('color', new THREE.Float32BufferAttribute(dnaColors, 3));
+const dnaMat = new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+const dnaLines = new THREE.LineSegments(dnaGeom, dnaMat);
+dnaGroup.add(dnaLines);
+
+const methylGeom = new THREE.BufferGeometry();
+const methylPos = [];
+for(let i=0; i<numBasePairs; i++) {
+  if (Math.random() > 0.7) {
+    const y = (i - numBasePairs/2) * heightStep;
+    const isStrand1 = Math.random() > 0.5;
+    const angle = i * angleStep + (isStrand1 ? 0 : Math.PI);
+    const x = Math.cos(angle) * (radius + 5);
+    const z = Math.sin(angle) * (radius + 5);
+    methylPos.push(x, y, z);
+  }
+}
+methylGeom.setAttribute('position', new THREE.Float32BufferAttribute(methylPos, 3));
+const methylMat = new THREE.PointsMaterial({ color: 0x00f5d4, size: 8, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+const methylNodes = new THREE.Points(methylGeom, methylMat);
+dnaGroup.add(methylNodes);
+
+// --- 2. PCM GRID (Hardware) ---
+const gridGroup = new THREE.Group();
+gridGroup.position.z = -1800;
+gridGroup.rotation.x = Math.PI / 2;
+scene.add(gridGroup);
+
+const gridGeom = new THREE.BufferGeometry();
+const gPos = [];
+const gridLines = 30;
+const gridSize = 1200;
+const spacing = gridSize / gridLines;
+
+for(let i=0; i<=gridLines; i++) {
+  const p = (i * spacing) - (gridSize/2);
+  gPos.push(p, -gridSize/2, 0); gPos.push(p, gridSize/2, 0);
+  gPos.push(-gridSize/2, p, 0); gPos.push(gridSize/2, p, 0);
+}
+gridGeom.setAttribute('position', new THREE.Float32BufferAttribute(gPos, 3));
+const gridMat = new THREE.LineBasicMaterial({ color: 0xffb703, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+const grid = new THREE.LineSegments(gridGeom, gridMat);
+gridGroup.add(grid);
+
+const nGeom = new THREE.BufferGeometry();
+const nPos = [];
+for(let i=0; i<=gridLines; i++) {
+  for(let j=0; j<=gridLines; j++) {
+    if(Math.random() > 0.5) {
+      const x = (i * spacing) - (gridSize/2);
+      const y = (j * spacing) - (gridSize/2);
+      nPos.push(x, y, 0);
+    }
+  }
+}
+nGeom.setAttribute('position', new THREE.Float32BufferAttribute(nPos, 3));
+const nMat = new THREE.PointsMaterial({ color: 0xffb703, size: 4, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
+const gridNodes = new THREE.Points(nGeom, nMat);
+gridGroup.add(gridNodes);
+
+// --- 3. SYNAPSE (Neural Network) ---
+const synGroup = new THREE.Group();
+synGroup.position.z = -3000;
+scene.add(synGroup);
+
+const sGeom = new THREE.SphereGeometry(40, 32, 32);
+const sMat = new THREE.MeshBasicMaterial({ color: 0x7b2fff, wireframe: true, transparent: true, opacity: 0 });
+const node1 = new THREE.Mesh(sGeom, sMat);
+node1.position.set(-200, 0, 0);
+const node2 = new THREE.Mesh(sGeom, sMat);
+node2.position.set(200, 0, 0);
+synGroup.add(node1);
+synGroup.add(node2);
+
+const lGeom = new THREE.BufferGeometry().setFromPoints([
+  new THREE.Vector3(-160, 0, 0),
+  new THREE.Vector3(160, 0, 0)
+]);
+const lMat = new THREE.LineBasicMaterial({ color: 0x00f5d4, transparent: true, opacity: 0 });
+const synLine = new THREE.Line(lGeom, lMat);
+synGroup.add(synLine);
+
+const pulseGeom = new THREE.SphereGeometry(10, 16, 16);
+const pulseMat = new THREE.MeshBasicMaterial({ color: 0x00f5d4, transparent: true, opacity: 0 });
+const pulse = new THREE.Mesh(pulseGeom, pulseMat);
+synGroup.add(pulse);
+
+// --- ANIMATION LOOP ---
+const clock = new THREE.Clock();
+function animate() {
+  requestAnimationFrame(animate);
+  const time = clock.getElapsedTime();
+  
+  dnaGroup.rotation.y = time * 0.2;
+  dnaGroup.rotation.x = time * 0.05;
+  
+  gridGroup.rotation.z = time * 0.05;
+  
+  if (sMat.opacity > 0) {
+    node1.rotation.y = time;
+    node2.rotation.y = -time;
+    pulse.position.x = Math.sin(time * 3) * 160;
+  }
+  
+  renderer.render(scene, camera);
+}
+animate();
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// --- GSAP TIMELINE (10 SCENES + HOOK) ---
+const tl = gsap.timeline({ defaults: { ease: "power2.inOut" } });
+
+gsap.set('.scene-text', { autoAlpha: 0, y: 30 });
+// Initial camera position for the Hook (looking down the barrel)
+gsap.set(camera.position, { y: 1500, z: -600 });
+gsap.set(camera.rotation, { x: -Math.PI / 2 });
+
+dnaGroup.materialOpacity = { val: 0.6 };
+methylMat.opacity = 0;
+gridGroup.materialOpacity = { val: 0 };
+synGroup.materialOpacity = { val: 0 };
+
+const updateOpacity = () => {
+  dnaMat.opacity = dnaGroup.materialOpacity.val;
+  gridMat.opacity = gridGroup.materialOpacity.val * 0.4;
+  nMat.opacity = gridGroup.materialOpacity.val;
+  sMat.opacity = synGroup.materialOpacity.val;
+  lMat.opacity = synGroup.materialOpacity.val;
+  pulseMat.opacity = synGroup.materialOpacity.val;
+};
+gsap.ticker.add(updateOpacity);
+
+tl.to('#progress', { width: '100%', duration: 72, ease: 'none' }, 0);
+
+// --- 0.0s: THE HOOK ---
+tl.to('#s0', { autoAlpha: 1, y: 0, scale: 1, duration: 0.1 }, 0);
+// Camera plummets down the DNA barrel
+tl.to(camera.position, { y: 0, z: 0, duration: 1.5, ease: 'power4.in' }, 0);
+tl.to(camera.rotation, { x: 0, duration: 1.5, ease: 'power4.in' }, 0);
+// Hook text scales up and fades
+tl.to('#s0', { scale: 3, autoAlpha: 0, duration: 1, ease: 'power2.in' }, 1.5);
+
+// Continuous slow camera move starts after hook
+tl.to(camera.position, { z: -3200, duration: 69, ease: 'power1.inOut' }, 2);
+
+// 1. DNA Basics
+tl.to('#s1', { autoAlpha: 1, y: 0, duration: 1 }, 2.5);
+tl.to('#s1', { autoAlpha: 0, y: -30, duration: 1 }, 6);
+
+// 2. Methylation Chemistry
+tl.to('#s2', { autoAlpha: 1, y: 0, duration: 1 }, 7);
+tl.to(methylMat, { opacity: 0.8, duration: 2 }, 7.5); 
+tl.to('#s2', { autoAlpha: 0, y: -30, duration: 1 }, 12);
+
+// 3. How Methyl Marks Encode Experience
+tl.to('#s3', { autoAlpha: 1, y: 0, duration: 1 }, 13);
+tl.to('#s3', { autoAlpha: 0, y: -30, duration: 1 }, 19);
+
+// 4. Analogy to PCM Write
+tl.to(dnaGroup.materialOpacity, { val: 0, duration: 3 }, 19);
+tl.to(methylMat, { opacity: 0, duration: 3 }, 19);
+tl.to(gridGroup.materialOpacity, { val: 1, duration: 3 }, 20);
+
+tl.to('#s4', { autoAlpha: 1, y: 0, duration: 1 }, 21);
+tl.to('#s4', { autoAlpha: 0, y: -30, duration: 1 }, 27);
+
+// 5. Stability vs Reversibility
+tl.to('#s5', { autoAlpha: 1, y: 0, duration: 1 }, 28);
+tl.to(nMat, { opacity: 0.2, duration: 0.5, yoyo: true, repeat: 5 }, 29);
+tl.to('#s5', { autoAlpha: 0, y: -30, duration: 1 }, 34);
+
+// 6. Cell-Level Learning
+tl.to('#s6', { autoAlpha: 1, y: 0, duration: 1 }, 35);
+tl.to('#s6', { autoAlpha: 0, y: -30, duration: 1 }, 41);
+
+// 7. Cross-Species Memory
+tl.to('#s7', { autoAlpha: 1, y: 0, duration: 1 }, 42);
+tl.to('#s7', { autoAlpha: 0, y: -30, duration: 1 }, 48);
+
+// 8. Link to Synaptic Plasticity
+tl.to(gridGroup.materialOpacity, { val: 0, duration: 3 }, 47);
+tl.to(synGroup.materialOpacity, { val: 1, duration: 3 }, 48);
+
+tl.to('#s8', { autoAlpha: 1, y: 0, duration: 1 }, 49);
+tl.to('#s8', { autoAlpha: 0, y: -30, duration: 1 }, 55);
+
+// 9. Bio-Computing Potential
+tl.to('#s9', { autoAlpha: 1, y: 0, duration: 1 }, 56);
+tl.to('#s9', { autoAlpha: 0, y: -30, duration: 1 }, 62);
+
+// 10. Punchline
+tl.to(synGroup.materialOpacity, { val: 0, duration: 2 }, 63); 
+tl.to('#s10', { autoAlpha: 1, y: 0, duration: 1 }, 64);
+tl.to('#s10', { autoAlpha: 0, y: -30, duration: 1 }, 71);
+
+// END
+tl.to('#replay', { autoAlpha: 1, duration: 1 }, 72);
+
+</script></body></html>

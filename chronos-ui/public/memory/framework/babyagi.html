@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BabyAGI Persistent Memory — Smriti | Smriti Memory Architecture</title>
+<meta name="description" content="Add long-term, causal memory to BabyAGI using Smriti's dual pgvector architecture. S-V-O extraction. Cross-session retention. O(1) recall."/>
+<meta property="og:title" content="BabyAGI Persistent Memory — Smriti"/>
+<meta property="og:description" content="Add long-term, causal memory to BabyAGI using Smriti's dual pgvector architecture. S-V-O extraction. Cross-session retention. O(1) recall."/>
+<meta property="og:type" content="article"/>
+<link rel="canonical" href="https://smriti.dev/memory/babyagi"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#050509;color:#fff;font-family:'Inter',sans-serif;line-height:1.6}
+
+/* Nav */
+nav{padding:20px 40px;display:flex;align-items:center;justify-content:space-between;
+    border-bottom:1px solid rgba(255,255,255,.06)}
+.logo{font-weight:800;font-size:20px;color:#00f5d4;letter-spacing:-.02em}
+.nav-link{color:rgba(255,255,255,.5);text-decoration:none;font-size:14px;
+           transition:color .2s}
+.nav-link:hover{color:#fff}
+
+/* Hero */
+.hero{max-width:860px;margin:80px auto 60px;padding:0 40px;text-align:center}
+.badge{display:inline-block;padding:6px 16px;border-radius:20px;font-size:12px;
+       font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+       background:rgba(0,245,212,.1);color:#00f5d4;border:1px solid rgba(0,245,212,.2);
+       margin-bottom:28px}
+h1{font-size:clamp(32px,5vw,56px);font-weight:800;line-height:1.15;
+   letter-spacing:-.03em;margin-bottom:24px}
+h1 span{color:#00f5d4}
+.hero-sub{font-size:20px;font-weight:300;color:rgba(255,255,255,.65);
+          max-width:620px;margin:0 auto 40px}
+.cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn-primary{padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;
+             background:#00f5d4;color:#050509;text-decoration:none;transition:.2s}
+.btn-primary:hover{background:#00d4b8}
+.btn-ghost{padding:14px 32px;border-radius:10px;font-size:16px;font-weight:600;
+           border:1px solid rgba(255,255,255,.15);color:#fff;text-decoration:none;
+           transition:.2s}
+.btn-ghost:hover{border-color:rgba(255,255,255,.4)}
+
+/* Stats */
+.stats{display:flex;gap:40px;justify-content:center;padding:40px;flex-wrap:wrap;
+       border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+.stat{text-align:center}
+.stat-num{font-size:36px;font-weight:800;color:#00f5d4}
+.stat-label{font-size:13px;color:rgba(255,255,255,.45);margin-top:4px}
+
+/* Content */
+.content{max-width:860px;margin:0 auto;padding:60px 40px}
+h2{font-size:28px;font-weight:800;margin:48px 0 16px;letter-spacing:-.02em}
+h2:first-child{margin-top:0}
+p{color:rgba(255,255,255,.72);margin-bottom:16px;font-size:17px}
+.highlight{color:#fff;font-weight:600}
+
+/* Problem / Solution boxes */
+.card{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+      border-radius:14px;padding:28px;margin:24px 0}
+.card.problem{border-color:rgba(255,48,120,.2);background:rgba(255,48,120,.04)}
+.card.solution{border-color:rgba(0,245,212,.2);background:rgba(0,245,212,.04)}
+.card-label{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+            margin-bottom:12px}
+.card.problem .card-label{color:#ff3066}
+.card.solution .card-label{color:#00f5d4}
+.card p{margin:0;color:rgba(255,255,255,.8)}
+
+/* Code block */
+.code-block{background:#0a0a12;border:1px solid rgba(255,255,255,.08);border-radius:10px;
+            padding:24px;margin:24px 0;overflow-x:auto}
+.code-block code{font-family:'JetBrains Mono',monospace;font-size:14px;
+                 color:#00f5d4;line-height:1.7}
+.code-comment{color:rgba(255,255,255,.3)}
+
+/* Comparison table */
+.compare-table{width:100%;border-collapse:collapse;margin:24px 0;font-size:15px}
+.compare-table th{padding:14px 20px;text-align:left;font-weight:600;font-size:12px;
+                  text-transform:uppercase;letter-spacing:.1em;
+                  color:rgba(255,255,255,.4);border-bottom:1px solid rgba(255,255,255,.08)}
+.compare-table td{padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.04)}
+.compare-table tr:last-child td{border-bottom:none}
+.tick{color:#00f5d4;font-weight:700}
+.cross{color:#ff3066}
+.col-smriti{background:rgba(0,245,212,.04)}
+
+/* Footer */
+footer{padding:40px;text-align:center;border-top:1px solid rgba(255,255,255,.06);
+       color:rgba(255,255,255,.3);font-size:14px;margin-top:80px}
+footer a{color:#00f5d4;text-decoration:none}
+
+/* SEO article (visible to Google, subtle to users) */
+.seo-article{max-width:860px;margin:0 auto;padding:0 40px 60px;
+             color:rgba(255,255,255,.45);font-size:15px}
+.seo-article h3{font-size:18px;font-weight:600;color:rgba(255,255,255,.6);
+                margin:32px 0 12px}
+</style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav>
+  <span class="logo">smriti</span>
+  <a href="/docs" class="nav-link">Docs</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="badge">Memory Architecture</div>
+  <h1>Add Persistent Memory to <span>BabyAGI</span></h1>
+  <p class="hero-sub">Give your BabyAGI agent a brain. Smriti adds long-term, causal memory — retaining context across every session, understanding why events happened, not just what happened.</p>
+  <div class="cta-row">
+    <a href="/docs/quickstart" class="btn-primary">Read the Docs</a>
+    <a href="/node97" class="btn-ghost">Watch Explainer</a>
+  </div>
+</section>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat"><div class="stat-num">O(1)</div><div class="stat-label">Connection Retrieval</div></div>
+  <div class="stat"><div class="stat-num">S-V-O</div><div class="stat-label">Extraction Engine</div></div>
+  <div class="stat"><div class="stat-num">Dual</div><div class="stat-label">pgvector Architecture</div></div>
+  <div class="stat"><div class="stat-num">âˆž</div><div class="stat-label">Context Retention</div></div>
+</div>
+
+<!-- Main Content -->
+<div class="content">
+
+  <div class="card problem">
+    <div class="card-label">The Problem</div>
+    <p>BabyAGI agents lose all context when a session ends. Every conversation starts from zero. Users repeat themselves, agents forget preferences, and causal connections between events disappear entirely.</p>
+  </div>
+
+  <div class="card solution">
+    <div class="card-label">The Smriti Solution</div>
+    <p>Smriti integrates directly with BabyAGI as a drop-in memory layer. It extracts Subject-Verb-Object triples from every interaction, stores them in a dual semantic and episodic pgvector space, and retrieves causal context in O(1) time — across any number of sessions.</p>
+  </div>
+
+  <h2>How It Works with BabyAGI</h2>
+  <p>BabyAGI calls Smriti's memory API before generating any response. Smriti checks its timeline, retrieves relevant causal context, and passes it as structured memory to the BabyAGI prompt. The agent responds with full awareness of past events — not just the last message.</p>
+
+  <div class="code-block">
+    <code>
+<span class="code-comment"># Install Smriti</span>
+pip install smriti
+
+<span class="code-comment"># Initialize with babyagi</span>
+from smriti import SmritiMemory
+
+memory = SmritiMemory(
+    backend="pgvector",
+    mode="dual",          <span class="code-comment"># semantic + episodic</span>
+    svo_extraction=True   <span class="code-comment"># auto S-V-O tagging</span>
+)
+
+<span class="code-comment"># Store any interaction</span>
+memory.store("User bought flowers on Tuesday")
+
+<span class="code-comment"># Retrieve with causal context</span>
+result = memory.recall("why did we argue on Friday?")
+<span class="code-comment"># Returns: Tuesday â†’ flowers â†’ context â†’ Friday</span>
+    </code>
+  </div>
+
+  <h2>Smriti vs Standard Vector DB</h2>
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Standard Vector DB</th>
+        <th class="col-smriti">Smriti</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Long-term memory</td>
+        <td><span class="cross">Partial</span></td>
+        <td class="col-smriti"><span class="tick">Full timeline</span></td>
+      </tr>
+      <tr>
+        <td>Causal context (A caused B)</td>
+        <td><span class="cross">No</span></td>
+        <td class="col-smriti"><span class="tick">S-V-O graph</span></td>
+      </tr>
+      <tr>
+        <td>Cross-session retention</td>
+        <td><span class="cross">Session only</span></td>
+        <td class="col-smriti"><span class="tick">Persistent</span></td>
+      </tr>
+      <tr>
+        <td>Encrypted memory blocks</td>
+        <td><span class="cross">No</span></td>
+        <td class="col-smriti"><span class="tick">Block-level</span></td>
+      </tr>
+      <tr>
+        <td>Query speed</td>
+        <td>O(n) scan</td>
+        <td class="col-smriti"><span class="tick">O(1) via index</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+
+<!-- SEO Article (crawlable text) -->
+<article class="seo-article">
+  <h3>Why BabyAGI needs long-term memory</h3>
+  <p>BabyAGI is a powerful AI framework but lacks persistent, cross-session memory by default. Each agent run begins with no knowledge of previous interactions. For production applications — customer support, personal assistants, research tools — this is a critical limitation. Smriti solves this by maintaining a chronological memory timeline that persists indefinitely.</p>
+  <h3>How Smriti's S-V-O architecture improves BabyAGI agents</h3>
+  <p>Unlike simple vector search that retrieves semantically similar text, Smriti extracts the Subject-Verb-Object structure from every stored memory. This means a BabyAGI agent can answer causal questions: not just 'what happened?' but 'why did it happen?' and 'what was the consequence?' This is the difference between a database and a timeline.</p>
+  <h3>Getting started with Smriti and BabyAGI</h3>
+  <p>Smriti installs as a Python package and integrates with BabyAGI in under 10 lines of code. It requires a PostgreSQL instance with pgvector enabled. Memory is stored in two parallel vector spaces — one for semantic meaning, one for episodic cause-and-effect — giving BabyAGI agents both broad recall and precise causal reasoning.</p>
+</article>
+
+<footer>
+  Built by <a href="/">Chronos OS</a> Â· Smriti Memory Architecture Â· Node 97
+</footer>
+
+</body>
+</html>
