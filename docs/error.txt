@@ -1,0 +1,825 @@
+===== Application Startup at 2026-04-20 19:16:52 =====
+
+>>> SVO PARSER v9 LOADED — _extract_json active <<<
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+2026-04-20 19:17:49,475 | chronos.api | INFO | 🕰️  Chronos OS starting up...
+2026-04-20 19:17:52,762 | chronos.memory_store | INFO | Memory store initialized (Neon PostgreSQL)
+2026-04-20 19:17:53,191 | chronos.vector_store | INFO | Vector store initialized (pgvector 384d)
+2026-04-20 19:17:56,114 | chronos.svo_parser | INFO | SVO parser initialized with fast pipeline: groq/llama-3.1-8b-instant
+2026-04-20 19:17:56,114 | chronos.api | INFO | ✅ Chronos OS ready — Systems online
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:7860 (Press CTRL+C to quit)
+INFO:     10.16.24.44:53206 - "GET /?logs=container HTTP/1.1" 200 OK
+INFO:     10.16.44.111:5417 - "GET /?logs=container HTTP/1.1" 200 OK
+2026-04-20 19:17:58,345 | sentence_transformers.base.model | INFO | No device provided, using cpu
+2026-04-20 19:17:58,368 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:58,375 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,384 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,392 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:58,398 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,406 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,407 | sentence_transformers.base.model | INFO | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-04-20 19:17:58,415 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:58,425 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,432 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-20 19:17:58,432 | huggingface_hub.utils._http | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-04-20 19:17:58,438 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/README.md "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,447 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/README.md "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,454 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:58,459 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/modules.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,466 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:58,471 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,478 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,487 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-04-20 19:17:58,495 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:58,501 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,508 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:58,556 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors "HTTP/1.1 302 Found"
+2026-04-20 19:17:58,572 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/xet-read-token/c9745ed1d9f207416be6d2e6f8de32d1f16199bf "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 4758.33it/s]
+BertModel LOAD REPORT from: sentence-transformers/all-MiniLM-L6-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+Notes:
+- UNEXPECTED:	can be ignored when loading from different task/architecture; not ok if you expect identical arch.
+2026-04-20 19:17:59,792 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-04-20 19:17:59,801 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-04-20 19:17:59,810 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-04-20 19:17:59,818 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-04-20 19:17:59,824 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:59,830 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,839 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,850 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:59,856 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,877 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:59,883 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,891 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:59,896 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,905 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-04-20 19:17:59,923 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,933 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/vocab.txt "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:59,939 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/vocab.txt "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,948 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/vocab.txt "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,959 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:17:59,965 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,974 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/tokenizer.json "HTTP/1.1 200 OK"
+2026-04-20 19:17:59,994 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/added_tokens.json "HTTP/1.1 404 Not Found"
+2026-04-20 19:18:00,016 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/special_tokens_map.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:18:00,032 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/special_tokens_map.json "HTTP/1.1 200 OK"
+2026-04-20 19:18:00,050 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/special_tokens_map.json "HTTP/1.1 200 OK"
+2026-04-20 19:18:00,061 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/chat_template.jinja "HTTP/1.1 404 Not Found"
+2026-04-20 19:18:00,105 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-04-20 19:18:00,111 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-04-20 19:18:00,118 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/c9745ed1d9f207416be6d2e6f8de32d1f16199bf/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-04-20 19:18:00,129 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-04-20 19:18:00,136 | chronos.vector_store | INFO | Embedding model loaded: all-MiniLM-L6-v2
+2026-04-20 19:18:20,846 | chronos.svo_parser | INFO | [DEBUG] Calling litellm.acompletion attempt 1...
+19:18:20 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:20,858 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,071 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,088 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,104 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:ERROR: fallback_utils.py:68 - Fallback attempt failed for model groq/llama-3.1-8b-instant: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 176, in _make_common_async_call
+    response = await async_httpx_client.post(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 297, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 515, in post
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 468, in post
+    response = await self.client.send(req, stream=stream)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 307, in handle_async_request
+    response = await self._make_aiohttp_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 285, in _make_aiohttp_request
+    response = await client_session.request(**request_kwargs).__aenter__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 1521, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 788, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 764, in _connect_and_send_request
+    resp = await req.send(conn)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 1470, in send
+    await writer.write_headers(status_line, self.headers)
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/http_writer.py", line 217, in write_headers
+    buf = _serialize_headers(status_line, headers)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_writer.pyx", line 148, in aiohttp._http_writer._serialize_headers
+  File "aiohttp/_http_writer.pyx", line 115, in aiohttp._http_writer._write_str_raise_on_nlcr
+ValueError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 620, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 308, in async_completion
+    response = await self._make_common_async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 203, in _make_common_async_call
+    raise self._handle_error(e=e, provider_config=provider_config)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 4721, in _handle_error
+    raise provider_config.get_error_class(
+litellm.llms.openai.common_utils.OpenAIError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 58, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 2093, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1892, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 639, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2456, in exception_type
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 588, in exception_type
+    raise InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+2026-04-20 19:18:21,115 | LiteLLM | ERROR | Fallback attempt failed for model groq/llama-3.1-8b-instant: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 176, in _make_common_async_call
+    response = await async_httpx_client.post(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 297, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 515, in post
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 468, in post
+    response = await self.client.send(req, stream=stream)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 307, in handle_async_request
+    response = await self._make_aiohttp_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 285, in _make_aiohttp_request
+    response = await client_session.request(**request_kwargs).__aenter__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 1521, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 788, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 764, in _connect_and_send_request
+    resp = await req.send(conn)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 1470, in send
+    await writer.write_headers(status_line, self.headers)
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/http_writer.py", line 217, in write_headers
+    buf = _serialize_headers(status_line, headers)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_writer.pyx", line 148, in aiohttp._http_writer._serialize_headers
+  File "aiohttp/_http_writer.pyx", line 115, in aiohttp._http_writer._write_str_raise_on_nlcr
+ValueError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 620, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 308, in async_completion
+    response = await self._make_common_async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 203, in _make_common_async_call
+    raise self._handle_error(e=e, provider_config=provider_config)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 4721, in _handle_error
+    raise provider_config.get_error_class(
+litellm.llms.openai.common_utils.OpenAIError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 58, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 2093, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1892, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 639, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2456, in exception_type
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 588, in exception_type
+    raise InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama3.1-8b; provider = cerebras
+2026-04-20 19:18:21,123 | LiteLLM | INFO | 
+LiteLLM completion() model= llama3.1-8b; provider = cerebras
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | [DEBUG] Response received. Type: <class 'litellm.types.utils.ModelResponse'>
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | [DEBUG] Message type: <class 'litellm.types.utils.Message'>, content type: <class 'str'>
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | [DEBUG] Content repr: '[\n  {\n    "subject": "I",\n    "verb": "scheduled",\n    "object": "a marketing activity",\n    "timestamp": "2026-04-20T19:18:14.891000+00:00",\n    "datetime_start": "2026-04-20T22:30:00+00:00",\
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | [DEBUG] Calling _extract_json with 531 chars
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | _extract_json called with 531 chars: [
+  {
+    "subject": "I",
+    "verb": "scheduled",
+    "object": "a marketing ac...
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | [DEBUG] _extract_json returned type: <class 'list'>
+2026-04-20 19:18:21,543 | chronos.svo_parser | INFO | Fast Pipeline (groq/llama-3.1-8b-instant) extracted 2 SVO tuples from text (112 chars)
+2026-04-20 19:18:21,717 | chronos.svo_parser | INFO | [DEBUG] Calling litellm.acompletion attempt 1...
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,719 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,737 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,749 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:21,761 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:21 - LiteLLM:ERROR: fallback_utils.py:68 - Fallback attempt failed for model groq/llama-3.1-8b-instant: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 176, in _make_common_async_call
+    response = await async_httpx_client.post(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 297, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 515, in post
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 468, in post
+    response = await self.client.send(req, stream=stream)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 307, in handle_async_request
+    response = await self._make_aiohttp_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 285, in _make_aiohttp_request
+    response = await client_session.request(**request_kwargs).__aenter__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 1521, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 788, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 764, in _connect_and_send_request
+    resp = await req.send(conn)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 1470, in send
+    await writer.write_headers(status_line, self.headers)
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/http_writer.py", line 217, in write_headers
+    buf = _serialize_headers(status_line, headers)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_writer.pyx", line 148, in aiohttp._http_writer._serialize_headers
+  File "aiohttp/_http_writer.pyx", line 115, in aiohttp._http_writer._write_str_raise_on_nlcr
+ValueError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 620, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 308, in async_completion
+    response = await self._make_common_async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 203, in _make_common_async_call
+    raise self._handle_error(e=e, provider_config=provider_config)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 4721, in _handle_error
+    raise provider_config.get_error_class(
+litellm.llms.openai.common_utils.OpenAIError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 58, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 2093, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1892, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 639, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2456, in exception_type
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 588, in exception_type
+    raise InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+2026-04-20 19:18:21,771 | LiteLLM | ERROR | Fallback attempt failed for model groq/llama-3.1-8b-instant: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 176, in _make_common_async_call
+    response = await async_httpx_client.post(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 297, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 515, in post
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 468, in post
+    response = await self.client.send(req, stream=stream)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 307, in handle_async_request
+    response = await self._make_aiohttp_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 285, in _make_aiohttp_request
+    response = await client_session.request(**request_kwargs).__aenter__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 1521, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 788, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 764, in _connect_and_send_request
+    resp = await req.send(conn)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 1470, in send
+    await writer.write_headers(status_line, self.headers)
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/http_writer.py", line 217, in write_headers
+    buf = _serialize_headers(status_line, headers)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_writer.pyx", line 148, in aiohttp._http_writer._serialize_headers
+  File "aiohttp/_http_writer.pyx", line 115, in aiohttp._http_writer._write_str_raise_on_nlcr
+ValueError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 620, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 308, in async_completion
+    response = await self._make_common_async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 203, in _make_common_async_call
+    raise self._handle_error(e=e, provider_config=provider_config)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 4721, in _handle_error
+    raise provider_config.get_error_class(
+litellm.llms.openai.common_utils.OpenAIError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 58, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 2093, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1892, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 639, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2456, in exception_type
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 588, in exception_type
+    raise InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+19:18:21 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama3.1-8b; provider = cerebras
+2026-04-20 19:18:21,777 | LiteLLM | INFO | 
+LiteLLM completion() model= llama3.1-8b; provider = cerebras
+2026-04-20 19:18:22,078 | chronos.svo_parser | INFO | [DEBUG] Response received. Type: <class 'litellm.types.utils.ModelResponse'>
+2026-04-20 19:18:22,078 | chronos.svo_parser | INFO | [DEBUG] Message type: <class 'litellm.types.utils.Message'>, content type: <class 'str'>
+2026-04-20 19:18:22,078 | chronos.svo_parser | INFO | [DEBUG] Content repr: '[\n  {\n    "subject": "I",\n    "verb": "posted",\n    "object": "a marketing activity",\n    "timestamp": "2026-04-20T19:18:17.239000+00:00",\n    "datetime_start": "2026-04-20T19:18:17.239000+00:0
+2026-04-20 19:18:22,079 | chronos.svo_parser | INFO | [DEBUG] Calling _extract_json with 867 chars
+2026-04-20 19:18:22,079 | chronos.svo_parser | INFO | _extract_json called with 867 chars: [
+  {
+    "subject": "I",
+    "verb": "posted",
+    "object": "a marketing activ...
+2026-04-20 19:18:22,079 | chronos.svo_parser | INFO | [DEBUG] _extract_json returned type: <class 'list'>
+2026-04-20 19:18:22,079 | chronos.svo_parser | INFO | Fast Pipeline (groq/llama-3.1-8b-instant) extracted 3 SVO tuples from text (109 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 41.88it/s]
+2026-04-20 19:18:22,689 | chronos.svo_parser | INFO | [DEBUG] Calling litellm.acompletion attempt 1...
+19:18:22 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:22,691 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:22 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:22,709 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:22 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:22,724 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:22 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-04-20 19:18:22,735 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+19:18:22 - LiteLLM:ERROR: fallback_utils.py:68 - Fallback attempt failed for model groq/llama-3.1-8b-instant: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 176, in _make_common_async_call
+    response = await async_httpx_client.post(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 297, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 515, in post
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 468, in post
+    response = await self.client.send(req, stream=stream)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 307, in handle_async_request
+    response = await self._make_aiohttp_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 285, in _make_aiohttp_request
+    response = await client_session.request(**request_kwargs).__aenter__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 1521, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 788, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 764, in _connect_and_send_request
+    resp = await req.send(conn)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 1470, in send
+    await writer.write_headers(status_line, self.headers)
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/http_writer.py", line 217, in write_headers
+    buf = _serialize_headers(status_line, headers)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_writer.pyx", line 148, in aiohttp._http_writer._serialize_headers
+  File "aiohttp/_http_writer.pyx", line 115, in aiohttp._http_writer._write_str_raise_on_nlcr
+ValueError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 620, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 308, in async_completion
+    response = await self._make_common_async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 203, in _make_common_async_call
+    raise self._handle_error(e=e, provider_config=provider_config)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 4721, in _handle_error
+    raise provider_config.get_error_class(
+litellm.llms.openai.common_utils.OpenAIError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 58, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 2093, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1892, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 639, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2456, in exception_type
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 588, in exception_type
+    raise InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+2026-04-20 19:18:22,744 | LiteLLM | ERROR | Fallback attempt failed for model groq/llama-3.1-8b-instant: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 176, in _make_common_async_call
+    response = await async_httpx_client.post(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 297, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 515, in post
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/http_handler.py", line 468, in post
+    response = await self.client.send(req, stream=stream)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/httpx/_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 307, in handle_async_request
+    response = await self._make_aiohttp_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/aiohttp_transport.py", line 285, in _make_aiohttp_request
+    response = await client_session.request(**request_kwargs).__aenter__()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 1521, in __aenter__
+    self._resp: _RetType = await self._coro
+                           ^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 788, in _request
+    resp = await handler(req)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client.py", line 764, in _connect_and_send_request
+    resp = await req.send(conn)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/client_reqrep.py", line 1470, in send
+    await writer.write_headers(status_line, self.headers)
+  File "/home/user/.local/lib/python3.11/site-packages/aiohttp/http_writer.py", line 217, in write_headers
+    buf = _serialize_headers(status_line, headers)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "aiohttp/_http_writer.pyx", line 148, in aiohttp._http_writer._serialize_headers
+  File "aiohttp/_http_writer.pyx", line 115, in aiohttp._http_writer._write_str_raise_on_nlcr
+ValueError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 620, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 308, in async_completion
+    response = await self._make_common_async_call(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 203, in _make_common_async_call
+    raise self._handle_error(e=e, provider_config=provider_config)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/custom_httpx/llm_http_handler.py", line 4721, in _handle_error
+    raise provider_config.get_error_class(
+litellm.llms.openai.common_utils.OpenAIError: Newline, carriage return, or null byte detected in headers. Potential header injection attack.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 58, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 2093, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1892, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 639, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2456, in exception_type
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 588, in exception_type
+    raise InternalServerError(
+litellm.exceptions.InternalServerError: litellm.InternalServerError: InternalServerError: GroqException - Newline, carriage return, or null byte detected in headers. Potential header injection attack. LiteLLM Retried: 3 times
+19:18:22 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= llama3.1-8b; provider = cerebras
+2026-04-20 19:18:22,751 | LiteLLM | INFO | 
+LiteLLM completion() model= llama3.1-8b; provider = cerebras
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | [DEBUG] Response received. Type: <class 'litellm.types.utils.ModelResponse'>
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | [DEBUG] Message type: <class 'litellm.types.utils.Message'>, content type: <class 'str'>
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | [DEBUG] Content repr: '[\n  {\n    "subject": "I",\n    "verb": "drafted",\n    "object": "a marketing activity",\n    "timestamp": "2026-04-20T19:18:19.593000+00:00",\n    "datetime_start": null,\n    "datetime_end": null
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | [DEBUG] Calling _extract_json with 503 chars
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | _extract_json called with 503 chars: [
+  {
+    "subject": "I",
+    "verb": "drafted",
+    "object": "a marketing acti...
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | [DEBUG] _extract_json returned type: <class 'list'>
+2026-04-20 19:18:22,975 | chronos.svo_parser | INFO | Fast Pipeline (groq/llama-3.1-8b-instant) extracted 2 SVO tuples from text (110 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 52.62it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 40.98it/s]
+2026-04-20 19:18:24,705 | chronos.vector_store | INFO | Batch added 2 event vectors to pgvector
+2026-04-20 19:18:25,870 | chronos.vector_store | INFO | Batch added 2 event vectors to pgvector
+2026-04-20 19:18:25,990 | chronos.routes.ingest | INFO | Ingested 2 events + 1 turns for source=marketing-tracker in 7889.7ms
+INFO:     10.16.24.44:57970 - "POST /ingest HTTP/1.1" 200 OK
+2026-04-20 19:18:26,431 | chronos.vector_store | INFO | Batch added 3 event vectors to pgvector
+2026-04-20 19:18:27,159 | chronos.routes.ingest | INFO | Ingested 2 events + 1 turns for source=marketing-tracker in 4899.6ms
+INFO:     10.16.47.45:63351 - "POST /ingest HTTP/1.1" 200 OK
+2026-04-20 19:18:27,764 | chronos.routes.ingest | INFO | Ingested 3 events + 1 turns for source=marketing-tracker in 6476.5ms
+INFO:     10.16.47.45:6065 - "POST /ingest HTTP/1.1" 200 OK
+2026-04-20 19:18:52,927 | chronos.agent.graph | INFO | Chronos agent graph compiled successfully
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 110.55it/s]
+2026-04-20 19:18:54,323 | chronos.llm_router | INFO | Heavy pipeline initialized: runnable=ChatLiteLLM(client=<module 'litellm' from '/home/user/.local/lib/python3.11/site-packages/litellm/__init__.py'>, model='cerebras/qwen-3-235b-a22b-instruct-2507', openai_api_key='', azure_api_key='', anthropic_api_key='', replicate_api_key='', cohere_api_key='', openrouter_api_key='', temperature=0.4, model_kwargs={}, max_retries=3) fallbacks=[ChatLiteLLM(client=<module 'litellm' from '/home/user/.local/lib/python3.11/site-packages/litellm/__init__.py'>, model='groq/llama-3.3-70b-versatile', openai_api_key='', azure_api_key='', anthropic_api_key='', replicate_api_key='', cohere_api_key='', openrouter_api_key='', temperature=0.4, model_kwargs={}, max_retries=3)]
+19:18:54 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:18:54,364 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 117.68it/s]
+2026-04-20 19:18:55,073 | chronos.agent.nodes | ERROR | Tool execution failed: query_chronos_memory — invalid input for query argument $3: '5' ('str' object cannot be interpreted as an integer)
+19:18:55 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:18:55,096 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 125.68it/s]
+2026-04-20 19:18:55,505 | chronos.agent.nodes | ERROR | Tool execution failed: query_chronos_memory — invalid input for query argument $3: '10' ('str' object cannot be interpreted as an integer)
+19:18:55 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:18:55,526 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 138.64it/s]
+19:18:56 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:18:56,281 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+INFO:     10.16.44.111:32873 - "POST /agent/run HTTP/1.1" 200 OK
+INFO:     10.16.44.111:5424 - "GET /health HTTP/1.1" 200 OK
+INFO:     10.16.44.111:5424 - "GET /health HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 88.53it/s]
+19:19:30 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:19:30,083 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 108.27it/s]
+19:19:30 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:19:30,731 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+INFO:     10.16.47.45:42459 - "POST /agent/run HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 121.03it/s]
+19:19:51 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:19:51,938 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+INFO:     10.16.47.45:29699 - "POST /agent/run HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 24.43it/s]
+19:20:54 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:20:54,363 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+INFO:     10.16.24.44:28058 - "POST /agent/run HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00,  6.22it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00,  6.21it/s]
+19:21:40 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:21:40,264 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 61.89it/s]
+19:21:40 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:21:40,979 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+2026-04-20 19:21:41,067 | langchain_core.language_models.llms | WARNING | Retrying langchain_litellm.chat_models.litellm.ChatLiteLLM.acompletion_with_retry.<locals>._completion_with_retry in 4 seconds as it raised RateLimitError: litellm.RateLimitError: RateLimitError: CerebrasException - We're experiencing high traffic right now! Please try again soon..
+19:21:45 - LiteLLM:INFO: utils.py:4007 - 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:21:45,069 | LiteLLM | INFO | 
+LiteLLM completion() model= qwen-3-235b-a22b-instruct-2507; provider = cerebras
+2026-04-20 19:21:45,113 | openai._base_client | INFO | Retrying request to /chat/completions in 60.000000 seconds
+
