@@ -1,5 +1,5 @@
-"""
-KAAL — API Key Authentication
+﻿"""
+Smriti — API Key Authentication
 =====================================
 Middleware to validate X-API-Key headers against the SQLite api_keys table.
 Supports tier-based rate limiting and usage tracking.
@@ -15,10 +15,10 @@ from typing import Optional
 from fastapi import HTTPException, Security, Request
 from fastapi.security import APIKeyHeader, HTTPBearer, HTTPAuthorizationCredentials
 
-from chronos_core.models import TierName, TIER_LIMITS
+from smriti_core.models import TierName, TIER_LIMITS
 from .deps import get_memory_store
 
-logger = logging.getLogger("chronos.auth")
+logger = logging.getLogger("smriti.auth")
 
 # ---------------------------------------------------------------------------
 # API Key header scheme

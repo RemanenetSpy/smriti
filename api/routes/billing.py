@@ -1,5 +1,5 @@
-"""
-KAAL — Billing Route
+﻿"""
+Smriti — Billing Route
 ============================
 Stripe Checkout integration for premium tier subscriptions.
 POST /billing/checkout — Create a Stripe checkout session
@@ -15,7 +15,7 @@ import os
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 
-from chronos_core.models import (
+from smriti_core.models import (
     BillingCheckoutRequest,
     BillingCheckoutResponse,
     TierName,
@@ -25,7 +25,7 @@ from chronos_core.models import (
 from api.auth import verify_api_key, generate_api_key, hash_api_key
 from api.deps import get_memory_store
 
-logger = logging.getLogger("chronos.routes.billing")
+logger = logging.getLogger("smriti.routes.billing")
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
 

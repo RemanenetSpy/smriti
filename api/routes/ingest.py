@@ -1,5 +1,5 @@
-"""
-KAAL — Ingest Route
+﻿"""
+Smriti — Ingest Route
 ===========================
 POST /ingest — Universal event ingestion endpoint.
 Any SaaS or agent sends events here to get temporal memory.
@@ -13,18 +13,18 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends
 
-from chronos_core.models import (
+from smriti_core.models import (
     EventRecord,
     IngestPayload,
     IngestResponse,
     TurnRecord,
     TurnRole,
 )
-from chronos_core.supersession import SupersessionEngine
+from smriti_core.supersession import SupersessionEngine
 from api.auth import verify_api_key, check_event_quota
 from api.deps import get_memory_store, get_vector_store, get_svo_parser
 
-logger = logging.getLogger("chronos.routes.ingest")
+logger = logging.getLogger("smriti.routes.ingest")
 
 router = APIRouter(tags=["Ingest"])
 

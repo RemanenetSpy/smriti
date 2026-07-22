@@ -1,5 +1,5 @@
-"""
-KAAL — Agent State Graph
+﻿"""
+Smriti — Agent State Graph
 ================================
 LangGraph state graph that orchestrates the Chronos agent.
 Architecture: retrieve_memory → call_model → (tools loop) → END
@@ -22,7 +22,7 @@ from .nodes import (
     execute_tools_node,
 )
 
-logger = logging.getLogger("chronos.agent.graph")
+logger = logging.getLogger("smriti.agent.graph")
 
 
 # ---------------------------------------------------------------------------

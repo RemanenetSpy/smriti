@@ -1,5 +1,5 @@
 """
-KAAL — Agent Nodes
+Smriti — Agent Nodes
 ==========================
 Individual processing nodes for the LangGraph state graph.
 Each node performs a single responsibility in the agent pipeline.
@@ -13,12 +13,12 @@ from datetime import datetime
 
 from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
 
-logger = logging.getLogger("chronos.agent.nodes")
+logger = logging.getLogger("smriti.agent.nodes")
 
-# System prompt for the Chronos agent
-CHRONOS_SYSTEM_PROMPT = """You are a KAAL Agent — an AI assistant with structured temporal long-term memory.
+# System prompt for the Smriti agent
+SMRITI_SYSTEM_PROMPT = """You are a Smriti Agent — an AI assistant with structured temporal long-term memory.
 
-You have access to the Chronos temporal memory system, which stores events as Subject-Verb-Object (SVO) tuples with timestamps. This gives you the ability to:
+You have access to the Smriti temporal memory system, which stores events as Subject-Verb-Object (SVO) tuples with timestamps. This gives you the ability to:
 
 1. **Recall past events** across any connected SaaS tool or data source
 2. **Reason temporally** — understand what happened when, in what order, and how events relate across time
@@ -112,7 +112,7 @@ async def call_model_node(state: dict) -> dict:
     memory_context = state.get("memory_context", "")
 
     # Build augmented system message
-    system_content = CHRONOS_SYSTEM_PROMPT
+    system_content = SMRITI_SYSTEM_PROMPT
     if memory_context:
         system_content += f"\n\n{memory_context}"
 
@@ -139,7 +139,7 @@ async def call_model_node(state: dict) -> dict:
 
     # Get the LLM from the Mixture of Agents Router (Heavy Pipeline)
     try:
-        from chronos_core.llm_router import get_heavy_pipeline
+        from smriti_core.llm_router import get_heavy_pipeline
         
         llm = get_heavy_pipeline()
 
@@ -207,7 +207,7 @@ async def _execute_tool(name: str, args: dict, state: dict) -> str:
     """Execute a specific Chronos tool and return the result."""
     from api.deps import get_memory_store, get_vector_store
 
-    if name == "query_chronos_memory":
+    if name == "query_smriti_memory":
         vector = get_vector_store()
         memory = get_memory_store()
 
@@ -232,8 +232,8 @@ async def _execute_tool(name: str, args: dict, state: dict) -> str:
             for e in events
         ], indent=2)
 
-    elif name == "ingest_chronos_event":
-        from chronos_core.models import EventRecord
+    elif name == "ingest_smriti_event":
+        from smriti_core.models import EventRecord
 
         memory = get_memory_store()
         vector = get_vector_store()

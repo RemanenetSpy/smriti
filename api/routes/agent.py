@@ -1,5 +1,5 @@
-"""
-KAAL — Agent Route
+﻿"""
+Smriti — Agent Route
 ==========================
 POST /agent/run — Execute an agent prompt with full Chronos temporal memory.
 """
@@ -11,11 +11,11 @@ import uuid
 
 from fastapi import APIRouter, Depends
 
-from chronos_core.models import AgentRunRequest, AgentRunResponse
+from smriti_core.models import AgentRunRequest, AgentRunResponse
 from api.auth import verify_api_key, check_orchestration_quota
 from api.deps import get_memory_store
 
-logger = logging.getLogger("chronos.routes.agent")
+logger = logging.getLogger("smriti.routes.agent")
 
 router = APIRouter(tags=["Agent"])
 

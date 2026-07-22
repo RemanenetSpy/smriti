@@ -1,5 +1,5 @@
-"""
-KAAL — Agent Tools
+﻿"""
+Smriti — Agent Tools
 ==========================
 Built-in tools that agents can use during execution.
 These connect the LangGraph agent to the Chronos memory system.
@@ -15,7 +15,7 @@ from langchain_core.tools import tool
 
 
 @tool
-def query_chronos_memory(
+def query_smriti_memory(
     query: str,
     time_start: Optional[str] = None,
     time_end: Optional[str] = None,
@@ -33,7 +33,7 @@ def query_chronos_memory(
         max_results: Maximum number of results to return (as string)
     """
     return json.dumps({
-        "tool": "query_chronos_memory",
+        "tool": "query_smriti_memory",
         "query": query,
         "time_start": time_start,
         "time_end": time_end,
@@ -43,7 +43,7 @@ def query_chronos_memory(
 
 
 @tool
-def ingest_chronos_event(
+def ingest_smriti_event(
     subject: str,
     verb: str,
     obj: str,
@@ -61,7 +61,7 @@ def ingest_chronos_event(
         raw_text: Optional full text description of the event
     """
     return json.dumps({
-        "tool": "ingest_chronos_event",
+        "tool": "ingest_smriti_event",
         "subject": subject,
         "verb": verb,
         "object": obj,
@@ -73,7 +73,7 @@ def ingest_chronos_event(
 @tool
 def list_connected_tools() -> str:
     """
-    List all SaaS tools connected to KAAL.
+    List all SaaS tools connected to Smriti.
     Use this to discover what external services and APIs are available.
     """
     return json.dumps({
@@ -110,8 +110,8 @@ def call_connected_tool(
 
 # All available tools for the agent
 CHRONOS_TOOLS = [
-    query_chronos_memory,
-    ingest_chronos_event,
+    query_smriti_memory,
+    ingest_smriti_event,
     list_connected_tools,
     call_connected_tool,
 ]

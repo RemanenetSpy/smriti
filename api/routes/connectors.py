@@ -1,5 +1,5 @@
-"""
-KAAL — Connectors Route
+﻿"""
+Smriti — Connectors Route
 ===============================
 POST /connect  — Register a SaaS product's API schema
 GET  /connectors — List all connected tools
@@ -13,7 +13,7 @@ from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from chronos_core.models import (
+from smriti_core.models import (
     ConnectorRegistration,
     ConnectorRecord,
     TIER_LIMITS,
@@ -22,7 +22,7 @@ from chronos_core.models import (
 from api.auth import verify_api_key
 from api.deps import get_memory_store
 
-logger = logging.getLogger("chronos.routes.connectors")
+logger = logging.getLogger("smriti.routes.connectors")
 
 router = APIRouter(tags=["Connectors"])
 
@@ -33,7 +33,7 @@ async def register_connector(
     key_info: dict = Depends(verify_api_key),
 ):
     """
-    Register a SaaS product with KAAL.
+    Register a SaaS product with Smriti.
     The product's API endpoints become available as tools for agents.
     Non-agentic SaaS instantly becomes agent-actionable.
     """
@@ -76,7 +76,7 @@ async def register_connector(
         "connector_id": connector_id,
         "name": registration.name,
         "endpoints_count": len(registration.endpoints),
-        "message": f"'{registration.name}' is now agent-actionable in KAAL.",
+        "message": f"'{registration.name}' is now agent-actionable in Smriti.",
     }
 
 

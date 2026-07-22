@@ -1,5 +1,5 @@
-"""
-KAAL — Central Runtime Configuration
+﻿"""
+Smriti — Central Runtime Configuration
 ======================================
 Single source of truth for all tunable parameters.
 Every value can be overridden by an environment variable — nothing is hardcoded.

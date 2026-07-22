@@ -1,9 +1,9 @@
-"""
-KAAL — Supersession Engine
+﻿"""
+Smriti — Supersession Engine
 ===========================
 Confidence-scored multi-signal detection for fact supersession.
 
-All numeric parameters are read from chronos_core.config, which in turn
+All numeric parameters are read from smriti_core.config, which in turn
 reads from environment variables.  Nothing is hardcoded in this file.
 
 Algorithm overview:
@@ -22,8 +22,8 @@ Design properties:
 
 from __future__ import annotations
 
-from chronos_core import config
-from chronos_core.models import EventRecord
+from smriti_core import config
+from smriti_core.models import EventRecord
 
 
 # ---------------------------------------------------------------------------
@@ -65,7 +65,7 @@ class SupersessionEngine:
     """
     Determines whether an incoming event supersedes an existing one.
 
-    All parameters are sourced from chronos_core.config (env-var driven).
+    All parameters are sourced from smriti_core.config (env-var driven).
     Instance-level overrides can be passed to __init__ for testing.
     """
 

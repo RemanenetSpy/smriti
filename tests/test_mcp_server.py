@@ -1,4 +1,4 @@
-"""
+﻿"""
 Smriti MCP — Server Tests
 ===========================
 Tests for MCP tools, resources, and prompts.
@@ -322,7 +322,7 @@ class TestSmritiHealth:
         client = make_mock_client()
         client.health.side_effect = SmritiAPIError(500, "Internal error")
         client.root_health.return_value = {
-            "service": "KAAL",
+            "service": "Smriti",
             "version": "0.2.0",
             "status": "operational",
         }

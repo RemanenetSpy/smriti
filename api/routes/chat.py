@@ -1,5 +1,5 @@
-"""
-KAAL — Chat Demo Route
+﻿"""
+Smriti — Chat Demo Route
 ==========================
 POST /chat/demo — Public demo chat endpoint for the KaalChat widget.
 No API key required. Rate-limited to 5 messages per session.
@@ -20,7 +20,7 @@ from collections import defaultdict
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
-logger = logging.getLogger("chronos.routes.chat")
+logger = logging.getLogger("smriti.routes.chat")
 
 router = APIRouter(tags=["Chat"])
 
@@ -93,7 +93,7 @@ async def chat_demo(request: ChatDemoRequest):
 
     # ── 1. Call the LLM (no memory search — this is a public guide bot) ─────────
     try:
-        from chronos_core.llm_router import get_heavy_pipeline
+        from smriti_core.llm_router import get_heavy_pipeline
         from langchain_core.messages import HumanMessage, SystemMessage
 
         llm = get_heavy_pipeline()

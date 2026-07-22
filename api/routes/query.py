@@ -1,5 +1,5 @@
-"""
-KAAL — Query Route
+﻿"""
+Smriti — Query Route
 ==========================
 POST /query — Hybrid temporal + semantic retrieval.
 The core value of Chronos: agents query structured temporal memory.
@@ -12,7 +12,7 @@ import time
 
 from fastapi import APIRouter, Depends
 
-from chronos_core.models import (
+from smriti_core.models import (
     LiteEventRecord,
     QueryRequest,
     QueryResponse,
@@ -21,7 +21,7 @@ from chronos_core.models import (
 from api.auth import verify_api_key
 from api.deps import get_memory_store, get_vector_store
 
-logger = logging.getLogger("chronos.routes.query")
+logger = logging.getLogger("smriti.routes.query")
 
 router = APIRouter(tags=["Query"])
 

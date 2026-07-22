@@ -1,5 +1,5 @@
-"""
-KAAL — Memory Store
+﻿"""
+Smriti — Memory Store
 ==========================
 Dual-calendar PostgreSQL storage engine backed by Neon.
   • Event Calendar — structured SVO events with temporal indexing
@@ -29,7 +29,7 @@ from .models import (
     TierName,
 )
 
-logger = logging.getLogger("chronos.memory_store")
+logger = logging.getLogger("smriti.memory_store")
 
 # ---------------------------------------------------------------------------
 # Schema

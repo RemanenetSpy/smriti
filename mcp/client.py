@@ -1,7 +1,7 @@
-"""
+﻿"""
 Smriti MCP — HTTP Client
 =========================
-Async HTTP client that wraps the Smriti (KAAL) REST API.
+Async HTTP client that wraps the Smriti REST API.
 Handles authentication, retries, timeouts, and error mapping.
 
 All methods return plain Python dicts — the MCP server layer
@@ -38,7 +38,7 @@ class SmritiAPIError(Exception):
 
 class SmritiClient:
     """
-    Async HTTP client for the Smriti (KAAL) temporal memory API.
+    Async HTTP client for the Smriti temporal memory API.
 
     Usage:
         client = SmritiClient(config)

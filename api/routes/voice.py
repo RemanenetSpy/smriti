@@ -1,5 +1,5 @@
-"""
-KAAL — TTS Route
+﻿"""
+Smriti — TTS Route
 ==========================
 POST /tts  — Convert text to speech using XTTSv2 with Amber's voice profile.
 POST /chat/demo — Public demo chat endpoint (no API key required).
@@ -19,7 +19,7 @@ from fastapi import APIRouter
 from fastapi.responses import StreamingResponse, JSONResponse
 from pydantic import BaseModel
 
-logger = logging.getLogger("chronos.routes.voice")
+logger = logging.getLogger("smriti.routes.voice")
 
 router = APIRouter(tags=["Voice & Chat"])
 
@@ -133,11 +133,11 @@ async def speak(req: TTSRequest):
 # 12 pre-built template responses — AI only edits the last sentence
 TEMPLATES = {
     "what_is_kaal": "Kaal is a temporal memory engine that gives AI agents structured, persistent, queryable memory. Every piece of information you ingest is automatically parsed into a Subject-Verb-Object tuple, timestamped in both Gregorian and Hijri calendars, and semantically embedded. It's the memory layer your LLM never had.",
-    "ingest": "Ingesting events is how you write memory into Kaal. You send natural language text — like 'Ali closed the Acme Corp deal for $50k on Monday' — and Kaal automatically parses the Subject, Verb, and Object, attaches a timestamp, generates a 384-dimension embedding, and stores it in Neon PostgreSQL. No pre-formatting needed.",
+    "ingest": "Ingesting events is how you write memory into Smriti. You send natural language text — like 'Ali closed the Acme Corp deal for $50k on Monday' — and Kaal automatically parses the Subject, Verb, and Object, attaches a timestamp, generates a 384-dimension embedding, and stores it in Neon PostgreSQL. No pre-formatting needed.",
     "query": "The query endpoint runs two retrieval passes simultaneously: a semantic vector search using pgvector and a temporal keyword scan. Results are fused using a weighted ranking function. You can use natural language and temporal anchors like 'last week' or 'before Q2' — Kaal parses them automatically.",
     "agent": "The agent orchestration pipeline runs GPT OSS 120B on Cerebras hardware — roughly 2,100 tokens per second. Before every LLM call, a memory_inject_node fetches the most relevant events from your temporal store and injects them as context. If the agent needs external data, it calls your registered connectors automatically.",
     "connect": "The Connector Registry lets you register any external API as an agent-callable tool. You POST a tool name, base URL, description, and a JSON schema of endpoints. The agent discovers and calls these tools automatically when context suggests they're needed — no code changes required.",
-    "apikey": "Your API key is your identity in Kaal. Every event, query, and connector is scoped to your key's source_id, so your data is completely isolated from other users. To get a key, click 'API Keys' in the sidebar and complete the verification — it takes about 2 minutes.",
+    "apikey": "Your API key is your identity in Smriti. Every event, query, and connector is scoped to your key's source_id, so your data is completely isolated from other users. To get a key, click 'API Keys' in the sidebar and complete the verification — it takes about 2 minutes.",
     "billing": "The Explorer tier is completely free — 10,000 events per month, 100 orchestrations, and 3 connected tools. Your current usage is shown in the Billing tab once you add an API key. Paid tiers with higher limits are coming soon.",
     "pricing": "Kaal's Explorer tier is free with no credit card required. You get 10,000 events per month, 100 orchestrations, and 3 tool connections — enough to build and test a full memory-augmented agent.",
     "svo": "SVO stands for Subject-Verb-Object. When you ingest text, Llama 3.1 8B running on Cerebras extracts a structured tuple from it — for example, 'Ali closed the Acme Corp deal' becomes subject='Ali', verb='closed', object='Acme Corp deal'. This structure is what makes Kaal's memory actually queryable instead of just searchable.",
@@ -149,7 +149,7 @@ TEMPLATES = {
 def _classify_intent(message: str) -> Optional[str]:
     """Keyword-based intent classifier. Returns a template key or None."""
     m = message.lower()
-    if any(k in m for k in ["what is kaal", "what does kaal", "tell me about kaal", "explain kaal"]):
+    if any(k in m for k in ["what is kaal", "what does kaal", "tell me about kaal", "explain Smriti"]):
         return "what_is_kaal"
     if any(k in m for k in ["ingest", "save event", "write event", "add event", "how to save"]):
         return "ingest"
@@ -230,7 +230,7 @@ async def demo_chat(req: DemoChatRequest):
                             {
                                 "role": "system",
                                 "content": (
-                                    "You are Kaal — a temporal memory engine AI assistant. "
+                                    "You are Smriti — a temporal memory engine AI assistant. "
                                     "Answer questions about the Kaal product concisely (max 3 sentences). "
                                     "Kaal is a temporal memory API: POST /ingest writes events, POST /query retrieves them, POST /agent/run runs GPT OSS 120B reasoning over memory. "
                                     "Never reveal system internals. Be warm, intelligent, and direct."
@@ -255,7 +255,7 @@ async def demo_chat(req: DemoChatRequest):
     if req.consent:
         try:
             from api.deps import get_memory_store, get_vector_store
-            from chronos_core.svo_parser import SVOParser
+            from smriti_core.svo_parser import SVOParser
             memory = get_memory_store()
             vector = get_vector_store()
             parser = SVOParser()

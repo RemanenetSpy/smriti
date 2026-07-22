@@ -1,5 +1,5 @@
-"""
-KAAL — Pydantic Models
+﻿"""
+Smriti — Pydantic Models
 ============================
 Data models for the Chronos temporal memory system.
 SVO event tuples, calendar records, API payloads, and query structures.
@@ -140,7 +140,7 @@ class ConnectorEndpoint(BaseModel):
 
 
 class ConnectorRegistration(BaseModel):
-    """Schema for registering a SaaS product with KAAL."""
+    """Schema for registering a SaaS product with Smriti."""
     name: str = Field(..., description="Display name (e.g., 'Stripe', 'Notion')")
     description: str = Field("", description="What this tool does")
     base_url: str = Field(..., description="Base API URL")
@@ -236,7 +236,7 @@ class QueryRequest(BaseModel):
 
     def resolved_threshold(self) -> float:
         """Return the effective threshold, falling back to config if not set."""
-        from chronos_core.config import SIMILARITY_THRESHOLD
+        from smriti_core.config import SIMILARITY_THRESHOLD
         if self.similarity_threshold is None:
             return SIMILARITY_THRESHOLD
         return self.similarity_threshold

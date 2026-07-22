@@ -1,5 +1,5 @@
-"""
-KAAL — SVO Parser
+﻿"""
+Smriti — SVO Parser
 ========================
 Extracts Subject-Verb-Object event tuples from raw text using
 the Mixture of Agents LiteLLM Router (Cerebras + Groq fallback).
@@ -17,7 +17,7 @@ from typing import Optional
 
 from .models import SVOTuple
 
-logger = logging.getLogger("chronos.svo_parser")
+logger = logging.getLogger("smriti.svo_parser")
 logger.info("SVO Parser module loaded — version 9 (robust JSON extraction)")
 print(">>> SVO PARSER v9 LOADED — _extract_json active <<<", flush=True)
 

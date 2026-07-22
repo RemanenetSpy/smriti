@@ -1,5 +1,5 @@
-"""
-KAAL — Multi-Model Mixture of Agents Router
+﻿"""
+Smriti — Multi-Model Mixture of Agents Router
 ===================================================
 Intelligently routes tasks to different LLMs to aggregate free-tier API limits.
 Falls back safely if rate limits (429) or downtimes occur.
@@ -17,7 +17,7 @@ from typing import Any
 
 from langchain_core.language_models.chat_models import BaseChatModel
 
-logger = logging.getLogger("chronos.llm_router")
+logger = logging.getLogger("smriti.llm_router")
 
 
 # ---------------------------------------------------------------------------

@@ -1,14 +1,14 @@
-"""
-KAAL — Dependency Injection
+﻿"""
+Smriti — Dependency Injection
 ==================================
 Provides shared instances of core services to FastAPI routes.
 """
 
 from __future__ import annotations
 
-from chronos_core.memory_store import MemoryStore
-from chronos_core.vector_store import VectorStore
-from chronos_core.svo_parser import SVOParser
+from smriti_core.memory_store import MemoryStore
+from smriti_core.vector_store import VectorStore
+from smriti_core.svo_parser import SVOParser
 
 # ---------------------------------------------------------------------------
 # Singleton instances (initialized in main.py lifespan)

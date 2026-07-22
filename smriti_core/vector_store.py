@@ -1,5 +1,5 @@
-"""
-KAAL — Vector Store
+﻿"""
+Smriti — Vector Store
 ==========================
 pgvector semantic search layer backed by Neon PostgreSQL.
 Replaces ChromaDB while keeping the same API surface.
@@ -21,7 +21,7 @@ from typing import Optional
 
 from .models import EventRecord
 
-logger = logging.getLogger("chronos.vector_store")
+logger = logging.getLogger("smriti.vector_store")
 
 
 class VectorStore:
@@ -184,7 +184,7 @@ class VectorStore:
           0.15  → ≥85% cosine similarity (default)
           0.30  → ≥70% cosine similarity (lenient)
         """
-        from chronos_core.config import SIMILARITY_THRESHOLD
+        from smriti_core.config import SIMILARITY_THRESHOLD
         threshold = similarity_threshold if similarity_threshold is not None else SIMILARITY_THRESHOLD
         import asyncio
 

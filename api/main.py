@@ -1,5 +1,5 @@
-"""
-KAAL — FastAPI Application
+﻿"""
+Smriti — FastAPI Application
 ==================================
 The API gateway for the Chronos Temporal AI Agent Ecosystem.
 Backend: Neon PostgreSQL + pgvector (persistent cloud storage).
@@ -23,9 +23,9 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from chronos_core.memory_store import MemoryStore
-from chronos_core.vector_store import VectorStore
-from chronos_core.svo_parser import SVOParser
+from smriti_core.memory_store import MemoryStore
+from smriti_core.vector_store import VectorStore
+from smriti_core.svo_parser import SVOParser
 from api.deps import set_stores
 
 # Load environment variables
@@ -36,7 +36,7 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(name)s | %(levelname)s | %(message)s",
 )
-logger = logging.getLogger("chronos.api")
+logger = logging.getLogger("smriti.api")
 
 
 # ---------------------------------------------------------------------------
@@ -47,7 +47,7 @@ logger = logging.getLogger("chronos.api")
 async def lifespan(app: FastAPI):
     """Initialize and tear down core services."""
     try:
-        logger.info("🕰️  KAAL starting up...")
+        logger.info("🕰️  Smriti starting up...")
 
         # Initialize Memory Store
         memory_store = MemoryStore()
@@ -63,7 +63,7 @@ async def lifespan(app: FastAPI):
         # Register singletons
         set_stores(memory_store, vector_store, svo_parser)
 
-        logger.info("✅ KAAL ready — Systems online")
+        logger.info("✅ Smriti ready — Systems online")
         
         yield  # App is running
         
@@ -78,9 +78,9 @@ async def lifespan(app: FastAPI):
         raise e
 
     # Shutdown
-    logger.info("🔒 KAAL shutting down...")
+    logger.info("🔒 Smriti shutting down...")
     await memory_store.close()
-    logger.info("👋 Goodbye from KAAL")
+    logger.info("👋 Goodbye from Smriti")
 
 
 # ---------------------------------------------------------------------------
@@ -88,7 +88,7 @@ async def lifespan(app: FastAPI):
 # ---------------------------------------------------------------------------
 
 app = FastAPI(
-    title="KAAL",
+    title="Smriti",
     description=(
         "The Temporal AI Agent Ecosystem. "
         "Structured long-term memory for every agent and SaaS product. "
@@ -136,9 +136,9 @@ app.include_router(chat_router)
 
 @app.get("/", tags=["Health"])
 async def health_check():
-    """Health check — verify KAAL is alive."""
+    """Health check — verify Smriti is alive."""
     return {
-        "service": "KAAL",
+        "service": "Smriti",
         "version": "0.2.0",
         "status": "operational",
         "storage": "Neon PostgreSQL + pgvector",
