@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { apiCall } from "@/lib/api";
-import { Key, Activity, Search, Cpu, Hexagon, ChevronRight, ChevronDown, ArrowRight } from "lucide-react";
+import { Key, Activity, Search, Cpu, Hexagon, ChevronRight, ChevronDown, ArrowRight, Plug } from "lucide-react";
 
 // ── Steps ──────────────────────────────────────────────────────────────────────
 const STEPS = [
@@ -14,6 +14,16 @@ const STEPS = [
     description: "Go to API Keys in the sidebar. Generate your first key — attach it as the Authorization header on every request.",
     code: `curl -H "Authorization: Bearer YOUR_KEY" \\
   https://spy9191-chronos-api-backend.hf.space/health`,
+  },
+  {
+    id: "mcp",
+    Icon: Plug,
+    title: "Connect via MCP (Claude / Cursor)",
+    section: "MCP Server",
+    description: "Use Model Context Protocol to connect Smriti directly to Claude Desktop or Cursor IDE with zero code.",
+    code: `pip install -r mcp/requirements.txt
+export SMRITI_API_KEY="chrn_your_key"
+python -m smriti.mcp`,
   },
   {
     id: "ingest",
