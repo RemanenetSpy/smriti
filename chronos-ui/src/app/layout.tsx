@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+import Script from "next/script";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Smriti | Temporal Memory API for AI",
     description: "Give any AI agent structured, persistent, queryable memory in 3 API calls.",
-    url: "https://smriti-kaal.vercel.app", // Kaal.ai isn't live yet, use Vercel URL to prevent backlink fragmentation
+    url: "https://smriti-kaal.vercel.app",
     siteName: "Smriti",
     images: [
       {
@@ -33,6 +34,8 @@ export const metadata: Metadata = {
   },
 };
 
+const GA_ID = "G-7G3JG5WTW5";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,6 +44,19 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
       <body className="font-sans antialiased text-black bg-white">
+        {/* Google Analytics */}
+        <Script
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}');
+          `}
+        </Script>
         {children}
       </body>
     </html>
