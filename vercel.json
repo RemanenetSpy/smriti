@@ -1,4 +1,9 @@
 {
+  "rewrites": [
+    { "source": "/framework/:path*", "destination": "/pseo/pages/framework/:path*" },
+    { "source": "/usecase/:path*", "destination": "/pseo/pages/usecase/:path*" },
+    { "source": "/problem/:path*", "destination": "/pseo/pages/problem/:path*" }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
