@@ -164,9 +164,23 @@ async def recall(payload: dict):
     cutoff  = bayesian_gap_cutoff(dists)
     matched = [r["id"] for r in candidates if r.get("distance", r.get("_dist", 0.5)) <= cutoff]
 
+    results_full = []
+    for i in matched:
+        evt = store.events.get(i)
+        if evt:
+            results_full.append({
+                "id": i,
+                "text": evt.raw_text,
+                "raw_text": evt.raw_text,
+                "subject": evt.subject,
+                "object": evt.object
+            })
+        else:
+            results_full.append({"id": i})
+
     return {
         "matched_ids": matched,
-        "results": [{"id": i} for i in matched],
+        "results": results_full,
         "debug": {"cutoff": cutoff, "raw": len(raw), "filtered": len(filtered), "passed": len(matched)}
     }
 
