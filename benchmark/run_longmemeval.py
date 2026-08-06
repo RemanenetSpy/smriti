@@ -23,6 +23,13 @@ import sys
 import warnings
 from datetime import datetime
 
+# Inject Windows system cert store so HuggingFace downloads work on Windows
+try:
+    import truststore
+    truststore.inject_into_ssl()
+except ImportError:
+    pass  # truststore not installed, fall back to default
+
 import urllib3
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -91,18 +98,54 @@ class SmritiClient:
 
 # ── LongMemEval dataset loader ───────────────────────────────────────────────
 
-def load_longmemeval(max_cases: int = 100, use_hf: bool = False):
+def load_longmemeval(max_cases: int = 100, use_hf: bool = False, local_path: str = None):
     """
-    Load LongMemEval-S from HuggingFace.
-    Falls back to a small synthetic set if HF is unreachable or disabled.
+    Load LongMemEval-S from a local file, HuggingFace, or a synthetic fallback.
     """
+    if local_path and os.path.exists(local_path):
+        print(f"  Loading LongMemEval from local file: {local_path}")
+        try:
+            # Load raw JSON (real LongMemEval schema)
+            with open(local_path, 'r', encoding='utf-8') as f:
+                raw = json.load(f)
+
+            if not isinstance(raw, list):
+                raise ValueError("Expected a JSON list at top level")
+
+            cases = []
+            for row in raw[:max_cases]:
+                # Real schema: haystack_sessions = list of sessions,
+                # each session = list of {role, content} turns.
+                # Flatten all sessions into one flat history list for ingest.
+                haystack = row.get("haystack_sessions", [])
+                flat_history = []
+                for session in haystack:
+                    if isinstance(session, list):
+                        flat_history.extend(session)
+                    elif isinstance(session, dict):
+                        flat_history.append(session)
+
+                cases.append({
+                    "id": str(row.get("question_id", uuid.uuid4())),
+                    "history": flat_history,
+                    "question": row.get("question", ""),
+                    "answer": str(row.get("answer", "")),
+                    "category": row.get("question_type", "general"),
+                    "answer_session_ids": row.get("answer_session_ids", []),
+                    "haystack_session_ids": row.get("haystack_session_ids", []),
+                })
+            print(f"  Loaded {len(cases)} cases from local file.")
+            return cases
+        except Exception as e:
+            print(f"  Failed to load local file: {e}")
+
     if not use_hf:
         print("  Skipping HuggingFace load (--use-hf not provided). Using synthetic fallback set.")
         return _synthetic_fallback(max_cases)
         
     print("  Loading LongMemEval-S from HuggingFace...")
     try:
-        ds = load_dataset("xiaowu0162/longmemeval-cleaned", split="test",
+        ds = load_dataset("xiaowu0162/longmemeval-cleaned", split="longmemeval_s_cleaned",
                           trust_remote_code=True)
         print(f"  Loaded {len(ds)} cases from HuggingFace.")
         cases = []
@@ -411,7 +454,9 @@ if __name__ == "__main__":
     parser.add_argument("--max-cases", type=int, default=100)
     parser.add_argument("--output", default="benchmark/results/longmemeval_run.json")
     parser.add_argument("--use-hf", action="store_true",
-                        help="Force HuggingFace dataset (requires internet)")
+                        help="Force HuggingFace dataset download (requires internet)")
+    parser.add_argument("--local-dataset", type=str, default=None,
+                        help="Path to local longmemeval JSON file (e.g. longmemeval_s_cleaned.json)")
     args = parser.parse_args()
 
     client = SmritiClient(args.api_url, args.api_key)
@@ -431,5 +476,5 @@ if __name__ == "__main__":
         print(f"  Health check failed: {e} — aborting.")
         sys.exit(1)
 
-    cases = load_longmemeval(args.max_cases, args.use_hf)
+    cases = load_longmemeval(args.max_cases, args.use_hf, args.local_dataset)
     summary = run_eval(client, cases, args.output)
