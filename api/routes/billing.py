@@ -177,70 +177,72 @@ async def generate_new_key(
     ip = (request.client.host if request.client else None) or "unknown"
 
     # ── 1. Cloudflare Turnstile verification ─────────────────────────────────
-    # Strip control chars (same issue that corrupted GROQ_API_KEY can affect this too)
+    # Strip control chars from env vars (guards against newline-in-secret bug)
     import re as _re
     def _clean_env(key: str) -> str:
         return _re.sub(r"[\x00-\x1f\x7f]", "", os.getenv(key, ""))
 
     turnstile_secret = _clean_env("CF_TURNSTILE_SECRET") or "1x0000000000000000000000000000000AA"
-    is_test_secret = turnstile_secret == "1x0000000000000000000000000000000AA"
+    is_test_secret   = turnstile_secret == "1x0000000000000000000000000000000AA"
 
-    # Also detect the frontend dev test sitekey token — if the frontend is using the
-    # dev test sitekey (1x00000000000000000000AA) but backend has a real secret,
-    # the verification will always fail. Surface a clear error instead of "captcha failed".
-    _CF_DEV_TOKEN_PREFIX = "XXXX."   # Cloudflare test tokens have a known prefix
-    _is_frontend_dev_token = cf_token and (
-        len(cf_token) < 30 or cf_token.startswith("XXXX")
-    )
+    # Emergency escape hatch: set SKIP_CAPTCHA=true in HF Spaces to bypass
+    # Turnstile entirely while debugging. Remove once widget is confirmed working.
+    skip_captcha = os.getenv("SKIP_CAPTCHA", "").strip().lower() in ("1", "true", "yes")
 
-    if not is_test_secret:
+    if not is_test_secret and not skip_captcha:
         if not cf_token:
             raise HTTPException(status_code=400, detail="Captcha token required.")
 
-        if _is_frontend_dev_token:
-            logger.error(
-                "Turnstile mismatch: frontend is using the CF dev test sitekey "
-                "(1x00000000000000000000AA) but backend has a real CF_TURNSTILE_SECRET. "
-                "Set NEXT_PUBLIC_CF_TURNSTILE_SITE_KEY to your real Cloudflare site key."
-            )
-            raise HTTPException(
-                status_code=503,
-                detail="Captcha configuration error. Please contact support.",
-            )
-
+        cf_verified = False
         try:
             import httpx
             async with httpx.AsyncClient(timeout=8.0) as client:
                 resp = await client.post(
                     "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-                    data={"secret": turnstile_secret, "response": cf_token, "remoteip": ip},
+                    data={
+                        "secret":   turnstile_secret,
+                        "response": cf_token,
+                        "remoteip": ip,
+                    },
                 )
-            # Log the raw body before trying to parse — helps debug empty-error issues
             raw_body = resp.text
+            logger.info(f"Turnstile siteverify HTTP {resp.status_code}: {raw_body[:300]}")
             try:
                 result = resp.json()
-            except Exception:
+                cf_verified = bool(result.get("success"))
+                if not cf_verified:
+                    codes = result.get("error-codes", [])
+                    logger.warning(
+                        f"Turnstile rejected: ip={ip} codes={codes} response={result}"
+                    )
+                    raise HTTPException(
+                        status_code=400,
+                        detail=(
+                            f"Captcha verification failed "
+                            f"({', '.join(codes) if codes else 'check site/secret key pair'}). "
+                            "Please refresh and try again."
+                        ),
+                    )
+            except HTTPException:
+                raise
+            except Exception as json_err:
                 logger.error(
-                    f"Turnstile siteverify returned non-JSON (status={resp.status_code}): {raw_body[:200]}"
+                    f"Turnstile siteverify returned non-JSON "
+                    f"(HTTP {resp.status_code}): {raw_body[:300]} — {json_err}"
                 )
-                raise HTTPException(status_code=503, detail="Could not verify captcha. Try again.")
+                raise HTTPException(
+                    status_code=503,
+                    detail="Captcha service returned an unexpected response. Try again.",
+                )
         except HTTPException:
             raise
-        except Exception as e:
-            logger.warning(f"Turnstile verification network error: {type(e).__name__}: {e}")
-            raise HTTPException(status_code=503, detail="Could not verify captcha. Try again.")
-
-        if not result.get("success"):
-            codes = result.get("error-codes", [])
+        except Exception as net_err:
             logger.warning(
-                f"Turnstile rejected token for ip={ip}: codes={codes} "
-                f"full_response={result}"
+                f"Turnstile network error ({type(net_err).__name__}): {net_err} "
+                f"— allowing request through (fail-open)"
             )
-            raise HTTPException(
-                status_code=400,
-                detail=f"Captcha verification failed ({', '.join(codes) if codes else 'unknown'}). "
-                       "Please refresh and try again.",
-            )
+            # Fail-open: if Cloudflare's servers are unreachable, don't block users.
+            # IP rate-limiting below still provides abuse protection.
 
     # ── 2. IP rate limiting — 3 keys per IP per calendar day ────────────────
     # Module-level store (resets on restart; good enough for HF Spaces)
