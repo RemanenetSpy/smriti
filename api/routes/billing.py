@@ -182,7 +182,7 @@ async def generate_new_key(
     def _clean_env(key: str) -> str:
         return _re.sub(r"[\x00-\x1f\x7f]", "", os.getenv(key, ""))
 
-    turnstile_secret = _clean_env("CF_TURNSTILE_SECRET") or "1x0000000000000000000000000000000AA"
+    turnstile_secret = _clean_env("TURNSTILE_SECRET") or "1x0000000000000000000000000000000AA"
     is_test_secret   = turnstile_secret == "1x0000000000000000000000000000000AA"
 
     # Emergency escape hatch: set SKIP_CAPTCHA=true in HF Spaces to bypass
