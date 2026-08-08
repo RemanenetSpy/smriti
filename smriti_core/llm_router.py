@@ -51,7 +51,7 @@ def get_fast_pipeline_kwargs() -> dict[str, Any]:
     Primary: Cerebras Llama 3.1 8B (Ultra-fast, free tier)
     Fallback: Groq Llama 3.1 8B Instant
 
-    NOTE: Cerebras model slugs use hyphens — "llama-3.1-8b" not "llama3.1-8b".
+    NOTE: Cerebras model slugs DO NOT use hyphens for version numbers — "llama3.1-8b" not "llama-3.1-8b".
     Keys are sanitized to strip control chars that can cause header injection errors.
     """
     cerebras_key = _sanitize_key("CEREBRAS_API_KEY")
@@ -62,13 +62,13 @@ def get_fast_pipeline_kwargs() -> dict[str, Any]:
 
     if has_cerebras and has_groq:
         return {
-            "model": "cerebras/llama-3.1-8b",
+            "model": "cerebras/llama3.1-8b",
             "api_key": cerebras_key,
             "fallbacks": [{"model": "groq/llama-3.1-8b-instant", "api_key": groq_key}],
             "num_retries": 3,
         }
     elif has_cerebras:
-        return {"model": "cerebras/llama-3.1-8b", "api_key": cerebras_key, "num_retries": 3}
+        return {"model": "cerebras/llama3.1-8b", "api_key": cerebras_key, "num_retries": 3}
     else:
         return {"model": "groq/llama-3.1-8b-instant", "api_key": groq_key, "num_retries": 3}
 
