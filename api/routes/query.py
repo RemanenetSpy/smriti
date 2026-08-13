@@ -1,13 +1,22 @@
-﻿"""
+"""
 Smriti — Query Route
 ==========================
 POST /query — Hybrid temporal + semantic retrieval.
 The core value of Chronos: agents query structured temporal memory.
+
+Retrieval algorithm (Bayesian Gap Cutoff):
+  1. Broad vector search (distance < BROAD_CUTOFF=0.85) — wide candidate net
+  2. Entity structural filter — drop zero-overlap candidates when query has entities
+  3. Bayesian gap cutoff (Gap=0.08, Max=0.52) — dynamically isolate best match(es)
+
+Best config found via 77-case benchmark sweep: 23 active passes, precision 0.299.
 """
 
 from __future__ import annotations
 
 import logging
+import os
+import re
 import time
 
 from fastapi import APIRouter, Depends
@@ -24,6 +33,46 @@ from api.deps import get_memory_store, get_vector_store
 logger = logging.getLogger("smriti.routes.query")
 
 router = APIRouter(tags=["Query"])
+
+
+# ---------------------------------------------------------------------------
+# Bayesian Gap Cutoff — ported from benchmark/harness/run_precision_bench.py
+# Best sweep result: Gap=0.08 / MaxCutoff=0.52 → precision 0.299 (+148% vs baseline)
+# All parameters are env-var overridable.
+# ---------------------------------------------------------------------------
+
+_GAP_THRESHOLD = float(os.getenv("SMRITI_GAP_THRESHOLD", "0.08"))
+_MAX_CUTOFF    = float(os.getenv("SMRITI_MAX_CUTOFF",    "0.52"))
+_BROAD_CUTOFF  = float(os.getenv("SMRITI_BROAD_CUTOFF",  "0.85"))  # initial SQL net
+
+_GAP_STOPWORDS = {
+    "the", "a", "an", "is", "in", "of", "to", "it", "was", "has", "are",
+    "and", "or", "for", "with", "on", "at", "by", "from", "this", "that",
+    "not", "but", "its", "be", "as", "can", "all", "use", "also", "via",
+    "per", "when", "than", "who", "what", "which", "how", "why", "where",
+}
+
+
+def _extract_entities(text: str) -> set[str]:
+    """Extract meaningful tokens from text, excluding stopwords."""
+    words = re.findall(r'\b[a-zA-Z0-9_-]{3,}\b', text.lower())
+    return set(words) - _GAP_STOPWORDS
+
+
+def _bayesian_gap_cutoff(distances: list[float]) -> float:
+    """
+    Dynamically compute a distance cutoff based on the gap between
+    the best and second-best candidate.
+
+    If rank-1 to rank-2 gap > GAP_THRESHOLD: isolate rank-1 (clear winner).
+    Otherwise: include near-neighbours up to MAX_CUTOFF.
+    """
+    if not distances:
+        return _MAX_CUTOFF
+    sorted_d = sorted(distances)
+    if len(sorted_d) > 1 and (sorted_d[1] - sorted_d[0]) > _GAP_THRESHOLD:
+        return sorted_d[0] + 0.04   # isolate rank-1
+    return min(_MAX_CUTOFF, sorted_d[0] + 0.12)
 
 
 @router.post("/query", response_model=QueryResponse)
@@ -52,18 +101,53 @@ async def query_memory(
     seen_ids: set[str] = set()
 
     # ----------------------------------------------------------------
-    # Phase 1: Semantic search via pgvector (scoped to owner)
+    # Phase 1: Semantic search via pgvector (Bayesian Gap Cutoff)
     # ----------------------------------------------------------------
+    # If the caller supplied an explicit similarity_threshold, use it as
+    # a static cutoff (backwards-compatible). Otherwise, run the full
+    # gap algorithm: broad net → entity filter → dynamic gap cutoff.
+    explicit_threshold = (
+        request.similarity_threshold  # None when not set by caller
+        if request.similarity_threshold is not None
+        else None
+    )
+    use_gap_algorithm = explicit_threshold is None
+
+    # Always search with broad net; for static-threshold callers, use their value directly.
+    sql_cutoff = _BROAD_CUTOFF if use_gap_algorithm else explicit_threshold
+
     semantic_results = await vector.semantic_search(
         query=request.query,
-        n_results=request.max_results,
-        owner_id=owner_id,  # PRIVACY: only search this user's data
+        n_results=request.max_results * 4 if use_gap_algorithm else request.max_results,
+        owner_id=owner_id,
         source_ids=request.source_ids or None,
         start_time=request.time_range.start if request.time_range else None,
         end_time=request.time_range.end if request.time_range else None,
         scope=request.scope,
-        similarity_threshold=request.resolved_threshold(),  # reads env var if not set by caller
+        broad_cutoff=sql_cutoff,
     )
+
+    if use_gap_algorithm and semantic_results:
+        # Stage 2 — Entity structural filter
+        q_ents = _extract_entities(request.query)
+        if len(q_ents) >= 2:
+            filtered = []
+            for r in semantic_results:
+                doc_text = r.get("document", "")
+                doc_ents = _extract_entities(doc_text)
+                if q_ents & doc_ents:  # at least one shared entity
+                    filtered.append(r)
+            if filtered:  # only apply filter if it keeps at least one result
+                semantic_results = filtered
+
+        # Stage 3 — Bayesian gap cutoff
+        dists  = [r["distance"] for r in semantic_results]
+        cutoff = _bayesian_gap_cutoff(dists)
+        semantic_results = [r for r in semantic_results if r["distance"] <= cutoff]
+        logger.debug(
+            f"Gap cutoff={cutoff:.3f} → {len(semantic_results)} candidates "
+            f"(from {len(dists)} raw)"
+        )
 
     # Fetch full event records from PostgreSQL
     semantic_ids = [r["id"] for r in semantic_results]

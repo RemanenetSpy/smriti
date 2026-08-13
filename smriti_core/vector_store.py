@@ -1,4 +1,4 @@
-﻿"""
+"""
 Smriti — Vector Store
 ==========================
 pgvector semantic search layer backed by Neon PostgreSQL.
@@ -174,18 +174,26 @@ class VectorStore:
         end_time: Optional[datetime] = None,
         scope: Optional[str] = None,
         similarity_threshold: Optional[float] = None,
+        broad_cutoff: Optional[float] = None,
     ) -> list[dict]:
         """
         Cosine similarity search over embedded events.
 
-        similarity_threshold: cosine distance cutoff (lower = stricter).
+        similarity_threshold: static cosine distance cutoff (lower = stricter).
           None  → read from SMRITI_SIMILARITY_THRESHOLD env var (default 0.15).
-          0.10  → ≥90% cosine similarity (very strict)
-          0.15  → ≥85% cosine similarity (default)
-          0.30  → ≥70% cosine similarity (lenient)
+          Used directly as the SQL filter when broad_cutoff is not set.
+
+        broad_cutoff: when set, overrides similarity_threshold in the SQL query
+          so the query route can cast a wide net (e.g. 0.85) and apply the
+          Bayesian gap algorithm on the full candidate list afterwards.
+          similarity_threshold is ignored when broad_cutoff is provided.
         """
         from smriti_core.config import SIMILARITY_THRESHOLD
-        threshold = similarity_threshold if similarity_threshold is not None else SIMILARITY_THRESHOLD
+        # Use broad_cutoff for SQL if provided (gap algorithm path),
+        # otherwise fall back to the static threshold.
+        sql_threshold = broad_cutoff if broad_cutoff is not None else (
+            similarity_threshold if similarity_threshold is not None else SIMILARITY_THRESHOLD
+        )
         import asyncio
 
         query_embedding = await asyncio.to_thread(self._embed, query)
@@ -211,7 +219,7 @@ class VectorStore:
             conditions.append(f"ev.timestamp <= ${i}"); params.append(end_time); i += 1
 
         # Configurable similarity threshold (cosine distance, not similarity)
-        params.append(threshold)  # resolved: never None
+        params.append(sql_threshold)  # resolved: never None
         threshold_param = i; i += 1
 
         params.append(n_results)
