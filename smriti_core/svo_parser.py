@@ -1,4 +1,4 @@
-﻿"""
+"""
 Smriti — SVO Parser
 ========================
 Extracts Subject-Verb-Object event tuples from raw text using
@@ -36,6 +36,33 @@ Rules:
 4. Include entity aliases when the same entity is referred to differently.
 5. Rate your confidence in each extraction from 0.0 to 1.0.
 6. Return ONLY a valid JSON array — no markdown, no explanation.
+
+LINKING VERB / COPULA RULE (critical — read carefully):
+For sentences with linking verbs (is, are, was, were, became, seems, feels, looks):
+  - The complement noun or adjective after the linking verb IS the Object. Never discard it.
+  - For possessive constructions "X's CATEGORY is VALUE":
+      subject = X  (the owner / person)
+      verb    = CATEGORY  (the attribute name, e.g. "favorite color", "job title")
+      object  = VALUE  (the actual value, e.g. "blue", "VP of Engineering")
+  - WARNING: If you produce object="favorite color", object="job title", object="name",
+    object="phone number", or any other attribute/category label without the actual value
+    attached, that is WRONG. The word or phrase after "is" is ALWAYS the Object.
+
+Few-shot examples (follow these exactly):
+  Input:  "John's favorite color is blue"
+  Output: {{"subject": "John", "verb": "favorite color", "object": "blue"}}
+
+  Input:  "My favorite color is blue"
+  Output: {{"subject": "I", "verb": "favorite color", "object": "blue"}}
+
+  Input:  "Alice is the VP of Engineering"
+  Output: {{"subject": "Alice", "verb": "is", "object": "VP of Engineering"}}
+
+  Input:  "My dog's name is Rex"
+  Output: {{"subject": "I", "verb": "dog name", "object": "Rex"}}
+
+  Input:  "Sarah became the lead developer"
+  Output: {{"subject": "Sarah", "verb": "became", "object": "lead developer"}}
 
 Output format (JSON array):
 [
@@ -120,6 +147,51 @@ def _regex_fallback(text: str, timestamp: Optional[datetime] = None) -> list[SVO
             ))
 
     return results
+
+
+# ---------------------------------------------------------------------------
+# Completeness guard
+# ---------------------------------------------------------------------------
+
+def _object_is_category_label(raw_text: str, subject: str, verb: str, obj: str) -> bool:
+    """
+    Structural check: returns True when the extracted `object` is a category
+    label (attribute name) from which the actual value was silently dropped.
+
+    Detection algorithm:
+      Look for the pattern "<obj> is/was/became <value>" in the raw text.
+      If `obj` appears immediately before a copula in the source sentence AND
+      the complement value after the copula is NOT captured anywhere in the
+      tuple (subject/verb/object), the object is a category label — reject.
+
+    This is structural: no hardcoded word list. Works for any domain.
+
+    Examples that fire:
+      raw="John's favorite color is blue", obj="favorite color"
+        → "favorite color is blue" matches → "blue" not in tuple → True (reject)
+
+    Examples that do NOT fire:
+      raw="John's favorite color is blue", obj="blue"
+        → "blue is ..." not found after copula → False (keep)
+    """
+    COPULAS = r"(?:is|are|was|were|becomes?|became|seems?|feels?|looks?)"
+    obj_escaped = re.escape(obj.lower().strip())
+    pattern = rf"\b{obj_escaped}\s+{COPULAS}\s+(\S+(?:\s+\S+){{0,3}})"
+
+    match = re.search(pattern, raw_text.lower())
+    if not match:
+        return False
+
+    # The value the model should have captured
+    captured_value = match.group(1).strip(".,;!?\"'")
+
+    # If this value is already represented anywhere in the tuple, it wasn't dropped
+    tuple_text = f"{subject} {verb} {obj}".lower()
+    if captured_value.split()[0] in tuple_text:  # check first word of value
+        return False
+
+    # obj is a category label; the real value was dropped
+    return True
 
 
 # ---------------------------------------------------------------------------
@@ -242,7 +314,25 @@ class SVOParser:
                     else:
                         item[field] = None
 
-                tuples.append(SVOTuple(**item))
+                svo = SVOTuple(**item)
+
+                # Completeness guard: reject tuples where the object is a
+                # category label and the actual value was silently dropped.
+                if _object_is_category_label(
+                    raw_text=text,
+                    subject=svo.subject,
+                    verb=svo.verb,
+                    obj=svo.object,
+                ):
+                    logger.warning(
+                        f"Completeness guard rejected tuple — object "
+                        f"{svo.object!r} appears to be a category label, "
+                        f"not a value. raw_text preserved in Turn Calendar. "
+                        f"subject={svo.subject!r} verb={svo.verb!r}"
+                    )
+                    continue
+
+                tuples.append(svo)
             except Exception as e:
                 logger.warning(f"Failed to parse SVO tuple: {item} — {e}")
                 continue
