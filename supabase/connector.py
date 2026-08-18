@@ -234,17 +234,21 @@ class SupabaseVectorStore:
         """Embed and store event vectors in the user's Supabase database."""
         if not events:
             return
+        import asyncio
+
+        embed_texts = [f"{e.subject} {e.verb} {e.object}" for e in events]
+        # Batch-encode using the main model (runs in thread — sentence-transformers is sync)
+        embeddings = await asyncio.to_thread(
+            lambda: self._main._model.encode(
+                embed_texts, normalize_embeddings=True, batch_size=32
+            ).tolist()
+        )
 
         rows = []
-        for e in events:
-            embed_text = f"{e.subject} {e.verb} {e.object}"
-            embedding = self._embed(embed_text)
+        for e, emb, txt in zip(events, embeddings, embed_texts):
             owner_id = e.metadata_json.get("owner_id", e.source_id)
-            rows.append((
-                e.id, e.source_id, owner_id, e.scope,
-                str(embedding),   # pgvector expects '[x,y,z,...]' string format
-                embed_text, e.timestamp,
-            ))
+            vec_str = f"[{','.join(str(x) for x in emb)}]"
+            rows.append((e.id, e.source_id, owner_id, e.scope, vec_str, txt, e.timestamp))
 
         async with self._pool.acquire() as conn:
             await conn.executemany(
@@ -272,12 +276,15 @@ class SupabaseVectorStore:
         Cosine-distance semantic search against the user's Supabase vector table.
         Returns the same dict structure as smriti_core.VectorStore.semantic_search.
         """
-        embedding = self._embed(query)
-        embedding_str = str(embedding)
+        import asyncio
+        # Run embedding in thread — sentence-transformers is sync/CPU-bound
+        query_embedding = await asyncio.to_thread(self._main._embed, query)
+        vec_str = f"[{','.join(str(x) for x in query_embedding)}]"
 
         conditions = ["ev.owner_id = $2"]
-        params: list = [embedding_str, owner_id]
+        params: list = [vec_str, owner_id]
         i = 3
+
 
         if source_ids:
             conditions.append(f"ev.source_id = ANY(${i})"); params.append(source_ids); i += 1
