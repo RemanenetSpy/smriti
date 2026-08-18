@@ -20,6 +20,9 @@ export default function DocsPage() {
             <a href="#mcp" className="p-3 border border-[#eaeaea] rounded-lg bg-[#fafafa] hover:border-black text-xs font-medium text-black transition-colors">
               🔌 MCP Server (Claude/Cursor)
             </a>
+            <a href="#supabase" className="p-3 border border-[#eaeaea] rounded-lg bg-[#fafafa] hover:border-black text-xs font-medium text-black transition-colors">
+              🗄️ Supabase (BYODB)
+            </a>
             <a href="#ingest" className="p-3 border border-[#eaeaea] rounded-lg bg-[#fafafa] hover:border-black text-xs font-medium text-black transition-colors">
               ⚡ Ingest API
             </a>
@@ -199,8 +202,204 @@ python -m smriti.mcp
                     <td className="p-3 font-mono text-xs text-[#666]">20</td>
                     <td className="p-3">Default max search results for recall & timeline</td>
                   </tr>
+                  <tr>
+                    <td className="p-3 font-mono text-xs font-semibold text-black">SMRITI_SUPABASE_URL</td>
+                    <td className="p-3 font-mono text-xs text-[#666]">(optional)</td>
+                    <td className="p-3">Your Supabase direct connection string (port 5432). Routes all memory to your own DB.</td>
+                  </tr>
                 </tbody>
               </table>
+            </div>
+          </section>
+
+          {/* Supabase BYODB Section */}
+          <section id="supabase" className="scroll-mt-24">
+            <div className="flex items-center gap-3 mb-2">
+              <h2 className="text-2xl font-semibold text-black">Supabase Integration (Bring Your Own DB)</h2>
+              <span className="bg-black text-white text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full">New</span>
+            </div>
+            <p className="text-[#666666] mb-6 leading-relaxed">
+              Store your AI memory in your own{" "}
+              <strong>Supabase database</strong> instead of the Smriti cloud. The full SVO extraction, supersession, and semantic search pipeline runs identically — your data never leaves your infrastructure.
+            </p>
+
+            {/* How it works callout */}
+            <div className="bg-[#fafafa] border border-[#eaeaea] rounded-lg p-5 mb-8">
+              <p className="text-sm font-medium text-black mb-3">How it works</p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-[#666]">
+                <div className="flex flex-col gap-1">
+                  <span className="font-medium text-black">🧠 Smriti Cloud</span>
+                  <span>Runs the AI — SVO parsing, embedding, semantic search</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-medium text-black">🗄️ Your Supabase</span>
+                  <span>Stores the results — events, turns, vectors. Fully yours.</span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <span className="font-medium text-black">🔑 Smriti API Key</span>
+                  <span>Still validates your quota. Auth always stays with us.</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Step by step */}
+            <div className="space-y-8">
+
+              {/* Step 1 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">1</span>
+                  <h3 className="text-base font-semibold text-black">Create a free Supabase project</h3>
+                </div>
+                <p className="text-sm text-[#666666] ml-10">
+                  Go to{" "}
+                  <a href="https://supabase.com" target="_blank" rel="noopener noreferrer" className="text-black underline underline-offset-2">supabase.com</a>
+                  {" "}→ <strong>New Project</strong>. The free tier is sufficient. Wait ~1 minute for it to provision.
+                </p>
+              </div>
+
+              {/* Step 2 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">2</span>
+                  <h3 className="text-base font-semibold text-black">Run the Smriti migration SQL</h3>
+                </div>
+                <p className="text-sm text-[#666666] mb-3 ml-10">
+                  In your Supabase dashboard: <strong>SQL Editor → New Query</strong>. Paste and run this (takes ~2 seconds):
+                </p>
+                <div className="bg-[#fafafa] border border-[#eaeaea] p-4 rounded-md overflow-x-auto">
+                  <pre className="text-sm font-mono text-black">
+{`-- Enable pgvector (built into Supabase)
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Event Calendar
+CREATE TABLE IF NOT EXISTS events (
+    id TEXT PRIMARY KEY, source_id TEXT NOT NULL,
+    subject TEXT NOT NULL, verb TEXT NOT NULL, object TEXT NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL, confidence REAL DEFAULT 1.0,
+    metadata_json JSONB DEFAULT '{}', raw_text TEXT DEFAULT '',
+    created_at TIMESTAMPTZ NOT NULL, scope TEXT NOT NULL DEFAULT 'default',
+    valid_from TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    valid_to TIMESTAMPTZ, superseded_by TEXT,
+    datetime_start TIMESTAMPTZ, datetime_end TIMESTAMPTZ,
+    entity_aliases JSONB DEFAULT '[]'
+);
+CREATE INDEX IF NOT EXISTS idx_events_active ON events(valid_to) WHERE valid_to IS NULL;
+
+-- Turn Calendar
+CREATE TABLE IF NOT EXISTS turns (
+    id TEXT PRIMARY KEY, source_id TEXT NOT NULL,
+    role TEXT NOT NULL DEFAULT 'user', content TEXT NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL, event_ids JSONB DEFAULT '[]',
+    created_at TIMESTAMPTZ NOT NULL
+);
+
+-- Vector Embeddings (384-dim)
+CREATE TABLE IF NOT EXISTS event_vectors (
+    event_id TEXT PRIMARY KEY REFERENCES events(id) ON DELETE CASCADE,
+    source_id TEXT NOT NULL, owner_id TEXT NOT NULL,
+    scope TEXT NOT NULL DEFAULT 'default',
+    embedding vector(384) NOT NULL,
+    embed_text TEXT NOT NULL, timestamp TIMESTAMPTZ NOT NULL
+);
+CREATE INDEX IF NOT EXISTS idx_vectors_hnsw
+    ON event_vectors USING hnsw (embedding vector_cosine_ops);`}
+                  </pre>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">3</span>
+                  <h3 className="text-base font-semibold text-black">Copy your direct connection string</h3>
+                </div>
+                <p className="text-sm text-[#666666] mb-3 ml-10">
+                  In Supabase: <strong>Project Settings → Database → Connection string → URI tab</strong>. Copy the string.
+                </p>
+                <div className="bg-[#fafafa] border border-[#eaeaea] p-4 rounded-md overflow-x-auto ml-10">
+                  <pre className="text-sm font-mono text-black">
+{`postgresql://postgres.YOURREF:YOURPASSWORD@db.YOURREF.supabase.co:5432/postgres
+#                                                                        ^^^^
+#                                              Must be port 5432 (direct), NOT 6543`}
+                  </pre>
+                </div>
+              </div>
+
+              {/* Step 4 — Test: Ingest */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">4</span>
+                  <h3 className="text-base font-semibold text-black">Test — Ingest a memory to your Supabase</h3>
+                </div>
+                <p className="text-sm text-[#666666] mb-3 ml-10">
+                  Add the <code className="bg-[#f5f5f5] px-1.5 py-0.5 rounded font-mono text-xs">X-Supabase-Url</code> header to your ingest call:
+                </p>
+                <div className="bg-[#fafafa] border border-[#eaeaea] p-4 rounded-md overflow-x-auto">
+                  <pre className="text-sm font-mono text-black">
+{`curl -X POST https://spy9191-chronos-api-backend.hf.space/ingest \\
+  -H "X-API-Key: chrn_your_key" \\
+  -H "X-Supabase-Url: postgresql://postgres.YOURREF:PW@db.YOURREF.supabase.co:5432/postgres" \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "source_id": "my-test",
+    "events": [{"text": "Alice joined the engineering team today"}]
+  }'`}
+                  </pre>
+                </div>
+              </div>
+
+              {/* Step 5 — Test: Query */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">5</span>
+                  <h3 className="text-base font-semibold text-black">Test — Query memory from your Supabase</h3>
+                </div>
+                <div className="bg-[#fafafa] border border-[#eaeaea] p-4 rounded-md overflow-x-auto">
+                  <pre className="text-sm font-mono text-black">
+{`curl -X POST https://spy9191-chronos-api-backend.hf.space/query \\
+  -H "X-API-Key: chrn_your_key" \\
+  -H "X-Supabase-Url: postgresql://postgres.YOURREF:PW@db.YOURREF.supabase.co:5432/postgres" \\
+  -H "Content-Type: application/json" \\
+  -d '{"query": "Who joined the team?"}'
+
+# Expected response:
+# { "results": [{ "subject": "Alice", "verb": "joined", "object": "engineering team" }] }`}
+                  </pre>
+                </div>
+              </div>
+
+              {/* Step 6 — Verify in Supabase */}
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <span className="w-7 h-7 rounded-full bg-black text-white text-xs font-bold flex items-center justify-center flex-shrink-0">6</span>
+                  <h3 className="text-base font-semibold text-black">Verify — Check your Supabase tables</h3>
+                </div>
+                <p className="text-sm text-[#666666] mb-3 ml-10">
+                  In Supabase dashboard: <strong>Table Editor → events</strong>. You should see rows with the extracted S-V-O memory. Or run SQL directly:
+                </p>
+                <div className="bg-[#fafafa] border border-[#eaeaea] p-4 rounded-md overflow-x-auto">
+                  <pre className="text-sm font-mono text-black">
+{`-- Run in Supabase SQL Editor to verify
+SELECT subject, verb, object, timestamp
+FROM events
+ORDER BY timestamp DESC
+LIMIT 10;
+
+-- Also check vector embeddings were stored
+SELECT event_id, embed_text FROM event_vectors LIMIT 5;`}
+                  </pre>
+                </div>
+              </div>
+
+              {/* Eject */}
+              <div className="border border-[#eaeaea] rounded-lg p-5 bg-[#fafafa]">
+                <p className="text-sm font-semibold text-black mb-2">🔌 To disconnect (eject)</p>
+                <p className="text-sm text-[#666666]">
+                  Remove the <code className="bg-white border border-[#eaeaea] px-1.5 py-0.5 rounded font-mono text-xs">X-Supabase-Url</code> header from your requests. Smriti immediately reverts to the default cloud storage. No config to undo. Your Supabase data remains untouched.
+                </p>
+              </div>
+
             </div>
           </section>
 
