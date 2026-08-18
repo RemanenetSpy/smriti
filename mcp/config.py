@@ -32,6 +32,11 @@ class SmritiMCPConfig:
     timeout_seconds: float = field(default=30.0)
     max_retries: int = field(default=3)
 
+    # ── Supabase BYODB (optional) ─────────────────────────────────────────────
+    # Set SMRITI_SUPABASE_URL to route memory storage to your own Supabase DB.
+    # Leave unset to use the default Smriti cloud storage.
+    supabase_url: str = field(default="")
+
     def validate(self) -> None:
         """Validate that all required config is present."""
         if not self.api_key:
@@ -58,5 +63,6 @@ def load_config() -> SmritiMCPConfig:
         parse_svo=os.getenv("SMRITI_PARSE_SVO", "true").lower() in ("true", "1", "yes"),
         timeout_seconds=float(os.getenv("SMRITI_TIMEOUT", "30.0")),
         max_retries=int(os.getenv("SMRITI_MAX_RETRIES", "3")),
+        supabase_url=os.getenv("SMRITI_SUPABASE_URL", ""),
     )
     return config

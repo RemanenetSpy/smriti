@@ -1,8 +1,13 @@
-﻿"""
+"""
 Smriti — Ingest Route
 ===========================
 POST /ingest — Universal event ingestion endpoint.
 Any SaaS or agent sends events here to get temporal memory.
+
+Supabase BYODB (optional):
+  Add header  X-Supabase-Url: postgresql://...
+  Memory lands in your Supabase DB instead of the default Smriti DB.
+  Omit the header → zero change in behaviour.
 """
 
 from __future__ import annotations
@@ -10,8 +15,9 @@ from __future__ import annotations
 import logging
 import time
 from datetime import datetime
+from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 
 from smriti_core.models import (
     EventRecord,
@@ -36,22 +42,34 @@ _supersession = SupersessionEngine()
 async def ingest_events(
     payload: IngestPayload,
     key_info: dict = Depends(verify_api_key),
+    x_supabase_url: Optional[str] = Header(default=None, alias="X-Supabase-Url"),
 ):
     """
     Ingest raw events into the Chronos temporal memory.
 
     Pipeline: validate → SVO parse → store in Event Calendar +
-    Turn Calendar + ChromaDB vector store.
+    Turn Calendar + pgvector store.
+
+    Optional header X-Supabase-Url redirects storage to the user's
+    own Supabase database. Quota metering always uses our central DB.
     """
     start_time = time.time()
     source_id = payload.source_id  # User's label (e.g., "my-crm")
     owner_id = key_info["source_id"]  # API key owner (tenant isolation)
 
-    # Check quota against the OWNER, not the source label
+    # Quota metering always uses our central DB — cannot be bypassed
     await check_event_quota(owner_id, len(payload.events))
 
-    memory = get_memory_store()
-    vector = get_vector_store()
+    # ── Storage target: Supabase BYODB or default Smriti DB ──────────
+    if x_supabase_url:
+        from supabase.connector import get_supabase_stores
+        memory, vector = await get_supabase_stores(x_supabase_url, get_vector_store())
+        logger.info(f"Supabase BYODB active for source={source_id!r}")
+    else:
+        memory = get_memory_store()
+        vector = get_vector_store()
+    # ─────────────────────────────────────────────────────────────────
+
     parser = get_svo_parser()
 
     all_event_ids: list[str] = []

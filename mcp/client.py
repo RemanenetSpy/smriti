@@ -1,4 +1,4 @@
-﻿"""
+"""
 Smriti MCP — HTTP Client
 =========================
 Async HTTP client that wraps the Smriti REST API.
@@ -53,16 +53,23 @@ class SmritiClient:
 
     async def connect(self) -> None:
         """Initialize the HTTP client with auth headers."""
+        headers: dict[str, str] = {
+            "X-API-Key": self.config.api_key,
+            "Content-Type": "application/json",
+            "User-Agent": "smriti-mcp/0.1.0",
+        }
+        # Forward Supabase BYODB URL when configured — applies to all tool calls
+        if self.config.supabase_url:
+            headers["X-Supabase-Url"] = self.config.supabase_url
+            logger.info("Supabase BYODB active — memory routed to user's Supabase DB")
+
         self._client = httpx.AsyncClient(
             base_url=self.config.base_url.rstrip("/"),
-            headers={
-                "X-API-Key": self.config.api_key,
-                "Content-Type": "application/json",
-                "User-Agent": "smriti-mcp/0.1.0",
-            },
+            headers=headers,
             timeout=httpx.Timeout(self.config.timeout_seconds),
         )
         logger.info(f"SmritiClient connected to {self.config.base_url}")
+
 
     async def close(self) -> None:
         """Close the HTTP client."""

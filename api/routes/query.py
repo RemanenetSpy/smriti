@@ -10,6 +10,11 @@ Retrieval algorithm (Bayesian Gap Cutoff):
   3. Bayesian gap cutoff (Gap=0.08, Max=0.52) — dynamically isolate best match(es)
 
 Best config found via 77-case benchmark sweep: 23 active passes, precision 0.299.
+
+Supabase BYODB (optional):
+  Add header  X-Supabase-Url: postgresql://...
+  Query runs against your Supabase DB instead of the default Smriti DB.
+  Omit the header → zero change in behaviour.
 """
 
 from __future__ import annotations
@@ -18,8 +23,9 @@ import logging
 import os
 import re
 import time
+from typing import Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Header
 
 from smriti_core.models import (
     LiteEventRecord,
@@ -79,6 +85,7 @@ def _bayesian_gap_cutoff(distances: list[float]) -> float:
 async def query_memory(
     request: QueryRequest,
     key_info: dict = Depends(verify_api_key),
+    x_supabase_url: Optional[str] = Header(default=None, alias="X-Supabase-Url"),
 ):
     """
     Hybrid temporal + semantic retrieval from Chronos memory.
@@ -90,12 +97,22 @@ async def query_memory(
     1. pgvector semantic search (fuzzy recall) — filtered by owner_id
     2. PostgreSQL temporal filtering (deterministic) — filtered by owner_id
     3. Merge + rank results by combined score
+
+    Optional header X-Supabase-Url runs the query against the user's
+    own Supabase DB instead of the default Smriti DB.
     """
     start_time = time.time()
     owner_id = key_info["source_id"]  # Tenant isolation key
 
-    memory = get_memory_store()
-    vector = get_vector_store()
+    # ── Storage target: Supabase BYODB or default Smriti DB ──────────
+    if x_supabase_url:
+        from supabase.connector import get_supabase_stores
+        memory, vector = await get_supabase_stores(x_supabase_url, get_vector_store())
+        logger.info(f"Supabase BYODB query active for owner={owner_id!r}")
+    else:
+        memory = get_memory_store()
+        vector = get_vector_store()
+    # ─────────────────────────────────────────────────────────────────
 
     results: list[QueryResult] = []
     seen_ids: set[str] = set()
