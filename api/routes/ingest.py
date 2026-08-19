@@ -17,7 +17,7 @@ import time
 from datetime import datetime
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends, Header, Query
 
 from smriti_core.models import (
     EventRecord,
@@ -42,7 +42,8 @@ _supersession = SupersessionEngine()
 async def ingest_events(
     payload: IngestPayload,
     key_info: dict = Depends(verify_api_key),
-    x_supabase_url: Optional[str] = Header(default=None, alias="X-Supabase-Url"),
+    header_supabase_url: Optional[str] = Header(default=None, alias="X-Supabase-Url"),
+    query_supabase_url: Optional[str] = Query(default=None, alias="supabase_url"),
 ):
     """
     Ingest raw events into the Chronos temporal memory.
@@ -61,9 +62,10 @@ async def ingest_events(
     await check_event_quota(owner_id, len(payload.events))
 
     # ── Storage target: Supabase BYODB or default Smriti DB ──────────
-    if x_supabase_url:
+    active_supabase_url = query_supabase_url or header_supabase_url
+    if active_supabase_url:
         from supabase.connector import get_supabase_stores
-        memory, vector = await get_supabase_stores(x_supabase_url, get_vector_store())
+        memory, vector = await get_supabase_stores(active_supabase_url, get_vector_store())
         logger.info(f"Supabase BYODB active for source={source_id!r}")
     else:
         memory = get_memory_store()
