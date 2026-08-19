@@ -52,28 +52,21 @@ async def get_pool(supabase_url: str) -> asyncpg.Pool:
       • Port 5432 → Direct connection  ← USE THIS with asyncpg
       • Port 6543 → PgBouncer pooler   ← Breaks asyncpg prepared statements
 
-    If the user accidentally passes port 6543, we silently correct it.
     """
-    # Silently fix the common mistake of using the pooler port
-    corrected_url = supabase_url.replace(":6543/", ":5432/")
-    if corrected_url != supabase_url:
-        logger.warning(
-            "X-Supabase-Url used port 6543 (PgBouncer). "
-            "Corrected to port 5432 (direct) for asyncpg compatibility."
-        )
-
-    if corrected_url not in _pool_cache:
-        logger.info(f"Opening new Supabase pool → {_safe_dsn(corrected_url)}")
+    # Use the URL exactly as provided. Port 6543 (PgBouncer) is required for IPv4 from HF Spaces.
+    if supabase_url not in _pool_cache:
+        logger.info(f"Opening new Supabase pool → {_safe_dsn(supabase_url)}")
         pool = await asyncpg.create_pool(
-            corrected_url,
+            supabase_url,
             min_size=1,
             max_size=5,          # Conservative — one user DB, not our main DB
             command_timeout=30,
+            statement_cache_size=0, # REQUIRED for asyncpg to work with Supabase PgBouncer (port 6543)
         )
-        _pool_cache[corrected_url] = pool
+        _pool_cache[supabase_url] = pool
         logger.info("Supabase pool ready")
 
-    return _pool_cache[corrected_url]
+    return _pool_cache[supabase_url]
 
 
 async def eject_pool(supabase_url: str) -> None:
@@ -81,11 +74,10 @@ async def eject_pool(supabase_url: str) -> None:
     Gracefully close and remove the pool for a given Supabase URL.
     Call this to disconnect cleanly (e.g., when a user removes their DB config).
     """
-    corrected_url = supabase_url.replace(":6543/", ":5432/")
-    pool = _pool_cache.pop(corrected_url, None)
+    pool = _pool_cache.pop(supabase_url, None)
     if pool:
         await pool.close()
-        logger.info(f"Ejected Supabase pool → {_safe_dsn(corrected_url)}")
+        logger.info(f"Ejected Supabase pool → {_safe_dsn(supabase_url)}")
 
 
 async def eject_all_pools() -> None:
