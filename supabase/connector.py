@@ -343,15 +343,22 @@ class SupabaseVectorStore:
                 LIMIT ${limit_idx}
             ),
             -- RRF fusion: score = w_vec/(60+rank) + w_fts/(60+rank)
+            -- FTS Dynamic Override: when keyword search confirms a match,
+            -- cap the distance at 0.35 regardless of vector distance.
+            -- This neutralises the symmetric-model asymmetry penalty (Phase 3).
             fused AS (
                 SELECT
-                    COALESCE(v.id,  f.id)       AS id,
-                    COALESCE(v.document, f.document) AS document,
-                    COALESCE(v.distance, 1.0)   AS distance,
+                    COALESCE(v.id,  f.id)                     AS id,
+                    COALESCE(v.document, f.document)          AS document,
+                    CASE
+                        WHEN f.id IS NOT NULL
+                            THEN LEAST(COALESCE(v.distance, 0.35), 0.35)
+                        ELSE v.distance
+                    END                                       AS distance,
                     (
                         CASE WHEN v.id IS NOT NULL THEN 1.0 / (60.0 + v.rnk) ELSE 0 END
                       + CASE WHEN f.id IS NOT NULL THEN 1.0 / (60.0 + f.rnk) ELSE 0 END
-                    )                           AS rrf_score
+                    )                                         AS rrf_score
                 FROM vec_ranked  v
                 FULL OUTER JOIN fts_ranked f ON v.id = f.id
             )
