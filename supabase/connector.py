@@ -273,18 +273,26 @@ class SupabaseVectorStore:
         broad_cutoff: float = 0.85,
     ) -> list[dict]:
         """
-        Cosine-distance semantic search against the user's Supabase vector table.
-        Returns the same dict structure as smriti_core.VectorStore.semantic_search.
+        Phase 3 — Hybrid Retrieval via Reciprocal Rank Fusion (RRF).
+
+        Combines two independent retrieval branches:
+          1. Dense vector branch  — pgvector cosine distance (HNSW index)
+          2. Sparse keyword branch — Postgres tsvector / ts_rank_cd (GIN index)
+
+        RRF formula: score = w_vec/(60 + rank_vec) + w_fts/(60 + rank_fts)
+
+        When cosine distance is artificially high due to symmetric-model asymmetry
+        (the "alias gap"), the FTS branch rescues relevant results via keyword
+        overlap. No LLM, no cross-encoder, no external API call.
         """
         import asyncio
-        # Run embedding in thread — sentence-transformers is sync/CPU-bound
         query_embedding = await asyncio.to_thread(self._main._embed, query)
         vec_str = f"[{','.join(str(x) for x in query_embedding)}]"
 
+        # Build filter conditions (applied to both branches)
         conditions = ["ev.owner_id = $2"]
         params: list = [vec_str, owner_id]
         i = 3
-
 
         if source_ids:
             conditions.append(f"ev.source_id = ANY(${i})"); params.append(source_ids); i += 1
@@ -295,25 +303,69 @@ class SupabaseVectorStore:
         if scope:
             conditions.append(f"ev.scope = ${i}"); params.append(scope); i += 1
 
-        params.extend([broad_cutoff, n_results])
+        # Final params: broad_cutoff, keyword query string, n_results
+        broad_cutoff_idx = i;      params.append(broad_cutoff); i += 1
+        keyword_idx      = i;      params.append(query);        i += 1
+        limit_idx        = i;      params.append(n_results * 2); i += 1  # over-fetch for RRF
+
         where = " AND ".join(conditions)
 
         sql = f"""
-            SELECT
-                ev.event_id   AS id,
-                ev.embed_text AS document,
-                (ev.embedding <=> $1::vector) AS distance
-            FROM event_vectors ev
-            WHERE {where}
-              AND (ev.embedding <=> $1::vector) <= ${i}
-            ORDER BY distance ASC
-            LIMIT ${i + 1}
+            WITH
+            -- Branch 1: Dense vector search (pgvector HNSW)
+            vec_ranked AS (
+                SELECT
+                    ev.event_id                                AS id,
+                    ev.embed_text                              AS document,
+                    (ev.embedding <=> $1::vector)              AS distance,
+                    ROW_NUMBER() OVER (ORDER BY (ev.embedding <=> $1::vector) ASC) AS rnk
+                FROM event_vectors ev
+                WHERE {where}
+                  AND (ev.embedding <=> $1::vector) <= ${broad_cutoff_idx}
+                LIMIT ${limit_idx}
+            ),
+            -- Branch 2: Sparse full-text search (tsvector / BM25 cover density)
+            fts_ranked AS (
+                SELECT
+                    ev.event_id                                AS id,
+                    ev.embed_text                              AS document,
+                    NULL::FLOAT                                AS distance,
+                    ROW_NUMBER() OVER (
+                        ORDER BY ts_rank_cd(
+                            to_tsvector('english', ev.embed_text),
+                            plainto_tsquery('english', ${keyword_idx})
+                        ) DESC
+                    )                                          AS rnk
+                FROM event_vectors ev
+                WHERE {where}
+                  AND to_tsvector('english', ev.embed_text)
+                      @@ plainto_tsquery('english', ${keyword_idx})
+                LIMIT ${limit_idx}
+            ),
+            -- RRF fusion: score = w_vec/(60+rank) + w_fts/(60+rank)
+            fused AS (
+                SELECT
+                    COALESCE(v.id,  f.id)       AS id,
+                    COALESCE(v.document, f.document) AS document,
+                    COALESCE(v.distance, 1.0)   AS distance,
+                    (
+                        CASE WHEN v.id IS NOT NULL THEN 1.0 / (60.0 + v.rnk) ELSE 0 END
+                      + CASE WHEN f.id IS NOT NULL THEN 1.0 / (60.0 + f.rnk) ELSE 0 END
+                    )                           AS rrf_score
+                FROM vec_ranked  v
+                FULL OUTER JOIN fts_ranked f ON v.id = f.id
+            )
+            SELECT id, document, distance
+            FROM fused
+            ORDER BY rrf_score DESC
+            LIMIT ${limit_idx}
         """
 
         async with self._pool.acquire() as conn:
             rows = await conn.fetch(sql, *params)
 
         return [{"id": r["id"], "document": r["document"], "distance": r["distance"]} for r in rows]
+
 
 
 # ---------------------------------------------------------------------------

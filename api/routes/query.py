@@ -58,6 +58,17 @@ _GAP_STOPWORDS = {
     "per", "when", "than", "who", "what", "which", "how", "why", "where",
 }
 
+# Interrogative detection: matches wh-words at start or trailing '?'
+_INTERROGATIVE_RE = re.compile(
+    r"^\s*(what|who|where|when|why|how|which|is|are|was|were|can|could|does|do|did)\b|.*\?\s*$",
+    re.IGNORECASE,
+)
+
+
+def _is_interrogative(text: str) -> bool:
+    """Return True if the query is phrased as a question."""
+    return bool(_INTERROGATIVE_RE.search(text))
+
 
 def _extract_entities(text: str) -> set[str]:
     """Extract meaningful tokens from text, excluding stopwords."""
@@ -65,20 +76,34 @@ def _extract_entities(text: str) -> set[str]:
     return set(words) - _GAP_STOPWORDS
 
 
-def _bayesian_gap_cutoff(distances: list[float]) -> float:
+def _adaptive_cutoff(distances: list[float], is_interrogative: bool = False) -> float:
     """
-    Dynamically compute a distance cutoff based on the gap between
-    the best and second-best candidate.
+    Phase 4 — Adaptive threshold combining:
+      1. Bayesian gap isolation (clear winner promotion)
+      2. Relative margin baseline: max(0.85 * s_max, s_max - 0.12)
+      3. Interrogative discount (δ=0.08): lowers the threshold for questions,
+         forgiving the asymmetric penalty that symmetric bi-encoders impose on
+         question-to-statement matching.
 
-    If rank-1 to rank-2 gap > GAP_THRESHOLD: isolate rank-1 (clear winner).
-    Otherwise: include near-neighbours up to MAX_CUTOFF.
+    No LLM, no external model. Pure math over the retrieved score distribution.
     """
     if not distances:
         return _MAX_CUTOFF
+
     sorted_d = sorted(distances)
-    if len(sorted_d) > 1 and (sorted_d[1] - sorted_d[0]) > _GAP_THRESHOLD:
-        return sorted_d[0] + 0.04   # isolate rank-1
-    return min(_MAX_CUTOFF, sorted_d[0] + 0.12)
+    s_min = sorted_d[0]  # best (smallest) distance
+
+    # --- 1. Bayesian gap: isolate rank-1 when it's a clear winner ---
+    if len(sorted_d) > 1 and (sorted_d[1] - s_min) > _GAP_THRESHOLD:
+        base = s_min + 0.04
+    else:
+        # --- 2. Relative margin: stay within 15% drop from best ---
+        relative_margin = max(0.85 * s_min, s_min - 0.12)
+        base = min(_MAX_CUTOFF, max(relative_margin, s_min + 0.10))
+
+    # --- 3. Interrogative discount: expand acceptance boundary for questions ---
+    delta = 0.08 if is_interrogative else 0.0
+    return base + delta
 
 
 @router.post("/query", response_model=QueryResponse)
@@ -157,13 +182,14 @@ async def query_memory(
             if filtered:  # only apply filter if it keeps at least one result
                 semantic_results = filtered
 
-        # Stage 3 — Bayesian gap cutoff
+        # Stage 3 — Adaptive cutoff (Phase 4: interrogative-aware)
+        is_q = _is_interrogative(request.query)
         dists  = [r["distance"] for r in semantic_results]
-        cutoff = _bayesian_gap_cutoff(dists)
+        cutoff = _adaptive_cutoff(dists, is_interrogative=is_q)
         semantic_results = [r for r in semantic_results if r["distance"] <= cutoff]
         logger.debug(
-            f"Gap cutoff={cutoff:.3f} → {len(semantic_results)} candidates "
-            f"(from {len(dists)} raw)"
+            f"Adaptive cutoff={cutoff:.3f} is_interrogative={is_q} "
+            f"→ {len(semantic_results)} candidates (from {len(dists)} raw)"
         )
 
     # Fetch full event records from PostgreSQL
