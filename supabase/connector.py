@@ -228,6 +228,8 @@ class SupabaseVectorStore:
             return
         import asyncio
 
+        self._main._load_model_if_needed()
+        
         embed_texts = [f"{e.subject} {e.verb} {e.object}" for e in events]
         # Batch-encode using the main model (runs in thread — sentence-transformers is sync)
         embeddings = await asyncio.to_thread(
