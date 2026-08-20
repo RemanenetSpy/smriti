@@ -60,128 +60,128 @@ async def ingest_events(
     # Quota metering always uses our central DB — cannot be bypassed
     await check_event_quota(owner_id, len(payload.events))
 
-    # ── Storage target: Supabase BYODB or default Smriti DB ──────────
-    if x_supabase_url:
-        try:
+    try:
+        # ── Storage target: Supabase BYODB or default Smriti DB ──────────
+        if x_supabase_url:
             from supabase.connector import get_supabase_stores
             memory, vector = await get_supabase_stores(x_supabase_url, get_vector_store())
             logger.info(f"Supabase BYODB active for source={source_id!r}")
-        except Exception as e:
-            from fastapi import HTTPException
-            raise HTTPException(status_code=400, detail=f"BYODB Error: {type(e).__name__} - {str(e)}")
-    else:
-        memory = get_memory_store()
-        vector = get_vector_store()
-    # ─────────────────────────────────────────────────────────────────
+        else:
+            memory = get_memory_store()
+            vector = get_vector_store()
+        # ─────────────────────────────────────────────────────────────────
 
-    parser = get_svo_parser()
+        parser = get_svo_parser()
 
-    all_event_ids: list[str] = []
-    all_svo_tuples = []
-    all_turn_ids: list[str] = []
+        all_event_ids: list[str] = []
+        all_svo_tuples = []
+        all_turn_ids: list[str] = []
 
-    for ingest_event in payload.events:
-        ts = ingest_event.timestamp or datetime.utcnow()
+        for ingest_event in payload.events:
+            ts = ingest_event.timestamp or datetime.utcnow()
 
-        # Resolve scope: per-event override wins over payload-level default
-        scope = ingest_event.scope or payload.scope or "default"
+            # Resolve scope: per-event override wins over payload-level default
+            scope = ingest_event.scope or payload.scope or "default"
 
-        # Merge owner_id into event metadata for tenant isolation
-        event_meta = {**ingest_event.metadata, "owner_id": owner_id}
+            # Merge owner_id into event metadata for tenant isolation
+            event_meta = {**ingest_event.metadata, "owner_id": owner_id}
 
-        # 1. Store raw turn in Turn Calendar
-        turn = TurnRecord(
-            source_id=owner_id,  # Track by owner for privacy
-            role=TurnRole.USER,
-            content=ingest_event.text,
-            timestamp=ts,
-        )
+            # 1. Store raw turn in Turn Calendar
+            turn = TurnRecord(
+                source_id=owner_id,  # Track by owner for privacy
+                role=TurnRole.USER,
+                content=ingest_event.text,
+                timestamp=ts,
+            )
 
-        # 2. Parse SVO tuples (if enabled)
-        event_records: list[EventRecord] = []
+            # 2. Parse SVO tuples (if enabled)
+            event_records: list[EventRecord] = []
 
-        if payload.parse_svo:
-            svo_tuples = await parser.parse(ingest_event.text, ts)
-            all_svo_tuples.extend(svo_tuples)
+            if payload.parse_svo:
+                svo_tuples = await parser.parse(ingest_event.text, ts)
+                all_svo_tuples.extend(svo_tuples)
 
-            for svo in svo_tuples:
+                for svo in svo_tuples:
+                    event = EventRecord(
+                        source_id=source_id,
+                        subject=svo.subject,
+                        verb=svo.verb,
+                        object=svo.object,
+                        timestamp=svo.timestamp,
+                        datetime_start=svo.datetime_start,
+                        datetime_end=svo.datetime_end,
+                        entity_aliases=svo.entity_aliases,
+                        confidence=svo.confidence,
+                        metadata_json=event_meta,
+                        raw_text=ingest_event.text,
+                        scope=scope,
+                    )
+                    event_records.append(event)
+            else:
+                # No SVO parsing — store as a single raw event
                 event = EventRecord(
                     source_id=source_id,
-                    subject=svo.subject,
-                    verb=svo.verb,
-                    object=svo.object,
-                    timestamp=svo.timestamp,
-                    datetime_start=svo.datetime_start,
-                    datetime_end=svo.datetime_end,
-                    entity_aliases=svo.entity_aliases,
-                    confidence=svo.confidence,
-                    metadata_json=event_meta,
+                    subject="unknown",
+                    verb="recorded",
+                    object=ingest_event.text[:200],
+                    timestamp=ts,
                     raw_text=ingest_event.text,
+                    metadata_json=event_meta,
+                    confidence=0.0,
                     scope=scope,
                 )
                 event_records.append(event)
-        else:
-            # No SVO parsing — store as a single raw event
-            event = EventRecord(
-                source_id=source_id,
-                subject="unknown",
-                verb="recorded",
-                object=ingest_event.text[:200],
-                timestamp=ts,
-                raw_text=ingest_event.text,
-                metadata_json=event_meta,
-                confidence=0.0,
-                scope=scope,
-            )
-            event_records.append(event)
 
-        # 3. Supersession check: invalidate outdated active facts
-        #    Only runs if we have named subjects (not 'unknown')
-        for new_event in event_records:
-            if new_event.subject == "unknown":
-                continue
-            candidates = await memory.find_active_by_subject(
-                owner_id=owner_id,
-                scope=scope,
-                subject=new_event.subject,
-            )
-            for candidate in candidates:
-                if _supersession.should_supersede(candidate, new_event):
-                    await memory.invalidate_event(
-                        event_id=candidate.id,
-                        superseded_by=new_event.id,
-                    )
-                    logger.info(
-                        f"Superseded event {candidate.id!r} "
-                        f"(score={_supersession.score(candidate, new_event):.2f}) "
-                        f"by {new_event.id!r} | scope={scope!r}"
-                    )
+            # 3. Supersession check: invalidate outdated active facts
+            #    Only runs if we have named subjects (not 'unknown')
+            for new_event in event_records:
+                if new_event.subject == "unknown":
+                    continue
+                candidates = await memory.find_active_by_subject(
+                    owner_id=owner_id,
+                    scope=scope,
+                    subject=new_event.subject,
+                )
+                for candidate in candidates:
+                    if _supersession.should_supersede(candidate, new_event):
+                        await memory.invalidate_event(
+                            event_id=candidate.id,
+                            superseded_by=new_event.id,
+                        )
+                        logger.info(
+                            f"Superseded event {candidate.id!r} "
+                            f"(score={_supersession.score(candidate, new_event):.2f}) "
+                            f"by {new_event.id!r} | scope={scope!r}"
+                        )
 
-        # 4. Persist to Event Calendar
-        if event_records:
-            ids = await memory.insert_events_batch(event_records)
-            all_event_ids.extend(ids)
-            turn.event_ids = ids
+            # 4. Persist to Event Calendar
+            if event_records:
+                ids = await memory.insert_events_batch(event_records)
+                all_event_ids.extend(ids)
+                turn.event_ids = ids
 
-            # 5. Persist to pgvector store
-            await vector.add_events_batch(event_records)
+                # 5. Persist to pgvector store
+                await vector.add_events_batch(event_records)
 
-        # 6. Persist turn to Turn Calendar
-        turn_id = await memory.insert_turn(turn)
-        all_turn_ids.append(turn_id)
+            # 6. Persist turn to Turn Calendar
+            turn_id = await memory.insert_turn(turn)
+            all_turn_ids.append(turn_id)
 
-    # 6. Update usage metering
-    await memory.increment_usage(owner_id, events=len(all_event_ids))
+        # 6. Update usage metering
+        await memory.increment_usage(owner_id, events=len(all_event_ids))
 
-    elapsed = (time.time() - start_time) * 1000
-    logger.info(
-        f"Ingested {len(all_event_ids)} events + {len(all_turn_ids)} turns "
-        f"for source={source_id} in {elapsed:.1f}ms"
-    )
+        elapsed = (time.time() - start_time) * 1000
+        logger.info(
+            f"Ingested {len(all_event_ids)} events + {len(all_turn_ids)} turns "
+            f"for source={source_id} in {elapsed:.1f}ms"
+        )
 
-    return IngestResponse(
-        ingested_count=len(all_event_ids),
-        event_ids=all_event_ids,
-        svo_tuples=all_svo_tuples,
-        turn_ids=all_turn_ids,
-    )
+        return IngestResponse(
+            ingested_count=len(all_event_ids),
+            event_ids=all_event_ids,
+            svo_tuples=all_svo_tuples,
+            turn_ids=all_turn_ids,
+        )
+    except Exception as e:
+        tb = traceback.format_exc()
+        raise HTTPException(status_code=400, detail=f"Ingest Error: {type(e).__name__} - {str(e)} - {tb}")
