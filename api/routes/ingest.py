@@ -64,9 +64,13 @@ async def ingest_events(
     # ── Storage target: Supabase BYODB or default Smriti DB ──────────
     active_supabase_url = query_supabase_url or header_supabase_url
     if active_supabase_url:
-        from supabase.connector import get_supabase_stores
-        memory, vector = await get_supabase_stores(active_supabase_url, get_vector_store())
-        logger.info(f"Supabase BYODB active for source={source_id!r}")
+        try:
+            from supabase.connector import get_supabase_stores
+            memory, vector = await get_supabase_stores(active_supabase_url, get_vector_store())
+            logger.info(f"Supabase BYODB active for source={source_id!r}")
+        except Exception as e:
+            from fastapi import HTTPException
+            raise HTTPException(status_code=400, detail=f"BYODB Error: {type(e).__name__} - {str(e)}")
     else:
         memory = get_memory_store()
         vector = get_vector_store()
