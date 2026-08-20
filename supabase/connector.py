@@ -205,7 +205,8 @@ class SupabaseStore:
 
 # ---------------------------------------------------------------------------
 # SupabaseVectorStore — same interface as smriti_core.VectorStore
-# ---------------------------------------------------------------------------    async def increment_usage(
+
+    async def increment_usage(
         self, source_id: str, events: int = 0, orchestration: int = 0,
     ) -> None:
         """Dummy method for Supabase BYODB — we don't track usage on the user's DB."""
