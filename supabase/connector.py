@@ -205,7 +205,52 @@ class SupabaseStore:
 
 # ---------------------------------------------------------------------------
 # SupabaseVectorStore — same interface as smriti_core.VectorStore
-# ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------    async def increment_usage(
+        self, source_id: str, events: int = 0, orchestration: int = 0,
+    ) -> None:
+        """Dummy method for Supabase BYODB — we don't track usage on the user's DB."""
+        pass
+
+    async def multi_hop_query(
+        self,
+        entities: list[str],
+        start: Optional[datetime] = None,
+        end: Optional[datetime] = None,
+        source_ids: Optional[list[str]] = None,
+        scope: Optional[str] = None,
+        limit: int = 50,
+    ) -> list[EventRecord]:
+        """Multi-hop temporal query: find ACTIVE events connecting multiple entities."""
+        if not entities:
+            return []
+            
+        entity_parts, params = [], []
+        i = 1
+        for entity in entities:
+            pattern = f"%{entity}%"
+            entity_parts.append(
+                f"(subject ILIKE ${i} OR object ILIKE ${i} OR entity_aliases::text ILIKE ${i})"
+            )
+            params.append(pattern); i += 1
+
+        conditions = ["valid_to IS NULL", f"({' OR '.join(entity_parts)})"]
+
+        if start:
+            conditions.append(f"timestamp >= ${i}"); params.append(start); i += 1
+        if end:
+            conditions.append(f"timestamp <= ${i}"); params.append(end); i += 1
+        if source_ids:
+            conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
+        if scope:
+            conditions.append(f"scope = ${i}"); params.append(scope); i += 1
+
+        params.append(limit)
+        where = f"WHERE {' AND '.join(conditions)}"
+        query = f"SELECT * FROM events {where} ORDER BY timestamp ASC LIMIT ${i}"
+
+        async with self._pool.acquire() as conn:
+            rows = await conn.fetch(query, *params)
+        return [_row_to_event(r) for r in rows]
 
 class SupabaseVectorStore:
     """
