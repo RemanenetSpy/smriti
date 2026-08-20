@@ -25,7 +25,7 @@ import re
 import time
 from typing import Optional
 
-from fastapi import APIRouter, Depends, Header, Query
+from fastapi import APIRouter, Depends, Header
 
 from smriti_core.models import (
     LiteEventRecord,
@@ -110,8 +110,7 @@ def _adaptive_cutoff(distances: list[float], is_interrogative: bool = False) -> 
 async def query_memory(
     request: QueryRequest,
     key_info: dict = Depends(verify_api_key),
-    header_supabase_url: Optional[str] = Header(default=None, alias="X-Supabase-Url"),
-    query_supabase_url: Optional[str] = Query(default=None, alias="supabase_url"),
+    x_supabase_url: Optional[str] = Header(default=None, alias="X-Supabase-Url"),
 ):
     """
     Hybrid temporal + semantic retrieval from Chronos memory.
@@ -131,11 +130,14 @@ async def query_memory(
     owner_id = key_info["source_id"]  # Tenant isolation key
 
     # ── Storage target: Supabase BYODB or default Smriti DB ──────────
-    active_supabase_url = query_supabase_url or header_supabase_url
-    if active_supabase_url:
-        from supabase.connector import get_supabase_stores
-        memory, vector = await get_supabase_stores(active_supabase_url, get_vector_store())
-        logger.info(f"Supabase BYODB query active for owner={owner_id!r}")
+    if x_supabase_url:
+        try:
+            from supabase.connector import get_supabase_stores
+            memory, vector = await get_supabase_stores(x_supabase_url, get_vector_store())
+            logger.info(f"Supabase BYODB query active for owner={owner_id!r}")
+        except Exception as e:
+            from fastapi import HTTPException
+            raise HTTPException(status_code=400, detail=f"BYODB Error: {type(e).__name__} - {str(e)}")
     else:
         memory = get_memory_store()
         vector = get_vector_store()
