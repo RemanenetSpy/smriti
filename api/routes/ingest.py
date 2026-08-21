@@ -170,7 +170,7 @@ async def ingest_events(
         turn_id = await memory.insert_turn(turn)
         all_turn_ids.append(turn_id)
 
-    # 6. Update usage metering
+    # 7. Update usage metering
     await memory.increment_usage(owner_id, events=len(all_event_ids))
 
     elapsed = (time.time() - start_time) * 1000

@@ -9,11 +9,13 @@ Design principles:
   • Clean connect() and eject() methods for easy lifecycle management.
   • Exposes exactly the same interface used by ingest/query routes
     (insert_events_batch, insert_turn, find_active_by_subject,
-     invalidate_event, get_events_by_ids, semantic_search).
+     invalidate_event, get_events_by_ids, query_temporal,
+     multi_hop_query, increment_usage, semantic_search).
 """
 
 from __future__ import annotations
 
+import asyncio
 import json
 import logging
 from datetime import datetime
@@ -46,22 +48,23 @@ def _safe_dsn(dsn: str) -> str:
 
 async def get_pool(supabase_url: str) -> asyncpg.Pool:
     """
-    Return a cached asyncpg pool for the given Supabase direct connection URL.
+    Return a cached asyncpg pool for the given Supabase connection URL.
 
     IMPORTANT: Supabase has two connection modes:
-      • Port 5432 → Direct connection  ← USE THIS with asyncpg
-      • Port 6543 → PgBouncer pooler   ← Breaks asyncpg prepared statements
+      • Session Pooler (aws-0-region.pooler.supabase.com:5432) ← USE THIS
+        Works from any cloud host (HF Spaces, Railway, Render, etc.)
+      • Direct connection (db.xxxx.supabase.co:5432)
+        Only works from IPv4 local/dedicated machines. Fails on most cloud hosts.
 
     """
-    # Use the URL exactly as provided. Port 6543 (PgBouncer) is required for IPv4 from HF Spaces.
     if supabase_url not in _pool_cache:
         logger.info(f"Opening new Supabase pool → {_safe_dsn(supabase_url)}")
         pool = await asyncpg.create_pool(
             supabase_url,
             min_size=1,
-            max_size=5,          # Conservative — one user DB, not our main DB
+            max_size=5,           # Conservative — one user DB, not our main DB
             command_timeout=30,
-            statement_cache_size=0, # REQUIRED for asyncpg to work with Supabase PgBouncer (port 6543)
+            statement_cache_size=0,  # Required for PgBouncer (Session Pooler) compatibility
         )
         _pool_cache[supabase_url] = pool
         logger.info("Supabase pool ready")
@@ -81,7 +84,7 @@ async def eject_pool(supabase_url: str) -> None:
 
 
 async def eject_all_pools() -> None:
-    """Close ALL cached Supabase pools. Used on server shutdown."""
+    """Close ALL cached Supabase pools. Called on server shutdown."""
     for url, pool in list(_pool_cache.items()):
         await pool.close()
         logger.info(f"Ejected Supabase pool → {_safe_dsn(url)}")
@@ -202,15 +205,35 @@ class SupabaseStore:
             )
         return [_row_to_event(r) for r in rows]
 
+    async def query_temporal(
+        self,
+        start: Optional[datetime] = None,
+        end: Optional[datetime] = None,
+        source_ids: Optional[list[str]] = None,
+        scope: Optional[str] = None,
+        limit: int = 50,
+    ) -> list[EventRecord]:
+        """Query ACTIVE (non-superseded) events by time range."""
+        conditions: list[str] = ["valid_to IS NULL"]
+        params: list = []
+        i = 1
 
-# ---------------------------------------------------------------------------
-# SupabaseVectorStore — same interface as smriti_core.VectorStore
+        if start:
+            conditions.append(f"timestamp >= ${i}"); params.append(start); i += 1
+        if end:
+            conditions.append(f"timestamp <= ${i}"); params.append(end); i += 1
+        if source_ids:
+            conditions.append(f"source_id = ANY(${i})"); params.append(source_ids); i += 1
+        if scope:
+            conditions.append(f"scope = ${i}"); params.append(scope); i += 1
 
-    async def increment_usage(
-        self, source_id: str, events: int = 0, orchestration: int = 0,
-    ) -> None:
-        """Dummy method for Supabase BYODB — we don't track usage on the user's DB."""
-        pass
+        where = f"WHERE {' AND '.join(conditions)}"
+        params.append(limit)
+        query = f"SELECT * FROM events {where} ORDER BY timestamp DESC LIMIT ${i}"
+
+        async with self._pool.acquire() as conn:
+            rows = await conn.fetch(query, *params)
+        return [_row_to_event(r) for r in rows]
 
     async def multi_hop_query(
         self,
@@ -224,7 +247,7 @@ class SupabaseStore:
         """Multi-hop temporal query: find ACTIVE events connecting multiple entities."""
         if not entities:
             return []
-            
+
         entity_parts, params = [], []
         i = 1
         for entity in entities:
@@ -253,6 +276,17 @@ class SupabaseStore:
             rows = await conn.fetch(query, *params)
         return [_row_to_event(r) for r in rows]
 
+    async def increment_usage(
+        self, source_id: str, events: int = 0, orchestration: int = 0,
+    ) -> None:
+        """No-op for BYODB — usage is metered against the central Smriti DB, not the user's DB."""
+        pass
+
+
+# ---------------------------------------------------------------------------
+# SupabaseVectorStore — same interface as smriti_core.VectorStore
+# ---------------------------------------------------------------------------
+
 class SupabaseVectorStore:
     """
     pgvector adapter for the user's Supabase database.
@@ -272,12 +306,13 @@ class SupabaseVectorStore:
         """Embed and store event vectors in the user's Supabase database."""
         if not events:
             return
-        import asyncio
 
         if self._main._model is None:
             self._main._load_model()
-        
-        embed_texts = [f"{e.subject} {e.verb} {e.object}" for e in events]
+
+        # Use the same embed text builder as the main store — single source of truth.
+        embed_texts = [VectorStore._build_embed_text(e) for e in events]
+
         # Batch-encode using the main model (runs in thread — sentence-transformers is sync)
         embeddings = await asyncio.to_thread(
             lambda: self._main._model.encode(
@@ -297,7 +332,9 @@ class SupabaseVectorStore:
                 INSERT INTO event_vectors
                     (event_id, source_id, owner_id, scope, embedding, embed_text, timestamp)
                 VALUES ($1,$2,$3,$4,$5::vector,$6,$7)
-                ON CONFLICT (event_id) DO NOTHING
+                ON CONFLICT (event_id) DO UPDATE SET
+                    embedding  = EXCLUDED.embedding,
+                    embed_text = EXCLUDED.embed_text
                 """,
                 rows,
             )
@@ -326,7 +363,6 @@ class SupabaseVectorStore:
         (the "alias gap"), the FTS branch rescues relevant results via keyword
         overlap. No LLM, no cross-encoder, no external API call.
         """
-        import asyncio
         query_embedding = await asyncio.to_thread(self._main._embed, query)
         vec_str = f"[{','.join(str(x) for x in query_embedding)}]"
 
@@ -386,7 +422,7 @@ class SupabaseVectorStore:
             -- RRF fusion: score = w_vec/(60+rank) + w_fts/(60+rank)
             -- FTS Dynamic Override: when keyword search confirms a match,
             -- cap the distance at 0.35 regardless of vector distance.
-            -- This neutralises the symmetric-model asymmetry penalty (Phase 3).
+            -- This neutralises the symmetric-model asymmetry penalty (alias gap fix).
             fused AS (
                 SELECT
                     COALESCE(v.id,  f.id)                     AS id,
@@ -415,7 +451,6 @@ class SupabaseVectorStore:
         return [{"id": r["id"], "document": r["document"], "distance": r["distance"]} for r in rows]
 
 
-
 # ---------------------------------------------------------------------------
 # Factory — get both stores from a single Supabase URL
 # ---------------------------------------------------------------------------
@@ -428,7 +463,7 @@ async def get_supabase_stores(
     Connect to the user's Supabase DB and return ready-to-use store adapters.
 
     Args:
-        supabase_url:       The direct Postgres connection string from Supabase dashboard.
+        supabase_url:       The Session Pooler connection string from Supabase dashboard.
         main_vector_store:  The main app's VectorStore (to borrow its loaded model).
 
     Returns:

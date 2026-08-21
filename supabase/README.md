@@ -16,13 +16,19 @@ Connect your own Supabase database to Smriti in **3 steps, under 2 minutes**. Yo
 3. Paste it in and click **Run** (▶).  Done. All Smriti tables and indexes are created.
 
 ### Step 3 — Copy your Connection String
-1. Go to **Project Settings → Database → Connection string**.
-2. Select the **URI** tab.
-3. Copy the string — it looks like:
+
+1. Go to **Project Settings → Database → Connection Pooling**.
+2. Set **Pool mode** to **Session**.
+3. Copy the **Connection string** — it looks like:
    ```
-   postgresql://postgres.xxxx:YOUR_PASSWORD@db.xxxx.supabase.co:5432/postgres
+   postgresql://postgres.xxxx:YOUR_PASSWORD@aws-0-REGION.pooler.supabase.com:5432/postgres
    ```
-   > ⚠️ **Important:** Use port `5432` (direct), NOT `6543` (pooler). Smriti auto-corrects `6543 → 5432` if you forget.
+
+> [!IMPORTANT]
+> **Use the Session Pooler URL** (from Connection Pooling, not Connection String).
+> The direct connection URL (`db.xxxx.supabase.co`) only works from local machines.
+> It **fails on Hugging Face Spaces, Railway, Render, and most cloud hosts** due to IPv6 routing.
+> The Session Pooler URL works everywhere.
 
 ---
 

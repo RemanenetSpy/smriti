@@ -1,4 +1,4 @@
-﻿"""
+"""
 Smriti — FastAPI Application
 ==================================
 The API gateway for the Chronos Temporal AI Agent Ecosystem.
@@ -80,6 +80,8 @@ async def lifespan(app: FastAPI):
     # Shutdown
     logger.info("🔒 Smriti shutting down...")
     await memory_store.close()
+    from supabase.connector import eject_all_pools
+    await eject_all_pools()
     logger.info("👋 Goodbye from Smriti")
 
 

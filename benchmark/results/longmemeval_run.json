@@ -1,0 +1,167 @@
+{
+  "summary": {
+    "benchmark": "LongMemEval-S",
+    "run_date": "2026-07-29T17:17:56Z",
+    "api_url": "http://127.0.0.1:8976",
+    "total_cases": 10,
+    "exact_match": 0.0,
+    "token_f1": 0.142,
+    "substring_match": 0.8,
+    "p50_latency_ms": 63.2,
+    "p95_latency_ms": 111.0,
+    "by_category": {
+      "single_session_user": {
+        "n": 3,
+        "exact_match": 0.0,
+        "f1": 0.159,
+        "substring_match": 0.667
+      },
+      "temporal_reasoning": {
+        "n": 2,
+        "exact_match": 0.0,
+        "f1": 0.072,
+        "substring_match": 1.0
+      },
+      "knowledge_update": {
+        "n": 2,
+        "exact_match": 0.0,
+        "f1": 0.077,
+        "substring_match": 0.5
+      },
+      "multi_session": {
+        "n": 2,
+        "exact_match": 0.0,
+        "f1": 0.211,
+        "substring_match": 1.0
+      },
+      "single_session_preference": {
+        "n": 1,
+        "exact_match": 0.0,
+        "f1": 0.222,
+        "substring_match": 1.0
+      }
+    }
+  },
+  "cases": [
+    {
+      "id": "syn-001",
+      "category": "single_session_user",
+      "question": "What is the user's name?",
+      "answer": "Reman",
+      "prediction": "User: My name is Reman and I work at Google as a software engineer.",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.143,
+      "substring_match": 1.0,
+      "latency_ms": 106.3
+    },
+    {
+      "id": "syn-002",
+      "category": "single_session_user",
+      "question": "What editor does the user prefer?",
+      "answer": "VS Code",
+      "prediction": "User: Also I use VS Code as my primary editor.",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.333,
+      "substring_match": 1.0,
+      "latency_ms": 40.5
+    },
+    {
+      "id": "syn-003",
+      "category": "temporal_reasoning",
+      "question": "What is the user's current Python version?",
+      "answer": "3.12",
+      "prediction": "User: I upgraded to Python 3.11 in March. User: Just upgraded again to Python 3.12 last week. User: In January I was using Python 3.9.",
+      "retrieved_count": 3,
+      "exact_match": 0.0,
+      "f1": 0.077,
+      "substring_match": 1.0,
+      "latency_ms": 63.3
+    },
+    {
+      "id": "syn-004",
+      "category": "knowledge_update",
+      "question": "Where does the user currently live?",
+      "answer": "Bangalore",
+      "prediction": "User: I live in Mumbai. User: I moved to Bangalore last month.",
+      "retrieved_count": 2,
+      "exact_match": 0.0,
+      "f1": 0.154,
+      "substring_match": 1.0,
+      "latency_ms": 111.0
+    },
+    {
+      "id": "syn-005",
+      "category": "multi_session",
+      "question": "What food allergy does the user have?",
+      "answer": "peanuts",
+      "prediction": "User: Session 1: I am allergic to peanuts.",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.222,
+      "substring_match": 1.0,
+      "latency_ms": 57.9
+    },
+    {
+      "id": "syn-006",
+      "category": "single_session_preference",
+      "question": "What genre of music does the user enjoy?",
+      "answer": "jazz",
+      "prediction": "User: I love jazz music, especially Miles Davis.",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.222,
+      "substring_match": 1.0,
+      "latency_ms": 70.0
+    },
+    {
+      "id": "syn-007",
+      "category": "single_session_user",
+      "question": "What is the user's dietary preference?",
+      "answer": "vegetarian",
+      "prediction": "User: Session 3: Can you recommend food I should avoid?",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.0,
+      "substring_match": 0.0,
+      "latency_ms": 42.4
+    },
+    {
+      "id": "syn-008",
+      "category": "knowledge_update",
+      "question": "What database does the user's project use?",
+      "answer": "MongoDB",
+      "prediction": "User: My project uses PostgreSQL as the database.",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.0,
+      "substring_match": 0.0,
+      "latency_ms": 37.3
+    },
+    {
+      "id": "syn-009",
+      "category": "temporal_reasoning",
+      "question": "What does the user do with Rust now?",
+      "answer": "teach",
+      "prediction": "User: By 2023 I was building production services in Rust. User: I started learning Rust in 2022. User: Now I teach Rust at my company. Assistant: Rust is powerful.",
+      "retrieved_count": 4,
+      "exact_match": 0.0,
+      "f1": 0.067,
+      "substring_match": 1.0,
+      "latency_ms": 63.2
+    },
+    {
+      "id": "syn-010",
+      "category": "multi_session",
+      "question": "What is the user's budget for the laptop?",
+      "answer": "1500",
+      "prediction": "User: My budget for the new laptop is 1500 USD.",
+      "retrieved_count": 1,
+      "exact_match": 0.0,
+      "f1": 0.2,
+      "substring_match": 1.0,
+      "latency_ms": 36.3
+    }
+  ]
+}

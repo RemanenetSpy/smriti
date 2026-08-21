@@ -1,0 +1,2122 @@
+===== Application Startup at 2026-08-08 07:21:23 =====
+
+>>> SVO PARSER v9 LOADED — _extract_json active <<<
+INFO:     Started server process [1]
+INFO:     Waiting for application startup.
+2026-08-08 07:21:30,122 | smriti.api | INFO | 🕰️  Smriti starting up...
+2026-08-08 07:21:34,016 | smriti.memory_store | INFO | Memory store initialized (Neon PostgreSQL)
+2026-08-08 07:21:34,654 | smriti.vector_store | INFO | Vector store initialized (pgvector 384d)
+2026-08-08 07:21:45,111 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+2026-08-08 07:21:45,111 | smriti.svo_parser | INFO | SVO parser initialized with fast pipeline: cerebras/llama-3.1-8b
+2026-08-08 07:21:45,111 | smriti.api | INFO | ✅ Smriti ready — Systems online
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:7860 (Press CTRL+C to quit)
+2026-08-08 07:21:52,898 | sentence_transformers.base.model | INFO | No device provided, using cpu
+2026-08-08 07:21:52,924 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
+2026-08-08 07:21:52,932 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-08 07:21:52,935 | huggingface_hub.utils._http | WARNING | Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-08-08 07:21:52,943 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:52,955 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:52,974 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:52,990 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:52,998 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:52,999 | sentence_transformers.base.model | INFO | Loading SentenceTransformer model from sentence-transformers/all-MiniLM-L6-v2.
+2026-08-08 07:21:53,012 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:53,017 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config_sentence_transformers.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,023 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:53,032 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,060 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/README.md "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,070 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:53,108 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/modules.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,117 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:53,140 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,172 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/sentence_bert_config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,200 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:53,244 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:53,252 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,265 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:53,357 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/model.safetensors "HTTP/1.1 302 Found"
+Loading weights:   0%|          | 0/103 [00:00<?, ?it/s]
+Loading weights: 100%|██████████| 103/103 [00:00<00:00, 5049.42it/s]
+2026-08-08 07:21:54,675 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:54,683 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:54,696 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/video_preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:54,704 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/preprocessor_config.json "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:54,713 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,719 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,727 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,735 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,741 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,756 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,763 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,772 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,778 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer_config.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,791 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:54,803 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,809 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/vocab.txt "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,813 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/vocab.txt "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,821 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/vocab.txt "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,832 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/tokenizer.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,838 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,886 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/tokenizer.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,921 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/added_tokens.json "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:54,929 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/special_tokens_map.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:54,935 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/special_tokens_map.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,953 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/special_tokens_map.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:54,962 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/chat_template.jinja "HTTP/1.1 404 Not Found"
+2026-08-08 07:21:55,064 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-08-08 07:21:55,071 | httpx | INFO | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:55,105 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/resolve-cache/models/sentence-transformers/all-MiniLM-L6-v2/1110a243fdf4706b3f48f1d95db1a4f5529b4d41/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+2026-08-08 07:21:55,115 | httpx | INFO | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/all-MiniLM-L6-v2 "HTTP/1.1 200 OK"
+2026-08-08 07:21:55,119 | smriti.vector_store | INFO | Embedding model loaded: all-MiniLM-L6-v2
+2026-08-08 07:22:10,390 | smriti.routes.billing | WARNING | Turnstile network error (ConnectTimeout):  — allowing request through (fail-open)
+2026-08-08 07:22:11,051 | smriti.routes.billing | INFO | API key generated source=src_81e0a543541a4dcc tier=explorer ip=10.16.9.229 email=set
+INFO:     10.16.9.229:17422 - "POST /billing/keys?tier=explorer HTTP/1.1" 200 OK
+2026-08-08 07:23:57,978 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:23:58 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:23:58,002 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:23:58 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:23:58,973 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:23:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:23:59,021 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:23:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:23:59,084 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:23:59 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:23:59,136 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:23:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:23:59,147 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:23:59,342 | smriti.svo_parser | INFO | _extract_json called with 234 chars: [
+  {
+    "subject": "user",
+    "verb": "prefer",
+    "object": "llama-3.1-8b",...
+2026-08-08 07:23:59,343 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (38 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00,  5.34it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00,  5.33it/s]
+2026-08-08 07:24:02,917 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:24:04,206 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-1-same-tags-supersede in 12880.5ms
+INFO:     10.16.45.25:54811 - "POST /ingest HTTP/1.1" 200 OK
+2026-08-08 07:24:08,250 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:24:08 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:08,252 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:08 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:08,303 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:08 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:08,355 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:08 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:08,411 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:08 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:24:08,452 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:24:08 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:08,462 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:09,197 | smriti.svo_parser | INFO | _extract_json called with 240 chars: [
+  {
+    "subject": "user",
+    "verb": "prefer",
+    "object": "gpt-4o-mini",
+...
+2026-08-08 07:24:09,197 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (37 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 68.98it/s]
+2026-08-08 07:24:10,492 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:24:11,345 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-1-same-tags-supersede in 3522.1ms
+INFO:     10.16.15.58:63312 - "POST /ingest HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 71.67it/s]
+2026-08-08 07:24:16,286 | smriti.routes.query | INFO | Query returned 1 results in 1311.0ms for owner=src_ff23fd1312f14010: 'user's preferred model is llama-3.1-8b...'
+INFO:     10.16.9.229:19633 - "POST /query HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 65.96it/s]
+2026-08-08 07:24:19,285 | smriti.routes.query | INFO | Query returned 1 results in 867.5ms for owner=src_ff23fd1312f14010: 'user's preferred model is gpt-4o-mini...'
+INFO:     10.16.0.211:22464 - "POST /query HTTP/1.1" 200 OK
+2026-08-08 07:24:21,897 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:24:21 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:21,898 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:21 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:21,952 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:22 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:22,000 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:22 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:22,052 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:22 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:24:22,094 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:24:22 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:22,100 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:22,576 | smriti.svo_parser | INFO | _extract_json called with 256 chars: [
+  {
+    "subject": "Alice Chen",
+    "verb": "is",
+    "object": "team lead",
+...
+2026-08-08 07:24:22,576 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (23 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 71.19it/s]
+2026-08-08 07:24:23,870 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:24:24,720 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-2-alias-gap in 3247.5ms
+INFO:     10.16.45.25:12140 - "POST /ingest HTTP/1.1" 200 OK
+2026-08-08 07:24:28,825 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:24:28 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:28,828 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:28 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:28,925 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:28 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:28,976 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:29,046 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:29 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:24:29,081 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:24:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:29,086 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:29,503 | smriti.svo_parser | INFO | _extract_json called with 253 chars: [
+  {
+    "subject": "A. Chen",
+    "verb": "is",
+    "object": "team lead",
+   ...
+2026-08-08 07:24:29,503 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (20 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 57.16it/s]
+2026-08-08 07:24:30,804 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:24:31,656 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-2-alias-gap in 3254.2ms
+INFO:     10.16.18.90:56745 - "POST /ingest HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 111.41it/s]
+2026-08-08 07:24:36,803 | smriti.routes.query | INFO | Query returned 2 results in 1505.7ms for owner=src_ff23fd1312f14010: 'team lead is Alice Chen...'
+INFO:     10.16.9.229:28514 - "POST /query HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 87.92it/s]
+2026-08-08 07:24:40,548 | smriti.routes.query | INFO | Query returned 2 results in 1502.3ms for owner=src_ff23fd1312f14010: 'team lead is A. Chen...'
+INFO:     10.16.15.58:64005 - "POST /query HTTP/1.1" 200 OK
+2026-08-08 07:24:43,072 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:24:43 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:43,074 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:43 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:43,181 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:43 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:43,252 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:43 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:43,294 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:43 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:24:43,344 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:24:43 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:43,358 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:43,596 | smriti.svo_parser | INFO | _extract_json called with 253 chars: [
+  {
+    "subject": "user",
+    "verb": "speaks",
+    "object": "Mandarin",
+   ...
+2026-08-08 07:24:43,596 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (20 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 57.07it/s]
+2026-08-08 07:24:44,894 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:24:45,754 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-3-multivalued-no-supersede in 3106.0ms
+INFO:     10.16.9.229:3536 - "POST /ingest HTTP/1.1" 200 OK
+2026-08-08 07:24:50,729 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:24:50 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:50,734 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:50 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:50,875 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:51 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:51,058 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:51 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:24:51,122 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:24:51 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:24:51,165 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:24:51 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:51,172 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:24:51,400 | smriti.svo_parser | INFO | _extract_json called with 252 chars: [
+  {
+    "subject": "user",
+    "verb": "speaks",
+    "object": "English",
+    ...
+2026-08-08 07:24:51,401 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (19 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 46.45it/s]
+2026-08-08 07:24:52,702 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:24:53,553 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-3-multivalued-no-supersede in 3250.3ms
+INFO:     10.16.15.58:10021 - "POST /ingest HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 92.79it/s]
+2026-08-08 07:24:59,322 | smriti.routes.query | INFO | Query returned 1 results in 1287.3ms for owner=src_ff23fd1312f14010: 'user speaks Mandarin...'
+INFO:     10.16.9.229:46365 - "POST /query HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 88.72it/s]
+2026-08-08 07:25:03,367 | smriti.routes.query | INFO | Query returned 1 results in 1291.4ms for owner=src_ff23fd1312f14010: 'user speaks English...'
+INFO:     10.16.9.229:46365 - "POST /query HTTP/1.1" 200 OK
+2026-08-08 07:25:06,557 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:25:06 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:06,561 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:06 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:06,619 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:06 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:06,659 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:06 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:06,703 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:06 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:25:06,751 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:25:06 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:06,761 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:06,983 | smriti.svo_parser | INFO | _extract_json called with 204 chars: [
+  {
+    "subject": "user",
+    "verb": "has",
+    "object": "pet dog",
+    "ti...
+2026-08-08 07:25:06,983 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (18 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 64.03it/s]
+2026-08-08 07:25:08,281 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:25:09,134 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-4-negation-supersede in 3003.8ms
+INFO:     10.16.18.90:20705 - "POST /ingest HTTP/1.1" 200 OK
+2026-08-08 07:25:13,482 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:25:13 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:13,484 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:13 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:13,539 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:13 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:13,613 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:13 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:13,661 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:13 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:25:13,698 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:25:13 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:13,705 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:14,088 | smriti.svo_parser | INFO | _extract_json called with 687 chars: [
+  {
+    "subject": "user",
+    "verb": "has",
+    "object": "pet dog",
+    "ti...
+2026-08-08 07:25:14,088 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 3 SVO tuples from text (27 chars)
+2026-08-08 07:25:15,151 | smriti.routes.ingest | INFO | Superseded event 'b1784d316e84485a9bd9e00686e5610f' (score=0.80) by 'd3a0470f01f249e59a8eaddd8ef15673' | scope='heartflow_official'
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 34.01it/s]
+2026-08-08 07:25:17,099 | smriti.vector_store | INFO | Batch added 3 event vectors to pgvector
+2026-08-08 07:25:17,949 | smriti.routes.ingest | INFO | Ingested 3 events + 1 turns for source=official_bench_fixture-4-negation-supersede in 4891.1ms
+INFO:     10.16.9.229:59437 - "POST /ingest HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 90.38it/s]
+2026-08-08 07:25:22,658 | smriti.routes.query | INFO | Query returned 0 results in 439.2ms for owner=src_ff23fd1312f14010: 'user has a pet dog...'
+INFO:     10.16.9.229:36878 - "POST /query HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 74.93it/s]
+INFO:     10.16.15.58:64250 - "POST /query HTTP/1.1" 200 OK
+2026-08-08 07:25:26,131 | smriti.routes.query | INFO | Query returned 2 results in 871.8ms for owner=src_ff23fd1312f14010: 'user has no pet dog anymore...'
+2026-08-08 07:25:29,183 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:25:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:29,187 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:29,274 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:29,311 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:29,362 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:29 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:25:29,411 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:25:29 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:29,418 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:29,651 | smriti.svo_parser | INFO | _extract_json called with 283 chars: [
+  {
+    "subject": "project deadline",
+    "verb": "is",
+    "object": "June 3...
+2026-08-08 07:25:29,652 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (27 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 94.65it/s]
+2026-08-08 07:25:30,945 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:25:31,797 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-5-ambiguous-correction in 3038.3ms
+INFO:     10.16.9.229:59150 - "POST /ingest HTTP/1.1" 200 OK
+2026-08-08 07:25:36,619 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:25:36 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:36,621 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:36 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:36,684 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:36 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:36,733 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:36 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:36,777 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:36 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:25:36,823 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:25:36 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:36,842 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:37,050 | smriti.svo_parser | INFO | _extract_json called with 237 chars: [
+  {
+    "subject": "project deadline",
+    "verb": "is",
+    "object": "June 1...
+2026-08-08 07:25:37,050 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (27 chars)
+2026-08-08 07:25:37,899 | smriti.routes.ingest | INFO | Superseded event 'b9d6b56618f3488c98fab3ec3b2d85f9' (score=0.96) by 'b0f39e8d91e44cfe888132cc6cbd4e21' | scope='heartflow_official'
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 83.63it/s]
+2026-08-08 07:25:38,765 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+INFO:     10.16.0.211:51757 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     10.16.15.58:56228 - "GET /api/config HTTP/1.1" 404 Not Found
+INFO:     10.16.0.211:51757 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     10.16.15.58:56228 - "GET /.env.local HTTP/1.1" 404 Not Found
+INFO:     10.16.18.90:16209 - "GET /.env.production HTTP/1.1" 404 Not Found
+INFO:     10.16.18.90:16209 - "GET /.streamlit/secrets.toml HTTP/1.1" 404 Not Found
+2026-08-08 07:25:39,615 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-5-ambiguous-correction in 3428.7ms
+INFO:     10.16.40.214:28123 - "POST /ingest HTTP/1.1" 200 OK
+INFO:     10.16.18.90:16209 - "GET /file%3D../.env HTTP/1.1" 404 Not Found
+INFO:     10.16.9.229:25724 - "GET /file%3D../../.env HTTP/1.1" 404 Not Found
+INFO:     10.16.0.211:51757 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     10.16.0.211:41710 - "POST /api/predict HTTP/1.1" 404 Not Found
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 42.46it/s]
+2026-08-08 07:25:44,919 | smriti.routes.query | INFO | Query returned 1 results in 1299.8ms for owner=src_ff23fd1312f14010: 'project deadline is June 30...'
+INFO:     10.16.0.211:51757 - "POST /query HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 94.42it/s]
+2026-08-08 07:25:48,973 | smriti.routes.query | INFO | Query returned 1 results in 1288.4ms for owner=src_ff23fd1312f14010: 'project deadline is June 13...'
+INFO:     10.16.0.211:32835 - "POST /query HTTP/1.1" 200 OK
+2026-08-08 07:25:52,089 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:25:52 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:52,091 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:52 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:52,153 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:52 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:52,200 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+07:25:52 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:52,250 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:52 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:25:52,302 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:25:52 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:52,308 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:52,523 | smriti.svo_parser | INFO | _extract_json called with 233 chars: [
+  {
+    "subject": "user",
+    "verb": "prefers",
+    "object": "dark theme",
+...
+2026-08-08 07:25:52,523 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (23 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 83.36it/s]
+2026-08-08 07:25:53,814 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:25:54,671 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-6-close-semantics in 3006.4ms
+INFO:     10.16.0.211:40290 - "POST /ingest HTTP/1.1" 200 OK
+2026-08-08 07:25:59,258 | smriti.llm_router | WARNING | Environment variable 'GROQ_API_KEY' contained control characters (e.g. newlines) — they have been stripped. Please fix the secret value in your HF Space / .env file.
+07:25:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:59,260 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:59,315 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:59,404 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+2026-08-08 07:25:59,453 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b; provider = cerebras
+
+Give Feedback / Get Help: https://github.com/BerriAI/litellm/issues/new
+LiteLLM.Info: If you need to debug this error, use `litellm._turn_on_debug()'.
+
+07:25:59 - LiteLLM:ERROR: fallback_utils.py:75 - Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+2026-08-08 07:25:59,493 | LiteLLM | ERROR | Fallback attempt failed for model cerebras/llama-3.1-8b: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 886, in acompletion
+    headers, response = await self.make_openai_chat_completion_request(
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/logging_utils.py", line 289, in async_wrapper
+    result = await func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 447, in make_openai_chat_completion_request
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 427, in make_openai_chat_completion_request
+    raw_response = await openai_aclient.chat.completions.with_raw_response.create(**data, timeout=timeout)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_legacy_response.py", line 386, in wrapped
+    return cast(LegacyAPIResponse[R], await func(*args, **kwargs))
+                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/resources/chat/completions/completions.py", line 2907, in create
+    return await self._post(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1992, in post
+    return await self.request(cast_to, opts, stream=stream, stream_cls=stream_cls)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/openai/_base_client.py", line 1777, in request
+    raise self._make_status_error_from_response(err.response) from None
+openai.NotFoundError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 656, in acompletion
+    response = await init_response
+               ^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/llms/openai/openai.py", line 946, in acompletion
+    raise OpenAIError(
+litellm.llms.openai.common_utils.OpenAIError: Error code: 404 - {'message': 'Model does not exist or you do not have access to it.', 'type': 'not_found_error', 'param': 'model', 'code': 'model_not_found'}
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/fallback_utils.py", line 62, in async_completion_with_fallbacks
+    response = await litellm.acompletion(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1873, in wrapper_async
+    raise e
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/utils.py", line 1690, in wrapper_async
+    result = await original_function(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/main.py", line 709, in acompletion
+    raise exception_type(
+          ^^^^^^^^^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2510, in exception_type
+    raise e  # it's already mapped
+    ^^^^^^^
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 2276, in exception_type
+    _map_openai_exception(
+  File "/home/user/.local/lib/python3.11/site-packages/litellm/litellm_core_utils/exception_mapping_utils.py", line 410, in _map_openai_exception
+    raise NotFoundError(
+litellm.exceptions.NotFoundError: litellm.NotFoundError: NotFoundError: CerebrasException - Model does not exist or you do not have access to it. LiteLLM Retried: 3 times
+07:25:59 - LiteLLM:INFO: utils.py:3840 - 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:59,499 | LiteLLM | INFO | 
+LiteLLM completion() model= llama-3.1-8b-instant; provider = groq
+2026-08-08 07:25:59,732 | smriti.svo_parser | INFO | _extract_json called with 239 chars: [
+  {
+    "subject": "user",
+    "verb": "cleared",
+    "object": "theme prefere...
+2026-08-08 07:25:59,732 | smriti.svo_parser | INFO | Fast Pipeline (cerebras/llama-3.1-8b) extracted 1 SVO tuples from text (29 chars)
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 82.39it/s]
+2026-08-08 07:26:01,235 | smriti.vector_store | INFO | Batch added 1 event vectors to pgvector
+2026-08-08 07:26:02,085 | smriti.routes.ingest | INFO | Ingested 1 events + 1 turns for source=official_bench_fixture-6-close-semantics in 3250.9ms
+INFO:     10.16.9.229:3748 - "POST /ingest HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 100.70it/s]
+2026-08-08 07:26:07,102 | smriti.routes.query | INFO | Query returned 1 results in 862.4ms for owner=src_ff23fd1312f14010: 'user prefers dark theme...'
+INFO:     10.16.9.229:30635 - "POST /query HTTP/1.1" 200 OK
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]
+Batches: 100%|██████████| 1/1 [00:00<00:00, 116.23it/s]
+2026-08-08 07:26:10,693 | smriti.routes.query | INFO | Query returned 1 results in 860.1ms for owner=src_ff23fd1312f14010: 'user theme preference cleared...'
+INFO:     10.16.45.25:35516 - "POST /query HTTP/1.1" 200 OK
+INFO:     10.16.45.25:28495 - "HEAD / HTTP/1.1" 405 Method Not Allowed
+INFO:     10.16.45.25:28495 - "GET /api/config HTTP/1.1" 404 Not Found
+INFO:     10.16.9.229:65485 - "GET /.env HTTP/1.1" 404 Not Found
+INFO:     10.16.18.90:31688 - "GET /.env.local HTTP/1.1" 404 Not Found
+INFO:     10.16.9.229:65485 - "GET /.env.production HTTP/1.1" 404 Not Found
+INFO:     10.16.40.214:10036 - "GET /.streamlit/secrets.toml HTTP/1.1" 404 Not Found
+INFO:     10.16.0.211:15626 - "GET /file%3D../.env HTTP/1.1" 404 Not Found
+INFO:     10.16.45.25:23021 - "GET /file%3D../../.env HTTP/1.1" 404 Not Found
+INFO:     10.16.0.211:19822 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     10.16.9.229:65485 - "POST /api/predict HTTP/1.1" 404 Not Found
