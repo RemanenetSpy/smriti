@@ -13,7 +13,7 @@ from pathlib import Path
 BASE   = Path(__file__).parent
 DATA   = json.loads((BASE / "data.json").read_text())
 TMPL   = (BASE / "template.html").read_text()
-OUT    = BASE.parent / "chronos-ui" / "public" / "pseo-pages"
+OUT    = BASE.parent / "chronos-ui" / "public"
 OUT.mkdir(exist_ok=True)
 
 def slug(text):
@@ -120,8 +120,16 @@ def generate_all(page_type=None, batch=None):
 
     total = 0
     for ptype, s, tokens in pages:
-        folder = OUT / ptype
-        folder.mkdir(exist_ok=True)
+        # Map ptype to the actual URL path segment
+        if ptype == 'framework':
+            segment = 'memory'
+        elif ptype == 'usecase':
+            segment = 'use-case'
+        else:
+            segment = ptype
+            
+        folder = OUT / segment
+        folder.mkdir(exist_ok=True, parents=True)
         html = fill(TMPL, tokens)
         path = folder / f"{s}.html"
         path.write_text(html, encoding='utf-8')

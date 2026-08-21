@@ -5,14 +5,7 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["lucide-react"],
   },
 
-  async rewrites() {
-    return [
-      { source: "/memory/:slug", destination: "/pseo-pages/framework/:slug.html" },
-      { source: "/use-case/:slug", destination: "/pseo-pages/usecase/:slug.html" },
-      { source: "/problem/:slug", destination: "/pseo-pages/problem/:slug.html" },
-      { source: "/integration/:slug", destination: "/pseo-pages/integration/:slug.html" }
-    ];
-  },
+
 
   async headers() {
     return [
