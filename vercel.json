@@ -1,8 +1,10 @@
 {
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/framework/:path*", "destination": "/pseo/pages/framework/:path*" },
-    { "source": "/usecase/:path*", "destination": "/pseo/pages/usecase/:path*" },
-    { "source": "/problem/:path*", "destination": "/pseo/pages/problem/:path*" }
+    { "source": "/memory/:slug", "destination": "/pseo/pages/framework/:slug.html" },
+    { "source": "/use-case/:slug", "destination": "/pseo/pages/usecase/:slug.html" },
+    { "source": "/problem/:slug", "destination": "/pseo/pages/problem/:slug.html" },
+    { "source": "/integration/:slug", "destination": "/pseo/pages/integration/:slug.html" }
   ],
   "headers": [
     {
