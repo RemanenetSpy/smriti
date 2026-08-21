@@ -13,7 +13,7 @@ from pathlib import Path
 BASE   = Path(__file__).parent
 DATA   = json.loads((BASE / "data.json").read_text())
 TMPL   = (BASE / "template.html").read_text()
-OUT    = BASE / "pages"
+OUT    = BASE.parent / "chronos-ui" / "public" / "pseo-pages"
 OUT.mkdir(exist_ok=True)
 
 def slug(text):

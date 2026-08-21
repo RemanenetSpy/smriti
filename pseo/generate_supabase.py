@@ -3,7 +3,7 @@ from pathlib import Path
 
 BASE = Path(__file__).parent
 TMPL = (BASE / "template.html").read_text(encoding="utf-8")
-OUT = BASE / "pages" / "integration"
+OUT = BASE.parent / "chronos-ui" / "public" / "pseo-pages" / "integration"
 OUT.mkdir(exist_ok=True, parents=True)
 
 def fill(template, tokens):
