@@ -1,5 +1,5 @@
 ---
-title: Smriti — Temporal Memory API for AI Agents
+title: Smriti — Temporal Event Memory for Business Workflows
 emoji: 🕰️
 colorFrom: red
 colorTo: gray
@@ -11,26 +11,27 @@ pinned: false
   <img src="https://img.shields.io/badge/Status-Live-4ADE80?style=for-the-badge" alt="Live" />
   <img src="https://img.shields.io/badge/MCP-Claude%20%7C%20Cursor%20%7C%20VS%20Code-6B7194?style=for-the-badge" alt="MCP" />
   <img src="https://img.shields.io/badge/Free%20Tier-10K%20events%2Fmo-C7AB6B?style=for-the-badge" alt="Free" />
-  <img src="https://img.shields.io/badge/Memory-SVO%20%2B%20pgvector-4ADE80?style=for-the-badge" alt="Memory" />
+  <img src="https://img.shields.io/badge/Memory-Bi--Temporal%20SVO%20%2B%20pgvector-4ADE80?style=for-the-badge" alt="Memory" />
 </p>
 
-<h1 align="center">🕰️ Smriti — Temporal AI Memory</h1>
+<h1 align="center">🕰️ Smriti — Temporal Event Memory</h1>
 
-> **Give any AI persistent, temporal long-term memory in 5 minutes.**
-> Smriti decomposes text into Subject-Verb-Object (SVO) causal events, stores them in PostgreSQL + pgvector, and lets agents query what happened, when, and why.
+> **Give your business workflows, ops teams, and AI agents an auditable ledger of what happened, when, and with whom.**
+> Smriti decomposes operational events into concrete Subject-Verb-Object (SVO) tuples, stores them in a Bi-Temporal PostgreSQL architecture, and lets workflows reason precisely across time without hallucination.
 
 ---
 
 ## 📖 What is Smriti?
 
-**The Problem:** AI agents are stateless. Every session starts from zero. They have no memory of past decisions, conversations, or changes in state.
-**The Solution:** Smriti is a **temporal memory layer**. It gives AI agents a hippocampus that persists across sessions and models.
+**The Problem:** Traditional "agent memory" relies on fuzzy vector databases that struggle with temporal drift and ambiguous chat facts. When tracking deals, deployments, contracts, or multi-step operational workflows, you don't need a chatbot to remember a favorite color—you need an auditable, deterministic event ledger.
 
-| Feature | Smriti | Traditional RAG |
+**The Solution:** Smriti is a **temporal event memory layer**. It gives AI agents and business infrastructure a bi-temporal hippocampus that tracks state changes perfectly across systems and sessions.
+
+| Feature | Smriti (Event Memory) | Traditional RAG (Chat Memory) |
 |---|---|---|
-| **Structure** | **SVO Extraction:** Breaks text into `Subject → Verb → Object` | **Vector Sludge:** Dumps full paragraphs into a vector DB |
-| **Time** | **Temporal Awareness:** Knows exact chronological order | **Timeless:** Cannot distinguish old facts from new |
-| **Updates** | **Supersession:** Safely overrides facts without deleting history | **Overwrite:** Hard deletes or confusing duplicates |
+| **Structure** | **SVO Tuples:** Tracks concrete actions (`Agent → Deployed → Build42`) | **Vector Sludge:** Dumps unstructured text into a vector DB |
+| **Time** | **Bi-Temporal:** Tracks both *when it happened* and *when it was recorded* | **Timeless:** Cannot distinguish old facts from current state |
+| **Updates** | **Supersession:** Safely overrides state without deleting history | **Overwrite:** Hard deletes or creates confusing duplicates |
 
 ---
 
@@ -69,6 +70,27 @@ curl -X POST https://spy9191-chronos-api-backend.hf.space/query \
   ]
 }
 ```
+
+---
+
+## 🐘 Bring Your Own Database (BYODB) — Supabase
+
+Want to keep your memory data in your own infrastructure? Smriti supports **Bring Your Own Database (BYODB)** using Supabase (PostgreSQL + pgvector).
+
+With zero code changes, you can route all extracted memories, vectors, and conversation turns directly to your own Supabase project. The data never touches Smriti's cloud storage.
+
+### How it works
+Just add the `X-Supabase-Url` header to your API requests (using the Session Pooler URL):
+```bash
+curl -X POST https://spy9191-chronos-api-backend.hf.space/ingest \
+  -H "X-API-Key: chrn_your_key" \
+  -H "X-Supabase-Url: postgresql://postgres.xxxx:pw@aws-0-REGION.pooler.supabase.com:5432/postgres" \
+  -d '{"source_id": "my-app", "events": [{"text": "Alice joined the team"}]}'
+```
+
+The Smriti pipeline runs exactly the same, but the final data lands in your database!
+
+👉 **[Read the full 3-step setup guide here](./supabase/README.md)**
 
 ---
 
